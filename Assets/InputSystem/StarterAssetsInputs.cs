@@ -1,5 +1,5 @@
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+#if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
 
@@ -12,6 +12,8 @@ using UnityEngine.InputSystem;
 		public bool jump;
 		public bool sprint;
 	    public bool esc;
+	    public bool backPack;
+	    public float scroll;
 
 	   [Header("Movement Settings")]
 		public bool analogMovement;
@@ -20,11 +22,20 @@ using UnityEngine.InputSystem;
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+#if ENABLE_INPUT_SYSTEM
 
-	   public void OnEsc(InputValue value)
+	public void OnEsc(InputValue value)
     {
 		esc = value.isPressed;
+    }
+
+	public void OnScroll(InputValue value)
+    {
+		scroll = Mathf.Clamp(value.Get<float>(), -1, 1);
+    }
+	public void OnBackPack(InputValue value)
+    {
+		backPack = value.isPressed;
     }
 		public void OnMove(InputValue value)
 		{

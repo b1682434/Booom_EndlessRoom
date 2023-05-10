@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManger : MonoBehaviour
 {
     GameObject[] revertObj;
@@ -24,5 +24,10 @@ public class GameManger : MonoBehaviour
             obj.GetComponent<RevertBase>().StartMovFunc();
         }
 
+    }
+
+    public void ReturnToMainu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

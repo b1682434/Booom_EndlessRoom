@@ -17,6 +17,7 @@ public class Interaction : MonoBehaviour
     public GameObject cineMachineTarget;
         Collider collToIgnore;
     bool movingThroughPortal;
+    Vector3 doorFacingVec;
         private void Awake()
         {
            
@@ -42,6 +43,11 @@ public class Interaction : MonoBehaviour
                 PortalInteract();
 
             }
+            if (_input.esc)
+            {
+                _input.esc = false;
+                FindAnyObjectByType<GameManger>().ReturnToMainu();
+            }
         }
            
          }
@@ -57,11 +63,14 @@ public class Interaction : MonoBehaviour
                 Vector3 posOffset = thisPortalPos - transform.position;
                 Vector3 potraledPos = otherPortalPos - posOffset;
                 transform.position = potraledPos;
+            doorFacingVec = hit.normal;
                 collToIgnore = thisPortal.otherPort.coll;
                 Physics.IgnoreCollision(GetComponent<CharacterController>(), collToIgnore,true);
                 thisPortal.otherPort.OpenDoorAnim();
 
+
             FindFirstObjectByType<GameManger>().revertAll();
+            
            // FindAnyObjectByType<GameManger>().revertAll();
             StartCoroutine(MoveThroughDoor(thisPortal.otherPort.enterPoint.position,thisPortal.otherPort.startPoint.position));
             movingThroughPortal = true;
@@ -92,10 +101,12 @@ public class Interaction : MonoBehaviour
             if (i >50)
             {
                 transform.position = Vector3.Lerp(transform.position, doorPointPos, Mathf.Clamp((i - 50f)/50f,0,1));//移动
+                
             }
             else
             {
                 transform.position = Vector3.Lerp(transform.position, startPointPos, i/50f); //到门前
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.FromToRotation(Vector3.forward, doorFacingVec * -1), i / 50f);
             }
 
             if (i>100)

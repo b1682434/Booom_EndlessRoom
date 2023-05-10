@@ -11,8 +11,9 @@ using UnityEngine.InputSystem;
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+	    public bool esc;
 
-		[Header("Movement Settings")]
+	   [Header("Movement Settings")]
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
@@ -20,6 +21,11 @@ using UnityEngine.InputSystem;
 		public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+
+	   public void OnEsc(InputValue value)
+    {
+		esc = value.isPressed;
+    }
 		public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());

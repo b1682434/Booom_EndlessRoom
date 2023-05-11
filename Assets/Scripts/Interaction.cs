@@ -17,6 +17,7 @@ public class Interaction : MonoBehaviour
     public GameObject cineMachineTarget;
     [Header("互动模式下的瞄准图标相关")]
     public Image aimUI;
+   
     public float aimUIMovSpeed;
     Vector2 defaultAimUIPos;
         Collider collToIgnore;
@@ -42,10 +43,23 @@ public class Interaction : MonoBehaviour
  
     void Update()
     {
-       /* if (_input.esc)
+        /* if (_input.esc)
+         {
+             _input.esc = false;
+             FindAnyObjectByType<GameManger>().ReturnToMainu();
+         }*/
+        RaycastHit hit;
+
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Vector3 uiWorldPos = Camera.main.ScreenToWorldPoint(aimUI.transform.position);
+        Debug.DrawLine(Camera.main.transform.position, uiWorldPos);
+        /*if(Physics.Raycast(ray,out hit))
         {
-            _input.esc = false;
-            FindAnyObjectByType<GameManger>().ReturnToMainu();
+            Debug.DrawLine(Camera.main.transform.position, hit.point,Color.red);
+        }
+        else
+        {
+            Debug.DrawLine(Camera.main.transform.position, ray.direction * 20,Color.green);
         }*/
        
         switch (pinputState)
@@ -108,8 +122,8 @@ public class Interaction : MonoBehaviour
     void Interact()
     {
         RaycastHit hit;
-        //Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
-        if(Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, interLength))
+        Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
+        if(Physics.Raycast(ray, out hit, interLength))
         {
             focusingObj = hit.transform.GetComponent<SelectableObject>();
             if (focusingObj != null)
@@ -181,6 +195,7 @@ public class Interaction : MonoBehaviour
             {
                 transform.position = Vector3.Lerp(transform.position, startPointPos, i/50f); //到门前
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.FromToRotation(Vector3.forward, doorFacingVec * -1), i / 50f);
+                //cineMachineTarget.transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.FromToRotation(Vector3.forward, doorFacingVec * -1), i / 50f);//另外一个分开/目前代码导致的问题：rotation无法完全控制！
             }
 
             if (i>100)
@@ -196,12 +211,18 @@ public class Interaction : MonoBehaviour
             }
         }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(cineMachineTarget.transform.position, cineMachineTarget.transform.position + cineMachineTarget.transform.forward * interLength);
+        //Gizmos.DrawLine(cineMachineTarget.transform.position, cineMachineTarget.transform.position + cineMachineTarget.transform.forward * interLength);
         //StaticFunctions.RectTransformToScreenSpace(aimUI.rectTransform, Camera.main, false);
-        Gizmos.DrawRay(Camera.main.ScreenPointToRay(aimUI.rectTransform.position));
+        // Gizmos.DrawRay(RectTransformUtility.ScreenPointToRay(Camera.main, aimUI.rectTransform.position));
+
+        /* Gizmos.DrawSphere(Camera.main.transform.position, 0.3f);
+         Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
+         Gizmos.DrawSphere(ray.direction * 10 + Camera.main.transform.position, 2f);
+         Gizmos.DrawLine(Camera.main.transform.position, ray.direction * 10 + Camera.main.transform.position);*/
+        
     }
 }
 

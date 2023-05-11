@@ -667,3 +667,4 @@ MonoBehaviour:
   cineMachineTarget: {fileID: 4135013735270702863}
   aimUI: {fileID: 7021371220830676400}
   aimUIMovSpeed: 50
+  pinputState: 1

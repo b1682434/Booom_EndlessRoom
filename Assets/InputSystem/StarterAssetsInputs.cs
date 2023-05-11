@@ -14,6 +14,7 @@ using UnityEngine.InputSystem;
 	    public bool esc;
 	    public bool backPack;
 	    public float scroll;
+	public bool confirm;
 
 	   [Header("Movement Settings")]
 		public bool analogMovement;
@@ -29,6 +30,10 @@ using UnityEngine.InputSystem;
 		esc = value.isPressed;
     }
 
+	public void OnConfirm(InputValue value)
+    {
+		confirm = value.isPressed;
+    }
 	public void OnScroll(InputValue value)
     {
 		scroll = Mathf.Clamp(value.Get<float>(), -1, 1);

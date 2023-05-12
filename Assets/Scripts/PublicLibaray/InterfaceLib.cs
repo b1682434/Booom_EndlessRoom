@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-  public interface IInteractReauest
+  public interface IInteractRequest
     {
         void InteractRequest(int ItemID);
-    }
+        public int ObjectType { get; set; }
+
+}
+
+
 

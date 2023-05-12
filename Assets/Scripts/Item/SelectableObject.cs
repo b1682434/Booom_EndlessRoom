@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class SelectableObject : RevertBase, IInteractReauest
+public class SelectableObject : RevertBase, IInteractRequest
 {
     public CinemachineVirtualCamera vCam;
     public int focusPriority = 15;
     public int requestedKeyID;
-
+    public int ObjectType { get; set; }
  private void Start()
     {
         DeFocus();

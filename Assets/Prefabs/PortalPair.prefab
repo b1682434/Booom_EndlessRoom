@@ -135,6 +135,11 @@ PrefabInstance:
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 450772000805992513}
+    - target: {fileID: 4721379248373442780, guid: 9d40809dfeb428d4995a016a2297939e,
+        type: 3}
+      propertyPath: otherPortal
+      value: 
+      objectReference: {fileID: 2879372373171805134}
     - target: {fileID: 6094012431085085793, guid: 9d40809dfeb428d4995a016a2297939e,
         type: 3}
       propertyPath: m_Mesh
@@ -287,6 +292,11 @@ PrefabInstance:
     - target: {fileID: 4721379248373442780, guid: 9d40809dfeb428d4995a016a2297939e,
         type: 3}
       propertyPath: otherPort
+      value: 
+      objectReference: {fileID: 8705837424338612768}
+    - target: {fileID: 4721379248373442780, guid: 9d40809dfeb428d4995a016a2297939e,
+        type: 3}
+      propertyPath: otherPortal
       value: 
       objectReference: {fileID: 8705837424338612768}
     - target: {fileID: 6094012431085085793, guid: 9d40809dfeb428d4995a016a2297939e,

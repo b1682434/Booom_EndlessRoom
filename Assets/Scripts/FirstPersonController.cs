@@ -15,9 +15,7 @@ using System.Collections.Generic;
 	
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 4.0f;
-		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 6.0f;
+		public float MoveSpeed = 4.0f;		
 		[Tooltip("Rotation speed of the character")]
 		public float RotationSpeed = 1.0f;
 		[Tooltip("Acceleration and deceleration")]
@@ -76,6 +74,11 @@ using System.Collections.Generic;
 
 		private const float _threshold = 0.01f;
 
+	public playerInputState pstate = playerInputState.Walking;
+	public float interactLength;
+
+	float startPoint;
+	float endPoint;
 		private bool IsCurrentDeviceMouse
 		{
 			get
@@ -114,16 +117,27 @@ using System.Collections.Generic;
 
 		private void Update()
 		{
-			//JumpAndGravity();
-			GroundedCheck();
-				Move();
 
+		switch (pstate)
+        {
+			case playerInputState.Walking:
+				GroundedCheck();
+				Move();
+				CameraRotation();
+				InteractInput();
+				break;
+			case playerInputState.Interacting:
+				break;
+			case playerInputState.Donothing:
+				break;
+        }
+		
 
 		}
 		
 		private void LateUpdate()
 		{
-			CameraRotation();
+			//CameraRotation();
 		}
 
 		private void GroundedCheck()
@@ -158,7 +172,7 @@ using System.Collections.Generic;
 		private void Move()
 		{
 			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			float targetSpeed =  MoveSpeed;
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -207,6 +221,73 @@ using System.Collections.Generic;
 		}
 
 		
+	void InteractInput()
+    {
+		if (_input.jump)
+		{
+			_input.jump = false;
+			Interactrion();
+		}
+		if (_input.confirm)
+		{
+			_input.confirm = false;
+			Interactrion();
+		}
+	}
+	 void Interactrion()
+    {
+		RaycastHit hit;
+		if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, interactLength))
+        {
+			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
+            if (IInter != null)
+            {
+                switch (IInter.ObjectType)
+                {
+					case 0:
+						
+						StartCoroutine(PassingDoor(hit.transform.GetComponent<BasicPortal>().DoorWayPoints(transform.position), hit.normal));
+						pstate = playerInputState.Donothing;
+						
+						
+						break;
+					case 1:
+						break;
+                }
+				IInter.InteractRequest(0);
+            }
+
+		}
+
+	}
+	IEnumerator PassingDoor(Vector3[] wayPoints, Vector3 doorFacingVec)
+    {
+		int i = 0;
+		
+		for(; ; )
+        {
+			i += 1;
+            if (i < 50)
+            {
+				transform.position = Vector3.Lerp(transform.position, wayPoints[0], i / 50f);
+				transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.FromToRotation(Vector3.forward, doorFacingVec * -1), i / 50f);
+				CinemachineCameraTarget.transform.rotation = Quaternion.Lerp(CinemachineCameraTarget.transform.rotation, transform.rotation, i / 50f);
+
+			}
+            else
+            {
+				transform.position = Vector3.Lerp(transform.position, wayPoints[1], (i-50) / 50f);
+			}
+            if (i > 100)
+            {
+				StopAllCoroutines();
+				_cinemachineTargetPitch = transform.rotation.x;
+				pstate = playerInputState.Walking;
+            }
+			yield return new WaitForSeconds(0.02f);
+        }
+    }
+	
 		
 		private void JumpAndGravity()
 		{

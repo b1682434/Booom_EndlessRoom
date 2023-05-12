@@ -69,7 +69,7 @@ public class Interaction : MonoBehaviour
                 if (_input.jump)
                 {
                     _input.jump = false;
-                    PortalInteract();
+                   // PortalInteract();
                 }
                 if (_input.confirm)
                 {
@@ -87,7 +87,7 @@ public class Interaction : MonoBehaviour
         
            
          }
-        void PortalInteract()
+        /*void PortalInteract()
         {
             RaycastHit hit;
             if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, interLength, portalLayerMask))
@@ -105,9 +105,9 @@ public class Interaction : MonoBehaviour
                 doorFacingVec = hit.normal;
                 collToIgnore = thisPortal.otherPort.coll;
                 Physics.IgnoreCollision(GetComponent<CharacterController>(), collToIgnore, true);
-                thisPortal.otherPort.OpenDoorAnim();
+                //thisPortal.otherPort.OpenDoorAnim();
                 FindFirstObjectByType<GameManger>().revertAll();
-                StartCoroutine(MoveThroughDoor(thisPortal.otherPort.enterPoint.position, thisPortal.otherPort.startPoint.position));
+                //StartCoroutine(MoveThroughDoor(thisPortal.otherPort.enterPoint.position, thisPortal.otherPort.startPoint.position));
                 pinputState = playerInputState.Donothing;
               }
 
@@ -117,7 +117,7 @@ public class Interaction : MonoBehaviour
             Interact();
         }
 
-        }
+        }*/
 
     void Interact()
     {
@@ -203,7 +203,7 @@ public class Interaction : MonoBehaviour
                     StopAllCoroutines();
                     Physics.IgnoreCollision(GetComponent<CharacterController>(), collToIgnore, false);
                     fps.enabled = true;
-                FindAnyObjectByType<GameManger>().StartMovingAll();
+               // FindAnyObjectByType<GameManger>().StartMovingAll();
                 pinputState = playerInputState.Walking;
             }
                 

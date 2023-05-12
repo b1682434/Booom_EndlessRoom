@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; align-items: flex-end; justify-content: center;">
+        <ui:ListView focusable="true" style="width: 160px;" />
+        <ui:VisualElement name="Dev" style="width: 160px; align-items: flex-end; justify-content: center;">
+            <ui:VisualElement name="VisualElement" style="width: 144px; background-color: rgba(0, 0, 0, 0.56); height: 144px;" />
+            <ui:VisualElement style="width: 144px; height: 144px; background-color: rgba(0, 0, 0, 0.39);" />
+            <ui:VisualElement style="width: 144px; height: 144px; background-color: rgba(0, 0, 0, 0.56);" />
+            <ui:VisualElement style="width: 144px; height: 144px; background-color: rgba(0, 0, 0, 0.39);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

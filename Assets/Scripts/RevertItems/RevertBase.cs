@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class RevertBase : MonoBehaviour
 {
+    /// <summary>
+    /// 重置时触发
+    /// </summary>
+    public delegate void OnRecoverDelegate();
+    public OnRecoverDelegate onRecover;
+    
     public void RevertFunc()
     {
         Recover();
@@ -16,7 +22,7 @@ public class RevertBase : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Recover()
     {
-
+        onRecover();
     }
     protected virtual void StartMoving()
     {

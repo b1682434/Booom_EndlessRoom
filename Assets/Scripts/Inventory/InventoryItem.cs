@@ -28,17 +28,28 @@ public class InventoryItem : MonoBehaviour
     /// <summary>
     /// 是否在背包内
     /// </summary>
-    private bool _isInInventory;
+    private bool _isInInventory = false;
+
+    /// <summary>
+    /// 是否是交互目标，需要在场景中
+    /// </summary>
+    private bool _isInteractionTarget = false;
+
+    public bool IsInteractionTarget
+    {
+        get => _isInteractionTarget;
+    }
 
     public bool IsInInventory
     {
         get => _isInInventory;
     }
-    
+
     /// <summary>
     /// 重置组件
     /// </summary>
     private RevertBase _revertBase;
+
     private Vector3 _initialPosition;
     private Quaternion _initialRotation;
 
@@ -66,28 +77,50 @@ public class InventoryItem : MonoBehaviour
     }
 
     /// <summary>
-    /// 是否可交互
+    /// 进入背包
     /// </summary>
-    /// <returns></returns>
-    public bool CanBeInteracted()
+    public void EnterInventory()
     {
-        return _isInInventory == false;
+        _isInInventory = true;
     }
 
     /// <summary>
-    /// 变成可交互状态
+    /// 获得物品。
     /// </summary>
-    public void BeInteractive()
+    public void ObtainItem()
     {
+        if (_isInInventory)
+        {
+            _stack++;
+        }
+    }
+
+    /// <summary>
+    /// 使用或消耗一次耐久。
+    /// </summary>
+    /// <param name="forceDestroy">销毁物品</param>
+    public void ComsumeItem(bool forceDestroy = false)
+    {
+        // TODO
+    }
+
+    /// <summary>
+    /// 成为交互目标
+    /// </summary>
+    public void BeInteractionTarget()
+    {
+        _isInteractionTarget = true;
         // TODO: UI提示
         // TODO: 高亮
+        Debug.Log($"BeInteractionTarget() {gameObject}");
     }
 
     /// <summary>
-    /// 变成不可交互状态
+    /// 成为非交互目标
     /// </summary>
-    public void BeNonInteractive()
+    public void BeNotInteractionTarget()
     {
+        _isInteractionTarget = false;
         // TODO: UI提示
         // TODO: 高亮
     }

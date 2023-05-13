@@ -62,3 +62,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a27d12d598ee3c4299b5ae0e79c903f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerGameObject: {fileID: 0}
+  gridAsset: {fileID: 9197481963319205126, guid: 7c2cefed320402f4bb486c2d3946424b,
+    type: 3}

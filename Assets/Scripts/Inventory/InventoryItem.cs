@@ -11,6 +11,16 @@ public class InventoryItem : MonoBehaviour
     [Tooltip("物品数据配置")] public InventoryItemData itemData;
 
     /// <summary>
+    /// 物品数量
+    /// </summary>
+    private int _stack = 1;
+
+    public int Stack
+    {
+        get => _stack;
+    }
+
+    /// <summary>
     /// 当前的可使用次数
     /// </summary>
     private int _durability;

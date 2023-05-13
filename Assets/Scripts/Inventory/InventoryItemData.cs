@@ -14,7 +14,7 @@ public class InventoryItemData : ScriptableObject
     [Tooltip("物品2D图片，用于在背包栏中展示")]
     public Sprite itemIcon;
 
-    [Tooltip("最大堆叠数量")]
+    [Tooltip("最大堆叠数量（暂不支持最大堆叠数量和可使用次数同时不为1）")]
     public int maxStack = 1;
 
     [Tooltip("是否能被捡起")]

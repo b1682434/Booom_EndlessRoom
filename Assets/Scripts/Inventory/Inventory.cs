@@ -59,10 +59,11 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// 丢弃物品。
+    /// 使用物品。
+    /// - 使用、合成、销毁操作均使用这个方法。
     /// </summary>
     /// <param name="ownedItem">持有的物品</param>
-    private void DropItem(InventoryItem ownedItem)
+    private void UseItem(InventoryItem ownedItem)
     {
     }
     

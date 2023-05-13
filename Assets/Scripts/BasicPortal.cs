@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicPortal : MonoBehaviour,IInteractRequest
+public class BasicPortal : InteractableBase,IInteractRequest
 {
 
     public bool notFirstDoor = true;
@@ -15,7 +15,7 @@ public class BasicPortal : MonoBehaviour,IInteractRequest
     GameManger gm;
     Vector3 revertObjoffset;//记录与轮回物品的相对位置。方便生成的时候能够让轮回物品精确的生成在同一相对位置
     Vector3 otherPortalOffset;//记录与另一扇门的相对位置。方便在生成的时候把另一扇门移到精确的相对位置
-    public int ObjectType { get; set; }
+
 
     private void Awake()
     {
@@ -72,14 +72,15 @@ public class BasicPortal : MonoBehaviour,IInteractRequest
         
         
         return wayPoints;
-    }
-    
+    }//给出玩家路径图，并叫gamemanger生成新关卡
 
-   /* public Vector3 PlayerTeleportTargetPos(Vector3 playerPos)
-    {
-        Vector3 playerOffsetToMe = playerPos - transform.position;
-        return (playerOffsetToMe + otherPortal.transform.position);
-    }*/
+   
+
+    /* public Vector3 PlayerTeleportTargetPos(Vector3 playerPos)
+     {
+         Vector3 playerOffsetToMe = playerPos - transform.position;
+         return (playerOffsetToMe + otherPortal.transform.position);
+     }*/
 
     private void OnDrawGizmos()
     {

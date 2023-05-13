@@ -2,40 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 public class GameManger : MonoBehaviour
 {
-    //GameObject[] revertObjs;
+    
     public GameObject currentRevertObj;
+    FirstPersonController fpsCtrl;
+    CinemachineBrain cmBrain;
+    CinemachineVirtualCamera currentVitrualCam;
    
   
     GameObject[] revertObjs = new GameObject[2];
     private void Start()
     {
-        
+        fpsCtrl = FindFirstObjectByType<FirstPersonController>();
         revertObjs[0] = currentRevertObj;
         revertObjs[1] = Instantiate(revertObjs[0], revertObjs[0].transform);
         revertObjs[1].transform.parent = null;
         revertObjs[1].SetActive(false);
-
-        // revertObj =   GameObject.FindGameObjectsWithTag("Revert");
+        cmBrain = Camera.main.GetComponent<CinemachineBrain>();
+        
     }
-    // Start is called before the first frame update
-   /* public void revertAll()
+    
+    public void EnterFocusMode(CinemachineVirtualCamera targetVcam)
     {
-        foreach(GameObject obj in revertObj)
+        if(currentVitrualCam!= null)
         {
-            obj.GetComponent<RevertBase>().RevertFunc();
+            currentVitrualCam.Priority = 0;
         }
+        currentVitrualCam = targetVcam;
+        currentVitrualCam.Priority = 15;
+        cmBrain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
+        fpsCtrl.EnterFocusMode();
     }
-    public void StartMovingAll()
+    public void ExitFocusVcam()
     {
-        foreach (GameObject obj in revertObj)
+        if (currentVitrualCam != null)
         {
-            obj.GetComponent<RevertBase>().StartMovFunc();
-        }
-
-    }*/
-
+            currentVitrualCam.Priority = 0;
+        }      
+        cmBrain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
+    }
   public  void GoThroughDoor( Vector3 postion )
     {
         //GameObject newObj = Instantiate(nextRevertObj, postion, nextRevertObj.transform.rotation);
@@ -43,10 +50,7 @@ public class GameManger : MonoBehaviour
         revertObjs[1].transform.position = postion;
         revertObjs[1].SetActive(true);
         Invoke("DestroyOldRertOBJ", 2f);
-      
-       
     }
-
     public void DestroyOldRertOBJ()
     {
         Destroy(revertObjs[0]);

@@ -6,7 +6,15 @@ using UnityEngine;
   public interface IInteractRequest
     {
         void InteractRequest(int ItemID);
-        public int ObjectType { get; set; }
+
+    void MouseOver();
+    
+
+        public int ObjectType { get; }
+
+    public string returnWord { get; }
+    public string objectName { get;}
+
 
 }
 

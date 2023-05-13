@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 #endif
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 
 	[RequireComponent(typeof(CharacterController))]
@@ -76,9 +77,11 @@ using System.Collections.Generic;
 
 	public playerInputState pstate = playerInputState.Walking;
 	public float interactLength;
-
-	float startPoint;
-	float endPoint;
+	public Image aimUI;
+	public Text dialogText;
+	Vector2 defaultAimUIpos;
+	bool mouseOverTextChanged = false;
+	
 		private bool IsCurrentDeviceMouse
 		{
 			get
@@ -113,6 +116,8 @@ using System.Collections.Generic;
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+
+		defaultAimUIpos = aimUI.rectTransform.position;//aimui的默认位置
 		}
 
 		private void Update()
@@ -124,9 +129,12 @@ using System.Collections.Generic;
 				GroundedCheck();
 				Move();
 				CameraRotation();
-				InteractInput();
+				WalkmodeInteractInput();
+				MouseOverInteractable();
 				break;
 			case playerInputState.Interacting:
+				MouseOverInteractable();
+				FocusMode();
 				break;
 			case playerInputState.Donothing:
 				break;
@@ -221,44 +229,74 @@ using System.Collections.Generic;
 		}
 
 		
-	void InteractInput()
+	void WalkmodeInteractInput()
     {
 		if (_input.jump)
 		{
 			_input.jump = false;
-			Interactrion();
+			Interaction();
 		}
 		if (_input.confirm)
 		{
 			_input.confirm = false;
-			Interactrion();
+			Interaction();
 		}
 	}
-	 void Interactrion()
+	 void Interaction()
     {
 		RaycastHit hit;
-		if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, interactLength))
+		Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
+		if (Physics.Raycast(ray, out hit, interactLength))
         {
 			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
             if (IInter != null)
             {
-                switch (IInter.ObjectType)
+				if(IInter.ObjectType == 1)//如果是门
                 {
-					case 0:
-						
+					if (pstate != playerInputState.Interacting)//防止专注模式点到门，有奇奇怪怪bug
+					{
 						StartCoroutine(PassingDoor(hit.transform.GetComponent<BasicPortal>().DoorWayPoints(transform.position), hit.normal));
 						pstate = playerInputState.Donothing;
-						
-						
-						break;
-					case 1:
-						break;
+						IInter.InteractRequest(0);
+					}
+				}
+                else
+                {
+					IInter.InteractRequest(0);
+				}
+                if (IInter.returnWord != null)
+                {
+					dialogText.text = IInter.returnWord;
                 }
-				IInter.InteractRequest(0);
+                
             }
 
 		}
 
+	}
+
+	public void EnterFocusMode()
+    {
+		pstate = playerInputState.Interacting;
+		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.visible = false;
+    }
+	void FocusMode()
+    {
+		aimUI.rectTransform.position = Mouse.current.position.ReadValue();
+		if (_input.jump)
+		{
+			_input.jump = false;
+			FindFirstObjectByType<GameManger>().ExitFocusVcam();
+			aimUI.rectTransform.position = defaultAimUIpos;
+			Cursor.lockState = CursorLockMode.Locked;
+			pstate = playerInputState.Walking;
+		}//离开专注模式
+        if (_input.confirm)
+        {
+			_input.confirm = false;
+			Interaction();
+        }
 	}
 	IEnumerator PassingDoor(Vector3[] wayPoints, Vector3 doorFacingVec)
     {
@@ -288,7 +326,66 @@ using System.Collections.Generic;
         }
     }
 	
+	void MouseOverInteractable()
+    {
+		RaycastHit hit;
+		Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
+		/*if (Physics.Raycast(ray, out hit, interactLength))
+        {
+			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
+			if (IInter != null)
+            {
+				IInter.MouseOver();
+                if (!mouseOverTextChanged)
+                {
+					dialogText.text = IInter.returnWord;
+					mouseOverTextChanged = true;
+				}
+            }
+            else
+            {
+				if (mouseOverTextChanged)
+				{
+					dialogText.text = null;
+					mouseOverTextChanged = false;
+				}//好麻烦 但也不知道怎么简化。。。。
+			}
+        }
+        else
+        {
+			if (mouseOverTextChanged)
+			{
+				dialogText.text = null;
+				mouseOverTextChanged = false;
+			}
+		}*/
+		IInteractRequest IInter;
+		   if (Physics.Raycast(ray, out hit, interactLength))
+		{  IInter = hit.transform.GetComponent<IInteractRequest>(); }
+        else
+        {
+			IInter = null;
+        }
+			if (IInter != null)
+			{
+				IInter.MouseOver();
+				
+					dialogText.text = IInter.returnWord;
+					mouseOverTextChanged = true;
+				
+			}
+			else
+			{
+				if (mouseOverTextChanged)
+				{
+					dialogText.text = null;
+					mouseOverTextChanged = false;
+				}//好麻烦 但也不知道怎么简化。。。。
+			}
 		
+		
+
+	}
 		private void JumpAndGravity()
 		{
 			

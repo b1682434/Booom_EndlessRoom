@@ -1172,9 +1172,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338e2619ef4816641b8d795d2af1f7f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objName: Door
+  ObjType: 1
+  mouseOVerWord: prprpr
+  cannotOpenWord: 
+  emptyHandWord: 
+  openWord: "\u5F00\u95E8"
+  showWord: 
+  outline: {fileID: 1372022080206954430}
+  overByMouse: 0
+  notFirstDoor: 1
   FrontPoint: {fileID: 3109279833498581537}
   BackPoint: {fileID: 4545709639819961021}
+  otherPortal: {fileID: 0}
   coll: {fileID: 7612224141688222543}
+  anim: {fileID: 0}
 --- !u!111 &8541021647538203665
 Animation:
   m_ObjectHideFlags: 0
@@ -1248,6 +1260,7 @@ GameObject:
   - component: {fileID: 6844307822761412582}
   - component: {fileID: 6434160992025177199}
   - component: {fileID: 2685195632173819978}
+  - component: {fileID: 1372022080206954430}
   m_Layer: 6
   m_Name: PortalModel
   m_TagString: Untagged
@@ -1564,6 +1577,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5204346654742117321}
   m_Mesh: {fileID: 0}
+--- !u!114 &1372022080206954430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5204346654742117321}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6302669491283170168
 GameObject:
   m_ObjectHideFlags: 0

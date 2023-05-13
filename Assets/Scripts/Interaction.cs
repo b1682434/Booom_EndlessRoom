@@ -159,13 +159,13 @@ public class Interaction : MonoBehaviour
         {
             _input.jump = false;
             
-            ExitFocusMode();
+           // ExitFocusMode();
            
         }
 
 
     }
-    public void ExitFocusMode()
+    /*public void ExitFocusMode()
     {
         if (focusingObj != null)
         {
@@ -177,7 +177,7 @@ public class Interaction : MonoBehaviour
         print("exed");
         Cursor.lockState = CursorLockMode.Locked;
         pinputState = playerInputState.Walking;
-    }
+    }*/
  
         
         IEnumerator MoveThroughDoor(Vector3 doorPointPos,Vector3 startPointPos)

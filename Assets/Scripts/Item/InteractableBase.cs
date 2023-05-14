@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,20 +6,20 @@ using UnityEngine;
 public class InteractableBase : MonoBehaviour
 {
 
-    [Tooltip("ÎïÆ·Ãû³Æ")]
+    [Tooltip("ç‰©å“åç§°")]
     public string objName;
-    [Tooltip("ÎïÆ·id")]
+    [Tooltip("ç‰©å“id")]
     public int ObjType;
-    [Tooltip("±»×¼ĞÇí¡×ÅÊ±ºò¸ÃËµÉ¶")]
+    [Tooltip("è¢«å‡†æ˜Ÿæ€¼ç€æ—¶å€™è¯¥è¯´å•¥")]
     public string mouseOVerWord;
-    [Tooltip("ÄÃÁË´íÎó¶«Î÷¿ªÃÅ¸ÃËµÉ¶")]
+    [Tooltip("æ‹¿äº†é”™è¯¯ä¸œè¥¿å¼€é—¨è¯¥è¯´å•¥")]
     public string cannotOpenWord;
-    [Tooltip("¿ÕÊÖµ÷²éÊ±ºò¸ÃËµÉ¶")]
+    [Tooltip("ç©ºæ‰‹è°ƒæŸ¥æ—¶å€™è¯¥è¯´å•¥")]
     public string emptyHandWord;
-    [Tooltip("´ò¿ªÁË¸ÃËµÉ¶")]
+    [Tooltip("æ‰“å¼€äº†è¯¥è¯´å•¥")]
     public string openWord;
-    [Tooltip("Õâ¸ö²»¶¯¾ÍĞĞ")]
-    public string showWord;//×îÖÕ´«»Ø¸ø½Ó¿ÚµÄÎÄ±¾
+    [Tooltip("è¿™ä¸ªä¸åŠ¨å°±è¡Œ")]
+    public string showWord;//æœ€ç»ˆä¼ å›ç»™æ¥å£çš„æ–‡æœ¬
     public string returnWord
     {
         get
@@ -47,7 +47,7 @@ public class InteractableBase : MonoBehaviour
     public Outline outline;
     bool corrotineAlreadyRunning =false;
    public bool overByMouse;
-    public void MouseOver()//mouseoverµÄ½Ó¿Ú´úÂë¡£¿ÉÄÜ·ÅÕâ¶ù²»´óºÏÊÊ£¬¿ÉÄÜ»áÒÆ¶¯Î»ÖÃ
+    public void MouseOver()//mouseoverçš„æ¥å£ä»£ç ã€‚å¯èƒ½æ”¾è¿™å„¿ä¸å¤§åˆé€‚ï¼Œå¯èƒ½ä¼šç§»åŠ¨ä½ç½®
     {
        
         overByMouse = true;
@@ -58,7 +58,7 @@ public class InteractableBase : MonoBehaviour
             showWord = mouseOVerWord;
             corrotineAlreadyRunning = true;
             outline.enabled = true;
-            showWord = mouseOVerWord;//¸Ğ¾õÓĞµã²»ĞĞ¡£ ±»´ò¿ªµÄ»°Ó¦¸ÃÊÇ»á±ä»¯µÄ¡£ºÃÏñÃ»±ØÒª·ÅÕâ¶ù£¿ÃÅ¿ÉÒÔÁíÆğ
+            showWord = mouseOVerWord;//æ„Ÿè§‰æœ‰ç‚¹ä¸è¡Œã€‚ è¢«æ‰“å¼€çš„è¯åº”è¯¥æ˜¯ä¼šå˜åŒ–çš„ã€‚å¥½åƒæ²¡å¿…è¦æ”¾è¿™å„¿ï¼Ÿé—¨å¯ä»¥å¦èµ·
            // outline.OutlineMode = Outline.Mode.OutlineVisible;
             
         }
@@ -71,7 +71,7 @@ public class InteractableBase : MonoBehaviour
         for(; ; )
         {
             overByMouse = false;
-            yield return new WaitForSeconds(0.02f);//µÈÒ»»á£¬Èç¹ûÖµ²»¸úĞÂ£¬ËµÃ÷²»ÔÙ±»¿´×ÅÁË,ÄÇ¾Í¹Ø±ÕÂÖÀªÏß²¢½áÊø´ËĞ­³Ì
+            yield return new WaitForSeconds(0.02f);//ç­‰ä¸€ä¼šï¼Œå¦‚æœå€¼ä¸è·Ÿæ–°ï¼Œè¯´æ˜ä¸å†è¢«çœ‹ç€äº†,é‚£å°±å…³é—­è½®å»“çº¿å¹¶ç»“æŸæ­¤åç¨‹
             if (!overByMouse)
             {
                 outline.enabled = false;

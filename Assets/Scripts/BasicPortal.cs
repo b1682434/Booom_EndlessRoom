@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,8 +13,8 @@ public class BasicPortal : InteractableBase,IInteractRequest
    public Animation anim;
     
     GameManger gm;
-    Vector3 revertObjoffset;//¼ÇÂ¼ÓëÂÖ»ØÎïÆ·µÄÏà¶ÔÎ»ÖÃ¡£·½±ãÉú³ÉµÄÊ±ºòÄÜ¹»ÈÃÂÖ»ØÎïÆ·¾«È·µÄÉú³ÉÔÚÍ¬Ò»Ïà¶ÔÎ»ÖÃ
-    Vector3 otherPortalOffset;//¼ÇÂ¼ÓëÁíÒ»ÉÈÃÅµÄÏà¶ÔÎ»ÖÃ¡£·½±ãÔÚÉú³ÉµÄÊ±ºò°ÑÁíÒ»ÉÈÃÅÒÆµ½¾«È·µÄÏà¶ÔÎ»ÖÃ
+    Vector3 revertObjoffset;//è®°å½•ä¸è½®å›ç‰©å“çš„ç›¸å¯¹ä½ç½®ã€‚æ–¹ä¾¿ç”Ÿæˆçš„æ—¶å€™èƒ½å¤Ÿè®©è½®å›ç‰©å“ç²¾ç¡®çš„ç”Ÿæˆåœ¨åŒä¸€ç›¸å¯¹ä½ç½®
+    Vector3 otherPortalOffset;//è®°å½•ä¸å¦ä¸€æ‰‡é—¨çš„ç›¸å¯¹ä½ç½®ã€‚æ–¹ä¾¿åœ¨ç”Ÿæˆçš„æ—¶å€™æŠŠå¦ä¸€æ‰‡é—¨ç§»åˆ°ç²¾ç¡®çš„ç›¸å¯¹ä½ç½®
 
 
     private void Awake()
@@ -34,18 +34,18 @@ public class BasicPortal : InteractableBase,IInteractRequest
     {
         if (!anim.Play())
         {
-            anim.Play();//ÔÚ¶¯»­Àï¼ÇÂ¼Åö×²ÌåµÄ¿ªÆô¹Ø±Õ
+            anim.Play();//åœ¨åŠ¨ç”»é‡Œè®°å½•ç¢°æ’ä½“çš„å¼€å¯å…³é—­
         }
         
     }
     public Vector3[] DoorWayPoints(Vector3 RequestedSourcePos)
     {
         Vector3[] wayPoints = new Vector3[2];
-        Vector3 rspDir = RequestedSourcePos - transform.position;//Íæ¼Ò´ó¸ÅµÄÃæ³¯·½Ïò
+        Vector3 rspDir = RequestedSourcePos - transform.position;//ç©å®¶å¤§æ¦‚çš„é¢æœæ–¹å‘
         float angle = Vector3.Angle(transform.right, rspDir);
         
         
-            if (angle > 90)//Ã»ÏßµÄÒ»Ãæ¡£ÏßÔÚgizmoÀïÃæ»­µÄ
+            if (angle > 90)//æ²¡çº¿çš„ä¸€é¢ã€‚çº¿åœ¨gizmoé‡Œé¢ç”»çš„
             {
                 wayPoints[1] = FrontPoint.position;
                 wayPoints[0] = BackPoint.position;
@@ -57,7 +57,7 @@ public class BasicPortal : InteractableBase,IInteractRequest
                
             }
         }
-            else//ÓĞÏßµÄÒ»Ãæ
+            else//æœ‰çº¿çš„ä¸€é¢
             {
           
                 wayPoints[0] = FrontPoint.position;
@@ -72,7 +72,7 @@ public class BasicPortal : InteractableBase,IInteractRequest
         
         
         return wayPoints;
-    }//¸ø³öÍæ¼ÒÂ·¾¶Í¼£¬²¢½ĞgamemangerÉú³ÉĞÂ¹Ø¿¨
+    }//ç»™å‡ºç©å®¶è·¯å¾„å›¾ï¼Œå¹¶å«gamemangerç”Ÿæˆæ–°å…³å¡
 
    
 

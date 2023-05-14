@@ -1,19 +1,19 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-  public interface IInteractRequest//µã»÷
+  public interface IInteractRequest//ç‚¹å‡»
     {
         void InteractRequest(int ItemID);
 
     //void MouseOver();
     
 
-        public int ObjectType { get; }//ÎïÆ·id
+        public int ObjectType { get; }//ç‰©å“id
 
-    public string returnWord { get; }//µãÁËÖ®ºóËµÉ¶
-    //public string objectName { get;}//¸Ğ¾õ½Ó¿ÚºÃÏñÒªÃû×ÖÃ»ÓÃ
+    public string returnWord { get; }//ç‚¹äº†ä¹‹åè¯´å•¥
+    //public string objectName { get;}//æ„Ÿè§‰æ¥å£å¥½åƒè¦åå­—æ²¡ç”¨
 
 
 }
@@ -21,7 +21,7 @@ using UnityEngine;
 public interface IMouseOver
 {
 
-    public string returnWord { get; }//Êó±ê·ÅÉÏÃæ»áËµÉ¶
+    public string returnWord { get; }//é¼ æ ‡æ”¾ä¸Šé¢ä¼šè¯´å•¥
     void MouseOver();
 }
 

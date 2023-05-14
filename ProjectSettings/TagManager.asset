@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Revert
+  - Selectable
   layers:
   - Default
   - TransparentFX

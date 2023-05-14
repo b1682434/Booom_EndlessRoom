@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 #endif
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 
 	[RequireComponent(typeof(CharacterController))]
@@ -15,9 +16,7 @@ using System.Collections.Generic;
 	
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 4.0f;
-		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 6.0f;
+		public float MoveSpeed = 4.0f;		
 		[Tooltip("Rotation speed of the character")]
 		public float RotationSpeed = 1.0f;
 		[Tooltip("Acceleration and deceleration")]
@@ -76,6 +75,13 @@ using System.Collections.Generic;
 
 		private const float _threshold = 0.01f;
 
+	public playerInputState pstate = playerInputState.Walking;
+	public float interactLength;
+	public Image aimUI;
+	public Text dialogText;
+	Vector2 defaultAimUIpos;
+	bool mouseOverTextChanged = false;
+	
 		private bool IsCurrentDeviceMouse
 		{
 			get
@@ -110,20 +116,36 @@ using System.Collections.Generic;
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+
+		defaultAimUIpos = aimUI.rectTransform.position;//aimui的默认位置
 		}
 
 		private void Update()
 		{
-			//JumpAndGravity();
-			GroundedCheck();
-				Move();
 
+		switch (pstate)
+        {
+			case playerInputState.Walking:
+				GroundedCheck();
+				Move();
+				CameraRotation();
+				WalkmodeInteractInput();
+				MouseOverInteractable();
+				break;
+			case playerInputState.Interacting:
+				MouseOverInteractable();
+				FocusMode();
+				break;
+			case playerInputState.Donothing:
+				break;
+        }
+		
 
 		}
 		
 		private void LateUpdate()
 		{
-			CameraRotation();
+			//CameraRotation();
 		}
 
 		private void GroundedCheck()
@@ -158,7 +180,7 @@ using System.Collections.Generic;
 		private void Move()
 		{
 			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			float targetSpeed =  MoveSpeed;
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -207,7 +229,163 @@ using System.Collections.Generic;
 		}
 
 		
+	void WalkmodeInteractInput()
+    {
+		if (_input.jump)
+		{
+			_input.jump = false;
+			Interaction();
+		}
+		if (_input.confirm)
+		{
+			_input.confirm = false;
+			Interaction();
+		}
+	}
+	 void Interaction()
+    {
+		RaycastHit hit;
+		Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
+		if (Physics.Raycast(ray, out hit, interactLength))
+        {
+			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
+            if (IInter != null)
+            {
+				if(IInter.ObjectType == 1)//如果是门
+                {
+					if (pstate != playerInputState.Interacting)//防止专注模式点到门，有奇奇怪怪bug
+					{
+						StartCoroutine(PassingDoor(hit.transform.GetComponent<BasicPortal>().DoorWayPoints(transform.position), hit.normal));
+						pstate = playerInputState.Donothing;
+						IInter.InteractRequest(0);
+					}
+				}
+                else
+                {
+					IInter.InteractRequest(0);
+				}
+                if (IInter.returnWord != null)
+                {
+					dialogText.text = IInter.returnWord;
+                }
+                
+            }
+
+		}
+
+	}
+
+	public void EnterFocusMode()
+    {
+		pstate = playerInputState.Interacting;
+		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.visible = false;
+    }
+	void FocusMode()
+    {
+		aimUI.rectTransform.position = Mouse.current.position.ReadValue();
+		if (_input.jump)
+		{
+			_input.jump = false;
+			FindFirstObjectByType<GameManger>().ExitFocusVcam();
+			aimUI.rectTransform.position = defaultAimUIpos;
+			Cursor.lockState = CursorLockMode.Locked;
+			pstate = playerInputState.Walking;
+		}//离开专注模式
+        if (_input.confirm)
+        {
+			_input.confirm = false;
+			Interaction();
+        }
+	}
+	IEnumerator PassingDoor(Vector3[] wayPoints, Vector3 doorFacingVec)
+    {
+		int i = 0;
 		
+		for(; ; )
+        {
+			i += 1;
+            if (i < 50)
+            {
+				transform.position = Vector3.Lerp(transform.position, wayPoints[0], i / 50f);
+				transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.FromToRotation(Vector3.forward, doorFacingVec * -1), i / 50f);
+				CinemachineCameraTarget.transform.rotation = Quaternion.Lerp(CinemachineCameraTarget.transform.rotation, transform.rotation, i / 50f);
+
+			}
+            else
+            {
+				transform.position = Vector3.Lerp(transform.position, wayPoints[1], (i-50) / 50f);
+			}
+            if (i > 100)
+            {
+				StopAllCoroutines();
+				_cinemachineTargetPitch = transform.rotation.x;
+				pstate = playerInputState.Walking;
+            }
+			yield return new WaitForSeconds(0.02f);
+        }
+    }
+	
+	void MouseOverInteractable()
+    {
+		RaycastHit hit;
+		Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
+		/*if (Physics.Raycast(ray, out hit, interactLength))
+        {
+			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
+			if (IInter != null)
+            {
+				IInter.MouseOver();
+                if (!mouseOverTextChanged)
+                {
+					dialogText.text = IInter.returnWord;
+					mouseOverTextChanged = true;
+				}
+            }
+            else
+            {
+				if (mouseOverTextChanged)
+				{
+					dialogText.text = null;
+					mouseOverTextChanged = false;
+				}//好麻烦 但也不知道怎么简化。。。。
+			}
+        }
+        else
+        {
+			if (mouseOverTextChanged)
+			{
+				dialogText.text = null;
+				mouseOverTextChanged = false;
+			}
+		}*/
+		IMouseOver Imouse;
+		   if (Physics.Raycast(ray, out hit, interactLength))
+		{ Imouse = hit.transform.GetComponent<IMouseOver>(); }
+        else
+        {
+			Imouse = null;
+        }
+			if (Imouse != null)
+			{
+			Imouse.MouseOver();
+				
+					dialogText.text = Imouse.returnWord;
+					mouseOverTextChanged = true;
+				
+			}
+			else
+			{
+				if (mouseOverTextChanged)
+				{
+					dialogText.text = null;
+					mouseOverTextChanged = false;
+				}//好麻烦 但也不知道怎么简化。。。。
+			}
+		
+		
+
+	}
 		private void JumpAndGravity()
 		{
 			

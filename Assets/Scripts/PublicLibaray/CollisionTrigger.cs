@@ -8,7 +8,7 @@ public delegate void CollisionDelegate(Collision other);
 
 /// <summary>
 /// 用于将一个gameObject的碰撞事件传递到其他脚本中
-/// - 暂不支持stay的传递
+/// - 出于性能考虑，暂不支持OnTriggerStay和OnCollisionStay的传递
 /// </summary>
 [RequireComponent(typeof(Collider))]
 public class CollisionTrigger : MonoBehaviour

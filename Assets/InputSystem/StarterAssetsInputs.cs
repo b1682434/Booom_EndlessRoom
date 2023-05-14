@@ -19,10 +19,7 @@ public class StarterAssetsInputs : MonoBehaviour
     public bool backPack;
     public float scroll;
     public bool confirm;
-
-    [Header("Inventory")]
     public bool inspectItem;
-    public float mouseScroll;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -32,8 +29,8 @@ public class StarterAssetsInputs : MonoBehaviour
     public bool cursorInputForLook = true;
 
     /**************** 输入事件 ****************/
-    public ButtonStartDelegate OnMouseScrollUpStart;
-    public ButtonStartDelegate OnMouseScrollDownStart;
+    public ButtonStartDelegate OnScrollUpStart;
+    public ButtonStartDelegate OnScrollDownStart;
     public ButtonStartDelegate OnInspectItemStart;
 
 
@@ -51,17 +48,27 @@ public class StarterAssetsInputs : MonoBehaviour
 
 	public void OnScroll(InputValue value)
     {
-		scroll = Mathf.Clamp(value.Get<float>(), -1, 1);
+        var newScrollDelta = Mathf.Clamp(value.Get<float>(), -1, 1);
+        // 只有从零变化到非零会触发事件
+        if (scroll == 0.0f)
+        {
+            if (newScrollDelta > 0.0f)
+            {
+                OnScrollUpStart();
+            }
+
+            if (newScrollDelta < 0.0f)
+            {
+                OnScrollDownStart();
+            }
+        }
+
+		scroll = newScrollDelta;
     }
     
 	public void OnBackPack(InputValue value)
     {
 		backPack = value.isPressed;
-    }
-    
-    public void OnMove(InputValue value)
-    {
-        MoveInput(value.Get<Vector2>());
     }
 
     public void OnMove(InputValue value)
@@ -87,11 +94,6 @@ public class StarterAssetsInputs : MonoBehaviour
         SprintInput(value.isPressed);
     }
 
-    public void OnDebug1(InputValue value)
-    {
-        Debug1Input(value.isPressed);
-    }
-
     public void OnInspectItem(InputValue value)
     {
         // 只有按下时会触发一次
@@ -101,27 +103,6 @@ public class StarterAssetsInputs : MonoBehaviour
         }
 
         inspectItem = value.isPressed;
-    }
-
-    public void OnMouseScroll(InputValue value)
-    {
-        // 只有从零变化到非零会触发事件
-        if (mouseScroll == 0)
-        {
-            var newScrollDelta = value.Get<float>();
-
-            if (newScrollDelta < 0.0f)
-            {
-                OnMouseScrollUpStart();
-            }
-
-            if (newScrollDelta > 0.0f)
-            {
-                OnMouseScrollDownStart();
-            }
-        }
-
-        mouseScroll = value.Get<float>();
     }
 #endif
 

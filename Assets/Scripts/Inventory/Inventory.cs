@@ -183,7 +183,9 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    // TODO: 自定义碰撞体
+    /// <summary>
+    /// 目前这两个方法方法依赖 CollisionTrigger 触发。
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
         var item = other.GetComponent<InventoryItem>();
@@ -256,20 +258,21 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
-        // TODO: 绑定_itemDetector的碰撞事件
         for (int i = 0; i < capacity; ++i)
         {
             _inventoryItems.Add(null);
         }
 
+        // 玩家输入
         _input = GetComponent<StarterAssetsInputs>();
         if (_input is not null)
         {
-            _input.OnMouseScrollUpStart += SelectPrevItem;
-            _input.OnMouseScrollDownStart += SelectNextItem;
+            _input.OnScrollUpStart += SelectPrevItem;
+            _input.OnScrollDownStart += SelectNextItem;
             // _input.OnInspectItemStart += // 进入检视界面
         }
 
+        // 交互检测
         if (_itemDetector is not null)
         {
             Debug.Log("Start() called");
@@ -280,10 +283,6 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-        if (debugObject is not null)
-        {
-            // Debug.Log(debugObject.transform.position);
-        }
     }
 
     private void SelectPrevItem()

@@ -6,20 +6,20 @@ using UnityEngine;
 public class InteractableBase : MonoBehaviour
 {
 
-    [Tooltip("ÎïÆ·Ãû³Æ")]
+    [Tooltip("ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½")]
     public string objName;
-    [Tooltip("ÎïÆ·id")]
+    [Tooltip("ï¿½ï¿½Æ·id")]
     public int ObjType;
-    [Tooltip("±»×¼ÐÇí¡×ÅÊ±ºò¸ÃËµÉ¶")]
+    [Tooltip("ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ËµÉ¶")]
     public string mouseOVerWord;
-    [Tooltip("ÄÃÁË´íÎó¶«Î÷¿ªÃÅ¸ÃËµÉ¶")]
+    [Tooltip("ï¿½ï¿½ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ËµÉ¶")]
     public string cannotOpenWord;
-    [Tooltip("¿ÕÊÖµ÷²éÊ±ºò¸ÃËµÉ¶")]
+    [Tooltip("ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ËµÉ¶")]
     public string emptyHandWord;
-    [Tooltip("´ò¿ªÁË¸ÃËµÉ¶")]
+    [Tooltip("ï¿½ï¿½ï¿½Ë¸ï¿½ËµÉ¶")]
     public string openWord;
-    [Tooltip("Õâ¸ö²»¶¯¾ÍÐÐ")]
-    public string showWord;//×îÖÕ´«»Ø¸ø½Ó¿ÚµÄÎÄ±¾
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    public string showWord;//ï¿½ï¿½ï¿½Õ´ï¿½ï¿½Ø¸ï¿½ï¿½Ó¿Úµï¿½ï¿½Ä±ï¿½
     public string returnWord
     {
         get
@@ -47,7 +47,7 @@ public class InteractableBase : MonoBehaviour
     public Outline outline;
     bool corrotineAlreadyRunning =false;
    public bool overByMouse;
-    public void MouseOver()//mouseoverµÄ½Ó¿Ú´úÂë¡£¿ÉÄÜ·ÅÕâ¶ù²»´óºÏÊÊ£¬¿ÉÄÜ»áÒÆ¶¯Î»ÖÃ
+    public void MouseOver()//mouseoverï¿½Ä½Ó¿Ú´ï¿½ï¿½ë¡£ï¿½ï¿½ï¿½Ü·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½Ü»ï¿½ï¿½Æ¶ï¿½Î»ï¿½ï¿½
     {
        
         overByMouse = true;
@@ -58,7 +58,7 @@ public class InteractableBase : MonoBehaviour
             showWord = mouseOVerWord;
             corrotineAlreadyRunning = true;
             outline.enabled = true;
-            showWord = mouseOVerWord;//¸Ð¾õÓÐµã²»ÐÐ¡£ ±»´ò¿ªµÄ»°Ó¦¸ÃÊÇ»á±ä»¯µÄ¡£ºÃÏñÃ»±ØÒª·ÅÕâ¶ù£¿ÃÅ¿ÉÒÔÁíÆð
+            showWord = mouseOVerWord;//ï¿½Ð¾ï¿½ï¿½Ðµã²»ï¿½Ð¡ï¿½ ï¿½ï¿½ï¿½ò¿ªµÄ»ï¿½Ó¦ï¿½ï¿½ï¿½Ç»ï¿½ä»¯ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
            // outline.OutlineMode = Outline.Mode.OutlineVisible;
             
         }
@@ -71,7 +71,7 @@ public class InteractableBase : MonoBehaviour
         for(; ; )
         {
             overByMouse = false;
-            yield return new WaitForSeconds(0.02f);//µÈÒ»»á£¬Èç¹ûÖµ²»¸úÐÂ£¬ËµÃ÷²»ÔÙ±»¿´×ÅÁË,ÄÇ¾Í¹Ø±ÕÂÖÀªÏß²¢½áÊø´ËÐ­³Ì
+            yield return new WaitForSeconds(0.02f);//ï¿½ï¿½Ò»ï¿½á£¬ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ù±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½Ç¾Í¹Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð­ï¿½ï¿½
             if (!overByMouse)
             {
                 outline.enabled = false;

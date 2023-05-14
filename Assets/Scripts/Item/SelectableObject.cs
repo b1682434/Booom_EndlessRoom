@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
@@ -34,16 +34,16 @@ public class SelectableObject : InteractableBase, IInteractRequest,IMouseOver
         if (needKeyToOpen)
         {
             
-            if (ItemID == keyID)//´ò¿ª
+            if (ItemID == keyID)//æ‰“å¼€
             {
                 opened = true;
                // showWord = openWord;
             }
-            else if(ItemID == 0)//¿ÕÊÖ
+            else if(ItemID == 0)//ç©ºæ‰‹
             {
-                showWord = emptyHandWord; //Ó¦¸Ã¿ÉÒÔ¼ÌĞøÓÅ»¯¡£ ĞèÒªÔ¿³×µÄÒ»¸öÀà£¬¶àÖÖÔ¿³×¶àÖÖ·½·¨µÄÒ»¸ö×ÓÀà£¬pickupÒ»¸ö
+                showWord = emptyHandWord; //åº”è¯¥å¯ä»¥ç»§ç»­ä¼˜åŒ–ã€‚ éœ€è¦é’¥åŒ™çš„ä¸€ä¸ªç±»ï¼Œå¤šç§é’¥åŒ™å¤šç§æ–¹æ³•çš„ä¸€ä¸ªå­ç±»ï¼Œpickupä¸€ä¸ª
             }
-            else // ÄÃÁË´íµÄ¶«Î÷¿ªÃÅ
+            else // æ‹¿äº†é”™çš„ä¸œè¥¿å¼€é—¨
             {
                 showWord = cannotOpenWord;
             }

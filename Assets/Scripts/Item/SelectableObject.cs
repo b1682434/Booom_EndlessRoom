@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class SelectableObject : InteractableBase, IInteractRequest
+public class SelectableObject : InteractableBase, IInteractRequest,IMouseOver
 {
     public CinemachineVirtualCamera vCam;
     public int focusPriority = 15;

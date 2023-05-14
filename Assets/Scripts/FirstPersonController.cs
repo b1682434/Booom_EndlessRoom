@@ -359,18 +359,18 @@ using UnityEngine.UI;
 				mouseOverTextChanged = false;
 			}
 		}*/
-		IInteractRequest IInter;
+		IMouseOver Imouse;
 		   if (Physics.Raycast(ray, out hit, interactLength))
-		{  IInter = hit.transform.GetComponent<IInteractRequest>(); }
+		{ Imouse = hit.transform.GetComponent<IMouseOver>(); }
         else
         {
-			IInter = null;
+			Imouse = null;
         }
-			if (IInter != null)
+			if (Imouse != null)
 			{
-				IInter.MouseOver();
+			Imouse.MouseOver();
 				
-					dialogText.text = IInter.returnWord;
+					dialogText.text = Imouse.returnWord;
 					mouseOverTextChanged = true;
 				
 			}

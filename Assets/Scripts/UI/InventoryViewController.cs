@@ -10,6 +10,7 @@ public class InventoryViewController
     /// </summary>
     private ListView _gridListView;
 
+    // 测试数据
     private int[] _intValues = { 1, 2, 3, 4 };
 
     /// <summary>
@@ -42,6 +43,7 @@ public class InventoryViewController
 
         _gridListView.fixedItemHeight = 144.0f;
         _gridListView.itemsSource = _intValues;
+        _gridListView.style.height = _gridListView.fixedItemHeight * _inventory.capacity;
 
         Debug.Log("InitializeInventoryGrid() called.");
         

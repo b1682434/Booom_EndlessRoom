@@ -36,8 +36,9 @@ public class Inventory : MonoBehaviour
     private CollisionTrigger _itemDetector;
 
     /// <summary>
-    /// 当前可交互的物品。
+    /// 当前可交互的物品列表。
     /// - 多个物品处于物品探测器中时，最后与_itemDetector接触的物品最优先发生交互。
+    /// - 交互目标是_interactableItems的首个元素，玩家只能与交互目标交互。交互目标通常会有诸如高亮的标识效果。
     /// </summary>
     private readonly List<InventoryItem> _interactableItems = new List<InventoryItem>();
 

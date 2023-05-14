@@ -6,6 +6,7 @@ using UnityEngine;
 /// 背包物体组件。
 /// - 可以放入背包的物体应该添加此组件
 /// </summary>
+[RequireComponent(typeof(Outline))]
 public class InventoryItem : MonoBehaviour
 {
     [Tooltip("物品数据配置")] public InventoryItemData itemData;
@@ -53,6 +54,11 @@ public class InventoryItem : MonoBehaviour
     private Vector3 _initialPosition;
     private Quaternion _initialRotation;
 
+    /********** 视觉效果 **********/
+    private Outline _outline;
+    [SerializeField] private GameObject _interactionTip;
+    private Transform _cameraTransform;
+
     void Start()
     {
         _revertBase = GetComponent<RevertBase>();
@@ -61,7 +67,23 @@ public class InventoryItem : MonoBehaviour
             _revertBase.onRecover += Restart;
         }
 
+        _outline = GetComponent<Outline>();
+        _outline.OutlineMode = Outline.Mode.OutlineVisible;
+        _outline.OutlineWidth = 8.0f;
+        _outline.enabled = false;
+
+        _cameraTransform = Camera.main.transform;
+
         Restart();
+    }
+
+    private void LateUpdate()
+    {
+        if (_isInteractionTarget && _interactionTip is not null)
+        {
+            _interactionTip.transform.rotation =
+                Quaternion.LookRotation(_interactionTip.transform.position - _cameraTransform.position);
+        }
     }
 
     /// <summary>
@@ -69,11 +91,11 @@ public class InventoryItem : MonoBehaviour
     /// </summary>
     private void Restart()
     {
-        if (itemData.recoverable)
-        {
-            // TODO: 生成一个新的物品，但只能生成一个
-            Instantiate(this, _initialPosition, _initialRotation);
-        }
+        // if (itemData.recoverable)
+        // {
+        //     // TODO: 生成一个新的物品，但只能生成一个
+        //     Instantiate(this, _initialPosition, _initialRotation);
+        // }
     }
 
     /// <summary>
@@ -82,6 +104,7 @@ public class InventoryItem : MonoBehaviour
     public void EnterInventory()
     {
         _isInInventory = true;
+        _outline.enabled = false;
     }
 
     /// <summary>
@@ -99,9 +122,26 @@ public class InventoryItem : MonoBehaviour
     /// 使用或消耗一次耐久。
     /// </summary>
     /// <param name="forceDestroy">销毁物品</param>
-    public void ComsumeItem(bool forceDestroy = false)
+    public void ConsumeItem(bool forceDestroy = false)
     {
-        // TODO
+        if (forceDestroy)
+        {
+            _stack = 0;
+        }
+        else
+        {
+            _durability--;
+            if (_durability <= 0)
+            {
+                _stack--;
+                _durability = itemData.durability;
+            }
+        }
+
+        if (_stack <= 0)
+        {
+            // TODO: 销毁物品
+        }
     }
 
     /// <summary>
@@ -110,8 +150,11 @@ public class InventoryItem : MonoBehaviour
     public void BeInteractionTarget()
     {
         _isInteractionTarget = true;
+
         // TODO: UI提示
-        // TODO: 高亮
+        _interactionTip.SetActive(true);
+        _outline.enabled = true;
+
         Debug.Log($"BeInteractionTarget() {gameObject}");
     }
 
@@ -121,7 +164,9 @@ public class InventoryItem : MonoBehaviour
     public void BeNotInteractionTarget()
     {
         _isInteractionTarget = false;
+
         // TODO: UI提示
-        // TODO: 高亮
+        _interactionTip.SetActive(false);
+        _outline.enabled = false;
     }
 }

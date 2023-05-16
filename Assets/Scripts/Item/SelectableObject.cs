@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class SelectableObject : InteractableBase, IInteractRequest,IMouseOver
+public class SelectableObject : InteractableBase, IInteractRequest
 {
     public CinemachineVirtualCamera vCam;
     public int focusPriority = 15;
@@ -13,7 +13,7 @@ public class SelectableObject : InteractableBase, IInteractRequest,IMouseOver
     bool opened;
     GameManger gm;
  
- private void Start()
+    protected void Start()
     {
         gm = FindObjectOfType<GameManger>();
     }

@@ -49,7 +49,7 @@ public class StarterAssetsInputs : MonoBehaviour
 	public void OnScroll(InputValue value)
     {
         var newScrollDelta = Mathf.Clamp(value.Get<float>(), -1, 1);
-        // 只有从零变化到非零会触发事件
+        // 只有从零变化到非零会触发事件，即按下时触发一次
         if (scroll == 0.0f)
         {
             if (newScrollDelta > 0.0f)

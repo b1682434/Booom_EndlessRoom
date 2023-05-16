@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 
+public delegate void OnInteraction(IInteractRequest IInter);
+
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
@@ -51,7 +53,10 @@ using UnityEngine.UI;
 		public float TopClamp = 90.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
-
+		
+		// interaction
+		public OnInteraction onInteraction;
+		
 		// cinemachine
 		private float _cinemachineTargetPitch;
 
@@ -258,11 +263,15 @@ using UnityEngine.UI;
 						StartCoroutine(PassingDoor(hit.transform.GetComponent<BasicPortal>().DoorWayPoints(transform.position), hit.normal));
 						pstate = playerInputState.Donothing;
 						IInter.InteractRequest(0);
+						
+						// 告知其他组件
+						onInteraction(IInter);
 					}
 				}
                 else
                 {
 					IInter.InteractRequest(0);
+					onInteraction(IInter);
 				}
                 if (IInter.returnWord != null)
                 {

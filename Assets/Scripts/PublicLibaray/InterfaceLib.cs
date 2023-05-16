@@ -18,5 +18,14 @@ public interface IInteractRequest  //点击
 public interface IMouseOver
 {
     public string returnWord { get; }//鼠标放上面会说啥
+    
+    /// <summary>
+    /// 鼠标移入
+    /// </summary>
     void MouseOver();
+
+    /// <summary>
+    /// 鼠标移出
+    /// </summary>
+    void MouseExit();
 }

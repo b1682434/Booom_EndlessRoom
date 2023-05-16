@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,16 @@ using UnityEngine;
 /// <summary>
 /// 背包物体组件。
 /// - 可以放入背包的物体应该添加此组件
+/// - 放入背包内的物品不会因为重置而消失
 /// </summary>
 [RequireComponent(typeof(Outline))]
-public class InventoryItem : MonoBehaviour
+public class InventoryItem : SelectableObject
 {
-    [Tooltip("物品数据配置")] public InventoryItemData itemData;
+    [Header("Inventory")]
+    [Tooltip("物品数据配置")]
+    public InventoryItemData itemData;
 
+    /****** 物品状态数据 ******/
     /// <summary>
     /// 物品数量
     /// </summary>
@@ -31,6 +36,11 @@ public class InventoryItem : MonoBehaviour
     /// </summary>
     private bool _isInInventory = false;
 
+    public bool IsInInventory
+    {
+        get => _isInInventory;
+    }
+
     /// <summary>
     /// 是否是交互目标，需要在场景中
     /// </summary>
@@ -41,89 +51,54 @@ public class InventoryItem : MonoBehaviour
         get => _isInteractionTarget;
     }
 
-    public bool IsInInventory
-    {
-        get => _isInInventory;
-    }
-
     /// <summary>
-    /// 重置组件
+    /// 重置组件 TODO
     /// </summary>
     private RevertBase _revertBase;
-
-    private Vector3 _initialPosition;
-    private Quaternion _initialRotation;
-
-    /********** 视觉效果 **********/
-    private Outline _outline;
-    [SerializeField] private GameObject _interactionTip;
-    private Transform _cameraTransform;
-
-    void Start()
-    {
-        _revertBase = GetComponent<RevertBase>();
-        if (_revertBase != null)
-        {
-            _revertBase.onRecover += Restart;
-        }
-
-        _outline = GetComponent<Outline>();
-        _outline.OutlineMode = Outline.Mode.OutlineVisible;
-        _outline.OutlineWidth = 8.0f;
-        _outline.enabled = false;
-
-        _cameraTransform = Camera.main.transform;
-
-        Restart();
-    }
-
-    private void LateUpdate()
-    {
-        if (_isInteractionTarget && _interactionTip is not null)
-        {
-            _interactionTip.transform.rotation =
-                Quaternion.LookRotation(_interactionTip.transform.position - _cameraTransform.position);
-        }
-    }
 
     /// <summary>
     /// 重置物品
     /// </summary>
     private void Restart()
     {
-        // if (itemData.recoverable)
-        // {
-        //     // TODO: 生成一个新的物品，但只能生成一个
-        //     Instantiate(this, _initialPosition, _initialRotation);
-        // }
     }
 
     /// <summary>
-    /// 进入背包
+    /// 获取物品
     /// </summary>
-    public void EnterInventory()
+    public void OnObtained()
     {
-        _isInInventory = true;
-        _outline.enabled = false;
-    }
-
-    /// <summary>
-    /// 获得物品。
-    /// </summary>
-    public void ObtainItem()
-    {
+        _revertBase.SetRecoveryEnabled(false);
+        
         if (_isInInventory)
         {
             _stack++;
+        }
+        else
+        {
+            _isInInventory = true;
+            // Note: 将此gameobject放到一个玩家看不到的位置，并且禁用碰撞
+            // 移动位置的逻辑在Inventory中
+            var colliders = GetComponents<Collider>();
+            foreach (var collider in colliders)
+            {
+                collider.enabled = false;
+            }
+            // Note: 不销毁是为了检视物品的时候不用重新生成
         }
     }
 
     /// <summary>
     /// 使用或消耗一次耐久。
     /// </summary>
-    /// <param name="forceDestroy">销毁物品</param>
-    public void ConsumeItem(bool forceDestroy = false)
+    /// <param name="forceDestroy">强制销毁物品</param>
+    public void OnConsumed(bool forceDestroy = false)
     {
+        if (!_isInInventory)
+        {
+            return;
+        }
+
         if (forceDestroy)
         {
             _stack = 0;
@@ -144,29 +119,63 @@ public class InventoryItem : MonoBehaviour
         }
     }
 
+    /****** SelectableObject ******/
+
     /// <summary>
-    /// 成为交互目标
+    /// 玩家与场景中的背包物品交互（通常是拾取）。
     /// </summary>
-    public void BeInteractionTarget()
+    /// <param name="ItemID">手持物品的ItemID，此处用不到</param>
+    public void InteractRequest(int ItemID)
     {
-        _isInteractionTarget = true;
-
-        // TODO: UI提示
-        _interactionTip.SetActive(true);
-        _outline.enabled = true;
-
-        Debug.Log($"BeInteractionTarget() {gameObject}");
     }
 
-    /// <summary>
-    /// 成为非交互目标
-    /// </summary>
-    public void BeNotInteractionTarget()
+    public override void MouseOver()
+    {
+        if (!_isInteractionTarget && !_isInInventory)
+        {
+            _isInteractionTarget = true;
+        }
+        
+        base.MouseOver();
+    }
+
+    public override void MouseExit()
     {
         _isInteractionTarget = false;
-
-        // TODO: UI提示
-        _interactionTip.SetActive(false);
-        _outline.enabled = false;
+        
+        base.MouseExit();
     }
+    
+    protected void Start()
+    {
+        base.Start();
+
+        _revertBase = GetComponent<RevertBase>();
+        if (_revertBase != null)
+        {
+            if (itemData.recoverable)
+            {
+                _revertBase.onRecover += Restart;
+            }
+            else
+            {
+                _revertBase.SetRecoveryEnabled(false);
+            }
+        }
+        
+        outline = GetComponent<Outline>();
+        if (outline is not null)
+        {
+            outline.enabled = false;
+        }
+
+        _durability = itemData.durability;
+
+        Restart();
+    }
+    
+    // public void OnMouseOver()
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

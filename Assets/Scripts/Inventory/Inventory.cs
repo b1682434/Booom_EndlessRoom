@@ -11,16 +11,19 @@ using UnityEngine.InputSystem;
 /// - 应该添加到玩家身上
 /// </summary>
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(StarterAssetsInputs))]
+[RequireComponent(typeof(FirstPersonController))]  // 需要它的交互功能
 public class Inventory : MonoBehaviour
 {
-    public GameObject debugObject;
-
-    [Tooltip("背包格子数")] public int capacity = 4;
+    [Header("背包属性")] 
+    [Tooltip("背包格子数")]
+    public int capacity = 4;
 
     /// <summary>
     /// 背包物品，列表长度由capacity确定。
     /// </summary>
-    [ItemCanBeNull] private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
+    [ItemCanBeNull] 
+    private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
 
     /// <summary>
     /// 选中的物品index
@@ -28,63 +31,77 @@ public class Inventory : MonoBehaviour
     private int _selectedItemIndex = 0;
 
     /// <summary>
-    /// 物品探测器。
-    /// - 在场景中的物品与此碰撞体重叠时，玩家可以与其交互。
-    /// - 设想中应该是一个椎体。
+    /// 当前选中物品的id
     /// </summary>
-    [Tooltip("物品探测体积。在场景中的物品与此碰撞体重叠时，玩家可以与其交互。")] [SerializeField]
-    private CollisionTrigger _itemDetector;
+    public int SelectedItemId
+    {
+        get
+        {
+            if (_inventoryItems[_selectedItemIndex] is null)
+            {
+                // TODO: 暂时用0作为空位id
+                return 0;
+            }
 
-    /// <summary>
-    /// 当前可交互的物品列表。
-    /// - 多个物品处于物品探测器中时，最后与_itemDetector接触的物品最优先发生交互。
-    /// - 交互目标是_interactableItems的首个元素，玩家只能与交互目标交互。交互目标通常会有诸如高亮的标识效果。
-    /// </summary>
-    private readonly List<InventoryItem> _interactableItems = new List<InventoryItem>();
+            return _inventoryItems[_selectedItemIndex].itemData.itemId;
+        }
+    }
 
-    private StarterAssetsInputs _input;
+    /****** 可用的物品操作 ******/
 
     /// <summary>
     /// 拾取物品
     /// </summary>
     /// <param name="sceneItem">场景中的物品</param>
-    private void PickUpItem(InventoryItem sceneItem)
+    public void PickUpItem(InventoryItem sceneItem)
     {
         if (!CanPickUpItem(sceneItem))
         {
             return;
         }
 
-        // 更新可交互物品列表
-        sceneItem.BeNotInteractionTarget();
-        _interactableItems.Remove(sceneItem);
-        RefreshInteractableItems();
-
         // 放入背包物品列表
         var index = FindSuitableGridForNewItem(sceneItem);
         if (_inventoryItems[index] is null)
         {
-            // TODO
-            _inventoryItems[index] = sceneItem;
-            sceneItem.EnterInventory();
+            var ownedItem = Instantiate(sceneItem, transform);
+            _inventoryItems[index] = ownedItem;
+            ownedItem.OnObtained();
+            
+            ownedItem.transform.localPosition = Vector3.back * 1.0f;
         }
         else
         {
-            _inventoryItems[index].ObtainItem();
-            Destroy(sceneItem.gameObject);
+            _inventoryItems[index].OnObtained();
         }
+        sceneItem.gameObject.SetActive(false);
+
         // TODO: 进入检视界面
         _selectedItemIndex = index;
-        InspectItem(sceneItem);
+        InspectItem(_inventoryItems[index]);
     }
 
     /// <summary>
     /// 检视物品。
     /// </summary>
     /// <param name="ownedItem">持有的物品</param>
-    private void InspectItem(InventoryItem ownedItem)
+    public void InspectItem([CanBeNull]InventoryItem ownedItem)
     {
-        // 进入检视界面
+        if (ownedItem is null)
+        {
+            // 场景1：检视空位。设想：检视失败提示音
+            return;
+        }
+
+        // TODO: 进入检视界面
+    }
+
+    /// <summary>
+    /// 检视当前选中物品。
+    /// </summary>
+    public void InspectSelectedItem()
+    {
+        InspectItem(_inventoryItems[_selectedItemIndex]);
     }
 
     /// <summary>
@@ -92,8 +109,43 @@ public class Inventory : MonoBehaviour
     /// - 使用、合成、销毁操作均使用这个方法。
     /// </summary>
     /// <param name="ownedItem">持有的物品</param>
-    private void UseItem(InventoryItem ownedItem)
+    public void UseItem(InventoryItem ownedItem)
     {
+    }
+
+    /// <summary>
+    /// 切换到上一个物品
+    /// </summary>
+    public void SelectPrevItem()
+    {
+        Debug.Log("SelectPrevItem() called");
+        _selectedItemIndex = Math.Max(_selectedItemIndex - 1, 0);
+        // TODO: 更新UI
+    }
+
+    /// <summary>
+    /// 切换到下一个物品
+    /// </summary>
+    public void SelectNextItem()
+    {
+        Debug.Log("SelectNextItem() called");
+        _selectedItemIndex = Math.Min(_selectedItemIndex + 1, capacity - 1);
+        // TODO: 更新UI
+    }
+
+    /****** 内部工具方法 ******/
+
+    /// <summary>
+    /// 有东西被交互时就看看是不是背包物品，是的话就捡起来
+    /// - 绑定在FirstPersonController的onInteraction上
+    /// </summary>
+    /// <param name="inter">交互物</param>
+    private void OnInteraction(IInteractRequest inter)
+    {
+        if (inter is InventoryItem item)
+        {
+            PickUpItem(item);
+        }
     }
 
     /// <summary>
@@ -118,14 +170,14 @@ public class Inventory : MonoBehaviour
             return true;
         }
 
-        // 判断是否可以以堆叠形式进入背包
+        // 判断物品本身是否可堆叠
         if (item.itemData.maxStack <= 1)
         {
             return false;
         }
 
-        // 找到第一个可以堆叠的物品
-        var stackItem = _inventoryItems.Find((InventoryItem itemInList) =>
+        // 找到第一个将item堆叠上去的物品
+        var stackItem = _inventoryItems.Find((itemInList) =>
         {
             // TODO: 这个比较没确定会不会有问题
             if (itemInList.itemData != item.itemData)
@@ -154,7 +206,6 @@ public class Inventory : MonoBehaviour
         // 找到第一个可以堆叠的物品索引
         var stackIndex = _inventoryItems.FindIndex((itemInList) =>
         {
-            // TODO: 这个比较没确定会不会有问题
             if (itemInList is null || itemInList.itemData != newItem.itemData)
             {
                 return false;
@@ -177,121 +228,39 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// 当前选中的背包位置是否包含物品
     /// </summary>
-    private bool IsSelectionBlank()
+    public bool IsSelectionBlank()
     {
-        // TODO
-        return true;
+        return _inventoryItems[_selectedItemIndex] is null;
     }
 
-    /// <summary>
-    /// 目前这两个方法方法依赖 CollisionTrigger 触发。
-    /// </summary>
-    private void OnTriggerEnter(Collider other)
-    {
-        var item = other.GetComponent<InventoryItem>();
-
-        if (item == null)
-        {
-            return;
-        }
-
-        if (_interactableItems.Contains(item))
-        {
-            return;
-        }
-
-        if (item.IsInInventory)
-        {
-            return;
-        }
-
-        // 使物品可交互
-        _interactableItems.Insert(0, item);
-        RefreshInteractableItems();
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        var item = other.GetComponent<InventoryItem>();
-        if (item == null)
-        {
-            return;
-        }
-
-        if (_interactableItems.Contains(item) == false)
-        {
-            return;
-        }
-
-        if (item.IsInInventory)
-        {
-            return;
-        }
-
-        // 使物品不可交互
-        item.BeNotInteractionTarget();
-        _interactableItems.Remove(item);
-        RefreshInteractableItems();
-    }
-
-    /// <summary>
-    /// 刷新各个可交互物品的可交互状态，只让第一个物品可交互
-    /// </summary>
-    private void RefreshInteractableItems()
-    {
-        if (_interactableItems.Count > 1)
-        {
-            for (int i = 1; i < _interactableItems.Count; ++i)
-            {
-                if (_interactableItems[i].IsInteractionTarget)
-                {
-                    _interactableItems[i].BeNotInteractionTarget();
-                }
-            }
-        }
-
-        if (_interactableItems.Count > 0 && !_interactableItems[0].IsInteractionTarget)
-        {
-            _interactableItems[0].BeInteractionTarget();
-        }
-    }
-
+    /****** MonoBehaviour ******/
+    
     void Start()
     {
+        // 初始化背包物品列表，null表示空位
         for (int i = 0; i < capacity; ++i)
         {
             _inventoryItems.Add(null);
         }
 
-        // 玩家输入
-        _input = GetComponent<StarterAssetsInputs>();
-        if (_input is not null)
+        // 绑定玩家输入事件
+        var input = GetComponent<StarterAssetsInputs>();
+        if (input is not null)
         {
-            _input.OnScrollUpStart += SelectPrevItem;
-            _input.OnScrollDownStart += SelectNextItem;
-            // _input.OnInspectItemStart += // 进入检视界面
+            input.OnScrollUpStart += SelectPrevItem;
+            input.OnScrollDownStart += SelectNextItem;
+            input.OnInspectItemStart += InspectSelectedItem;
         }
 
-        // 交互检测
-        if (_itemDetector is not null)
+        // 绑定交互事件
+        var fpc = GetComponent<FirstPersonController>();
+        if (fpc is not null)
         {
-            Debug.Log("Start() called");
-            _itemDetector.OnTriggerEnterThis += OnTriggerEnter;
-            _itemDetector.OnTriggerExitThis += OnTriggerExit;
+            fpc.onInteraction += OnInteraction;
         }
     }
 
     void Update()
     {
-    }
-
-    private void SelectPrevItem()
-    {
-        Debug.Log("SelectPrevItem() called");
-    }
-
-    private void SelectNextItem()
-    {
-        Debug.Log("SelectNextItem() called");
     }
 }

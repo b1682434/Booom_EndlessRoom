@@ -131,10 +131,12 @@ using UnityEngine.UI;
 				CameraRotation();
 				WalkmodeInteractInput();
 				MouseOverInteractable();
+				JumpAndGravity();
 				break;
 			case playerInputState.Interacting:
 				MouseOverInteractable();
 				FocusMode();
+				JumpAndGravity();
 				break;
 			case playerInputState.Donothing:
 				break;
@@ -361,17 +363,17 @@ using UnityEngine.UI;
 		}*/
 		IMouseOver Imouse;
 		   if (Physics.Raycast(ray, out hit, interactLength))
-		{ Imouse = hit.transform.GetComponent<IMouseOver>(); }
+		{ Imouse = hit.transform.GetComponent<IMouseOver>(); Debug.DrawLine(Camera.main.ScreenToWorldPoint(aimUI.transform.position), hit.point); }
         else
         {
-			Imouse = null;
-        }
+			Imouse = null; Debug.DrawLine(Camera.main.ScreenToWorldPoint(aimUI.transform.position),ray.direction*interactLength+ Camera.main.ScreenToWorldPoint(aimUI.transform.position));
+
+		}
 			if (Imouse != null)
 			{
-			Imouse.MouseOver();
-				
-					dialogText.text = Imouse.returnWord;
-					mouseOverTextChanged = true;
+			Imouse.MouseOver();				
+			dialogText.text = Imouse.returnWord;
+			mouseOverTextChanged = true;
 				
 			}
 			else
@@ -401,15 +403,7 @@ using UnityEngine.UI;
 				}
 
 				// Jump
-				if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-				{
-					
-					// the square root of H * -2 * G = how much velocity needed to reach desired height
-					//_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-
-
-					_input.jump = false;
-				}
+			
 
 				// jump timeout
 				if (_jumpTimeoutDelta >= 0.0f)
@@ -429,7 +423,7 @@ using UnityEngine.UI;
 				}
 
 				// if we are not grounded, do not jump
-				_input.jump = false;
+				//_input.jump = false;
 			}
 
 			// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)

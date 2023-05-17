@@ -128,7 +128,7 @@ public class Interaction : MonoBehaviour
             focusingObj = hit.transform.GetComponent<SelectableObject>();
             if (focusingObj != null)
             {
-                focusingObj.BeFocus();
+              //  focusingObj.BeFocus();
                 fps.enabled = false;
                 pinputState = playerInputState.Interacting;
                 Cursor.lockState = CursorLockMode.Confined;

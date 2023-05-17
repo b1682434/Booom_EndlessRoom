@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class SelectableObject : InteractableBase, IInteractRequest,IMouseOver
+public class SelectableObject : InteractableBase, IInteractRequest                               
 {
     public CinemachineVirtualCamera vCam;
     public int focusPriority = 15;
@@ -12,19 +12,14 @@ public class SelectableObject : InteractableBase, IInteractRequest,IMouseOver
     public bool focusObj;
     bool opened;
     GameManger gm;
+    bool canInteract;
  
  private void Start()
     {
         gm = FindObjectOfType<GameManger>();
     }
-    public void BeFocus()
-    {
-        //Camera.main.transform.GetComponent<CinemachineBlenderSettings>()
-        Camera.main.transform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
-        vCam.Priority = focusPriority;
-    }
+   
     
-
     public void InteractRequest(int ItemID)
     {
         if (focusObj)

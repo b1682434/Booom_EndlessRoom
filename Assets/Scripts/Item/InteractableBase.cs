@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[RequireComponent(typeof(Outline))]
-public class InteractableBase : MonoBehaviour
+public class InteractableBase : MonoBehaviour,IMouseOver
 {
 
     [Tooltip("物品名称")]
@@ -57,7 +57,11 @@ public class InteractableBase : MonoBehaviour
             StartCoroutine("CheckWhetherStillOverByTheMouse");
             showWord = mouseOVerWord;
             corrotineAlreadyRunning = true;
-            outline.enabled = true;
+            if (outline != null)
+            {
+                outline.enabled = true;
+            }
+            
             showWord = mouseOVerWord;//感觉有点不行。 被打开的话应该是会变化的。好像没必要放这儿？门可以另起
            // outline.OutlineMode = Outline.Mode.OutlineVisible;
             
@@ -74,13 +78,17 @@ public class InteractableBase : MonoBehaviour
             yield return new WaitForSeconds(0.02f);//等一会，如果值不跟新，说明不再被看着了,那就关闭轮廓线并结束此协程
             if (!overByMouse)
             {
-                outline.enabled = false;
+                if (outline != null)
+                {
+                    outline.enabled = false;
+                }
+                
                 corrotineAlreadyRunning = false;
                 StopAllCoroutines();
 
             }
             
-        }
+        }//虽然方法很狗屎，但似乎取消被聚焦那块也可以这么做？解耦。判断条件就是vcam的priority值等于多少
     }
 
     // Start is called before the first frame update

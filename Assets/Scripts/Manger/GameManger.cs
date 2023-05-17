@@ -7,6 +7,8 @@ public class GameManger : MonoBehaviour
 {
     
     public GameObject currentRevertObj;
+
+    public GameObject roomPrefab;
     FirstPersonController fpsCtrl;
     CinemachineBrain cmBrain;
     CinemachineVirtualCamera currentVitrualCam;
@@ -16,10 +18,10 @@ public class GameManger : MonoBehaviour
     private void Start()
     {
         fpsCtrl = FindFirstObjectByType<FirstPersonController>();
-        revertObjs[0] = currentRevertObj;
-        revertObjs[1] = Instantiate(revertObjs[0], revertObjs[0].transform);
+        revertObjs[1] = currentRevertObj;
+        /*revertObjs[1] = Instantiate(revertObjs[0], revertObjs[0].transform);
         revertObjs[1].transform.parent = null;
-        revertObjs[1].SetActive(false);
+        revertObjs[1].SetActive(false);*/
         cmBrain = Camera.main.GetComponent<CinemachineBrain>();
         
     }
@@ -46,18 +48,22 @@ public class GameManger : MonoBehaviour
   public  void GoThroughDoor( Vector3 postion )
     {
         //GameObject newObj = Instantiate(nextRevertObj, postion, nextRevertObj.transform.rotation);
-        
-        revertObjs[1].transform.position = postion;
-        revertObjs[1].SetActive(true);
-        Invoke("DestroyOldRertOBJ", 2f);
+        GameObject newObj = Instantiate(roomPrefab, postion, revertObjs[1].transform.rotation);
+        newObj.transform.parent = null; 
+        revertObjs[0] = revertObjs[1];
+        revertObjs[1] = newObj;
+        /* revertObjs[1].transform.position = postion;
+         revertObjs[1].SetActive(true);*/
+         Invoke("DestroyOldRertOBJ", 2f);
     }
     public void DestroyOldRertOBJ()
     {
         Destroy(revertObjs[0]);
+       /* Destroy(revertObjs[0]);
         revertObjs[0] = revertObjs[1];
         revertObjs[1] = Instantiate(revertObjs[0], revertObjs[0].transform);
         revertObjs[1].transform.parent = null;
-        revertObjs[1].SetActive(false);
+        revertObjs[1].SetActive(false);*/
     }
 
 

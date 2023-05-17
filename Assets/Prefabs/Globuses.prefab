@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 425928158172826328}
   - component: {fileID: 8439788673098691135}
   - component: {fileID: 7620379665255812160}
+  - component: {fileID: 2128388568705172504}
   m_Layer: 0
   m_Name: Globuses
   m_TagString: Untagged
@@ -99,8 +100,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25447096c961ae146b53297e560a54d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objName: 
+  ObjType: 0
+  mouseOVerWord: 
+  cannotOpenWord: 
+  emptyHandWord: 
+  openWord: 
+  showWord: 
+  outline: {fileID: 0}
+  overByMouse: 0
+  vCam: {fileID: 0}
+  focusPriority: 15
+  needKeyToOpen: 0
+  keyID: 0
+  focusObj: 0
   itemData: {fileID: 11400000, guid: deb211298afe5cd4f921fe3351b75c3b, type: 2}
-  _interactionTip: {fileID: 9045003560402905368}
 --- !u!135 &8439788673098691135
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -132,6 +146,18 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &2128388568705172504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3135290788386631453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6066cf10196276547adb0385f26c140e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3869197021659977910
 GameObject:
   m_ObjectHideFlags: 0

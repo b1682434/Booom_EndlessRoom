@@ -21,6 +21,8 @@ public class InventoryViewInitializer : MonoBehaviour
         var inventory = playerGameObject.GetComponent<Inventory>();
 
         var inventoryViewController = new InventoryViewController();
-        inventoryViewController.InitializeInventoryGrid(inventory, uiDocument.rootVisualElement, gridAsset);
+        inventoryViewController.InitializeInventoryGrids(inventory, uiDocument.rootVisualElement, gridAsset);
+        var inventoryView = uiDocument.rootVisualElement.Q<VisualElement>("InventoryViewRoot");
+        inventoryView.userData = inventoryViewController;
     }
 }

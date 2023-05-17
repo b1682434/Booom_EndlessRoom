@@ -8,44 +8,79 @@ public class InventoryViewController
     /// <summary>
     /// 容纳Grid的ListView
     /// </summary>
-    private ListView _gridListView;
+    private ScrollView _gridScrollView;
 
-    // 测试数据
-    private int[] _intValues = { 1, 2, 3, 4 };
+    private List<VisualElement> _grids = new List<VisualElement>();
 
     /// <summary>
     /// 玩家的背包组件
     /// </summary>
     private Inventory _inventory;
-    
+
     /// <summary>
     /// 初始化背包格子UI
     /// </summary>
     /// <param name="rootElement">InventoryView根节点</param>
     /// <param name="gridTemplate">背包格子控件</param>
-    public void InitializeInventoryGrid(Inventory inventory, VisualElement rootElement, VisualTreeAsset gridTemplate)
+    public void InitializeInventoryGrids(Inventory inventory, VisualElement rootElement, VisualTreeAsset gridTemplate)
     {
-        _gridListView = rootElement.Q<ListView>();
+        _gridScrollView = rootElement.Q<ScrollView>();
         _inventory = inventory;
 
-        _gridListView.makeItem = () =>
+        for (int i = 0; i < inventory.capacity; ++i)
         {
             var newGrid = gridTemplate.Instantiate();
             var newGridLogic = new InventoryGridController();
+            newGridLogic.InitializeGridController(newGrid);
+            newGridLogic.SetGridData(inventory.GetInventoryItem(i));
             newGrid.userData = newGridLogic;
-            return newGrid;
-        };
+            _gridScrollView.Add(newGrid);
+        }
 
-        _gridListView.bindItem = (item, index) =>
+        // 绑定更新
+        _inventory.onItemInfoUpdate += RefreshGrid;
+        _inventory.onSelectionChanged += FocusGrid;
+
+        FocusGrid(0);
+    }
+
+    /// <summary>
+    /// 刷新特定格子
+    /// </summary>
+    /// <param name="gridIndex"></param>
+    public void RefreshGrid(int gridIndex)
+    {
+        if (_gridScrollView.ElementAt(gridIndex).userData is InventoryGridController gridController)
         {
-            
-        };
+            gridController.SetGridData(_inventory.GetInventoryItem(gridIndex));
+        }
+    }
 
-        _gridListView.fixedItemHeight = 144.0f;
-        _gridListView.itemsSource = _intValues;
-        _gridListView.style.height = _gridListView.fixedItemHeight * _inventory.capacity;
+    /// <summary>
+    /// 刷新所有格子
+    /// </summary>
+    public void RefreshAllGrids()
+    {
+        foreach (var grid in _gridScrollView.Children())
+        {
+            if (grid.userData is InventoryGridController gridController)
+            {
+                gridController.Refresh();
+            }
+        }
+    }
 
-        Debug.Log("InitializeInventoryGrid() called.");
-        
+    /// <summary>
+    /// 聚焦到某个格子
+    /// </summary>
+    public void FocusGrid(int gridIndex)
+    {
+        for (int i = 0; i < _gridScrollView.childCount; ++i)
+        {
+            if (_gridScrollView.ElementAt(i).userData is InventoryGridController gridController)
+            {
+                gridController.SetSelected(i == gridIndex);
+            }
+        }
     }
 }

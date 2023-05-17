@@ -11,7 +11,7 @@ public class InteractableBase : MonoBehaviour, IMouseOver
     [Tooltip("拿了错误东西开门该说啥")] public string cannotOpenWord;
     [Tooltip("空手调查时候该说啥")] public string emptyHandWord;
     [Tooltip("打开了该说啥")] public string openWord;
-    [Tooltip("这个不动就行")] public string showWord; //最终传回给接口的文本
+    [Tooltip("这个不动就行")] [HideInInspector] public string showWord; //最终传回给接口的文本
 
     public string returnWord
     {
@@ -30,8 +30,7 @@ public class InteractableBase : MonoBehaviour, IMouseOver
 
     public Outline outline;
     bool corrotineAlreadyRunning = false;
-    [HideInInspector]
-    public bool overByMouse;
+    [HideInInspector] public bool overByMouse;
 
     public virtual void MouseOver()
     {

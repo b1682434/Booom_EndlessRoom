@@ -32,13 +32,13 @@ public class InventoryItem : SelectableObject
     private int _durability;
 
     /// <summary>
-    /// 是否在背包内
+    /// 拥有该物品的背包
     /// </summary>
-    private bool _isInInventory = false;
+    private Inventory _inventory;
 
     public bool IsInInventory
     {
-        get => _isInInventory;
+        get => _inventory is not null;
     }
 
     /// <summary>
@@ -49,10 +49,11 @@ public class InventoryItem : SelectableObject
     public bool IsInteractionTarget
     {
         get => _isInteractionTarget;
+        protected set => _isInteractionTarget = value;
     }
 
     /// <summary>
-    /// 重置组件 TODO
+    /// 重置组件 TODO: 重置组件可能会有修改
     /// </summary>
     private RevertBase _revertBase;
 
@@ -61,22 +62,24 @@ public class InventoryItem : SelectableObject
     /// </summary>
     private void Restart()
     {
+        gameObject.SetActive(true);
     }
 
     /// <summary>
-    /// 获取物品
+    /// 物品被获取
     /// </summary>
-    public void OnObtained()
+    public void OnObtained(Inventory inventory)
     {
         _revertBase.SetRecoveryEnabled(false);
         
-        if (_isInInventory)
+        if (_inventory is not null)
         {
             _stack++;
         }
         else
         {
-            _isInInventory = true;
+            _inventory = inventory;
+            
             // Note: 将此gameobject放到一个玩家看不到的位置，并且禁用碰撞
             // 移动位置的逻辑在Inventory中
             var colliders = GetComponents<Collider>();
@@ -89,12 +92,12 @@ public class InventoryItem : SelectableObject
     }
 
     /// <summary>
-    /// 使用或消耗一次耐久。
+    /// 物品被使用
     /// </summary>
-    /// <param name="forceDestroy">强制销毁物品</param>
+    /// <param name="forceDestroy">强制销毁</param>
     public void OnConsumed(bool forceDestroy = false)
     {
-        if (!_isInInventory)
+        if (_inventory is null)
         {
             return;
         }
@@ -115,7 +118,8 @@ public class InventoryItem : SelectableObject
 
         if (_stack <= 0)
         {
-            // TODO: 销毁物品
+            // TODO: 销毁物品，通知Inventory
+            Destroy(gameObject);
         }
     }
 
@@ -127,13 +131,14 @@ public class InventoryItem : SelectableObject
     /// <param name="ItemID">手持物品的ItemID，此处用不到</param>
     public void InteractRequest(int ItemID)
     {
+        base.InteractRequest(ItemID);
     }
 
     public override void MouseOver()
     {
-        if (!_isInteractionTarget && !_isInInventory)
+        if (!IsInteractionTarget && !IsInteractionTarget)
         {
-            _isInteractionTarget = true;
+            IsInteractionTarget = true;
         }
         
         base.MouseOver();
@@ -141,17 +146,15 @@ public class InventoryItem : SelectableObject
 
     public override void MouseExit()
     {
-        _isInteractionTarget = false;
+        IsInteractionTarget = false;
         
         base.MouseExit();
     }
     
-    protected void Start()
+    protected void Awake()
     {
-        base.Start();
-
         _revertBase = GetComponent<RevertBase>();
-        if (_revertBase != null)
+        if (_revertBase is not null)
         {
             if (itemData.recoverable)
             {
@@ -170,10 +173,20 @@ public class InventoryItem : SelectableObject
         }
 
         _durability = itemData.durability;
+    }
 
+    protected void Start()
+    {
+        base.Start();
+
+        objName = itemData.itemName;
+        ObjType = itemData.itemId;
+        mouseOVerWord = cannotOpenWord = emptyHandWord = itemData.itemName;
+        openWord = "拿走了";
+        
         Restart();
     }
-    
+
     // public void OnMouseOver()
     // {
     //     throw new NotImplementedException();

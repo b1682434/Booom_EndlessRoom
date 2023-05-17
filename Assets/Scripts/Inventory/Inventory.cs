@@ -6,44 +6,87 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+/// <summary>
+/// 物品数据变化时触发，index为变化的物品的位置。
+/// </summary>
+public delegate void OnInventoryItemUpdate(int index);
+
 /// <summary>
 /// 背包组件。
 /// - 应该添加到玩家身上
 /// </summary>
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(StarterAssetsInputs))]
-[RequireComponent(typeof(FirstPersonController))]  // 需要它的交互功能
+[RequireComponent(typeof(FirstPersonController))] // 需要它的交互功能
 public class Inventory : MonoBehaviour
 {
-    [Header("背包属性")] 
-    [Tooltip("背包格子数")]
-    public int capacity = 4;
+    [Header("背包属性")] [Tooltip("背包格子数")] public int capacity = 4;
+
+    /****** 背包状态 ******/
+
+    /// <summary>
+    /// 物品事件。
+    /// </summary>
+    public OnInventoryItemUpdate onItemInfoUpdate;
+
+    public OnInventoryItemUpdate onInspectItemFailed;
+
+    public OnInventoryItemUpdate onSelectionChanged;
 
     /// <summary>
     /// 背包物品，列表长度由capacity确定。
     /// </summary>
-    [ItemCanBeNull] 
-    private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
+    [ItemCanBeNull] private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
 
     /// <summary>
-    /// 选中的物品index
+    /// 获取特定位置的背包物品
     /// </summary>
+    public InventoryItem GetInventoryItem(int index)
+    {
+        if (index < 0)
+        {
+            return null;
+        }
+
+        return index < _inventoryItems.Count ? _inventoryItems[index] : null;
+    }
+
+    
     private int _selectedItemIndex = 0;
 
     /// <summary>
-    /// 当前选中物品的id
+    /// 选中的物品index
+    /// - 设置该值会触发onSelectionChanged
+    /// </summary>
+    public int SelectedItemIndex
+    {
+        get => _selectedItemIndex;
+        protected set
+        {
+            var oldValue = _selectedItemIndex;
+            _selectedItemIndex = Math.Clamp(value, 0, _inventoryItems.Count - 1);
+            if (oldValue != _selectedItemIndex)
+            {
+                onSelectionChanged(_selectedItemIndex);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 当前选中物品的id（将来服务于IInteractRequest）
     /// </summary>
     public int SelectedItemId
     {
         get
         {
-            if (_inventoryItems[_selectedItemIndex] is null)
+            if (_inventoryItems[SelectedItemIndex] is null)
             {
                 // TODO: 暂时用0作为空位id
                 return 0;
             }
 
-            return _inventoryItems[_selectedItemIndex].itemData.itemId;
+            return _inventoryItems[SelectedItemIndex].itemData.itemId;
         }
     }
 
@@ -62,22 +105,25 @@ public class Inventory : MonoBehaviour
 
         // 放入背包物品列表
         var index = FindSuitableGridForNewItem(sceneItem);
-        if (_inventoryItems[index] is null)
+        var itemObtained = _inventoryItems[index];
+        if (itemObtained is null)
         {
             var ownedItem = Instantiate(sceneItem, transform);
             _inventoryItems[index] = ownedItem;
-            ownedItem.OnObtained();
-            
+            itemObtained = ownedItem;
+
             ownedItem.transform.localPosition = Vector3.back * 1.0f;
         }
-        else
-        {
-            _inventoryItems[index].OnObtained();
-        }
+
+        itemObtained.OnObtained(this);
+
+        // TODO: sceneItem 变成可重置状态
         sceneItem.gameObject.SetActive(false);
 
+        SelectedItemIndex = index;
+        onItemInfoUpdate(index);
+        
         // TODO: 进入检视界面
-        _selectedItemIndex = index;
         InspectItem(_inventoryItems[index]);
     }
 
@@ -85,7 +131,7 @@ public class Inventory : MonoBehaviour
     /// 检视物品。
     /// </summary>
     /// <param name="ownedItem">持有的物品</param>
-    public void InspectItem([CanBeNull]InventoryItem ownedItem)
+    public void InspectItem([CanBeNull] InventoryItem ownedItem)
     {
         if (ownedItem is null)
         {
@@ -101,7 +147,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void InspectSelectedItem()
     {
-        InspectItem(_inventoryItems[_selectedItemIndex]);
+        InspectItem(_inventoryItems[SelectedItemIndex]);
     }
 
     /// <summary>
@@ -111,6 +157,15 @@ public class Inventory : MonoBehaviour
     /// <param name="ownedItem">持有的物品</param>
     public void UseItem(InventoryItem ownedItem)
     {
+        int indexToUse = _inventoryItems.IndexOf(ownedItem);
+
+        // TODO: 使用逻辑
+
+        onItemInfoUpdate(SelectedItemIndex);
+        if (indexToUse != SelectedItemIndex)
+        {
+            onItemInfoUpdate(indexToUse);
+        }
     }
 
     /// <summary>
@@ -118,9 +173,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void SelectPrevItem()
     {
-        Debug.Log("SelectPrevItem() called");
-        _selectedItemIndex = Math.Max(_selectedItemIndex - 1, 0);
-        // TODO: 更新UI
+        SelectedItemIndex--;
     }
 
     /// <summary>
@@ -128,9 +181,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void SelectNextItem()
     {
-        Debug.Log("SelectNextItem() called");
-        _selectedItemIndex = Math.Min(_selectedItemIndex + 1, capacity - 1);
-        // TODO: 更新UI
+        SelectedItemIndex++;
     }
 
     /****** 内部工具方法 ******/
@@ -230,11 +281,11 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public bool IsSelectionBlank()
     {
-        return _inventoryItems[_selectedItemIndex] is null;
+        return _inventoryItems[SelectedItemIndex] is null;
     }
 
     /****** MonoBehaviour ******/
-    
+
     void Start()
     {
         // 初始化背包物品列表，null表示空位
@@ -242,7 +293,7 @@ public class Inventory : MonoBehaviour
         {
             _inventoryItems.Add(null);
         }
-
+        
         // 绑定玩家输入事件
         var input = GetComponent<StarterAssetsInputs>();
         if (input is not null)

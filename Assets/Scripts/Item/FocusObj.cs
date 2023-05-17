@@ -1,15 +1,20 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class FocusObj : InteractableBase,IInteractRequest
 {
-   public Collider[] childCollider;//×ÓÎïÌåµÄcollider ½øÈë focuss mode ºó²Å»á¼¤»î,ÕâÑù×ÓÎïÌåÖ»ÓĞÔÚfocusmode²Å»á±»Ñ¡ÖĞ
-   
+   public Collider[] childCollider;//å­ç‰©ä½“çš„collider è¿›å…¥ focuss mode åæ‰ä¼šæ¿€æ´»,è¿™æ ·å­ç‰©ä½“åªæœ‰åœ¨focusmodeæ‰ä¼šè¢«é€‰ä¸­
+   public Collider selfColl;
+    public CinemachineVirtualCamera vcam;
+    GameManger gm;
     // Start is called before the first frame update
     void Start()
     {
         DeFocus();
+        //selfColl = GetComponent<Collider>();
+        gm = FindObjectOfType<GameManger>();
     }
 
     // Update is called once per frame
@@ -19,14 +24,21 @@ public class FocusObj : InteractableBase,IInteractRequest
         {
             coll.enabled = true;
         }
+        selfColl.enabled = false;
+        gm.EnterFocusMode(vcam);
+        if (outline != null)
+        {
+            outline.enabled = false;
+        }
 
     }
 
-    public void DeFocus()
+    public void DeFocus()//ä½¿ç”¨eventæ¿€æ´»ã€‚ å¾ˆä¹±ï¼Œä½†å…ˆè¿™æ ·å§
     {
         foreach (Collider coll in childCollider)
         {
             coll.enabled = false;
         }
+        selfColl.enabled = true;
     }
 }

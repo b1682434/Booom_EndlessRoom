@@ -46,7 +46,7 @@ public class InteractableBase : MonoBehaviour,IMouseOver
 
     public Outline outline;
     bool corrotineAlreadyRunning =false;
-   public bool overByMouse;
+    bool overByMouse;
     public void MouseOver()//mouseover的接口代码。可能放这儿不大合适，可能会移动位置
     {
        

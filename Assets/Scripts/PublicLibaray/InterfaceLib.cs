@@ -25,5 +25,10 @@ public interface IMouseOver
     void MouseOver();
 }
 
+public interface IOpenItem
+{
+    void ItemsOpened();
+}
+
 
 

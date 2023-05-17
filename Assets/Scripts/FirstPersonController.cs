@@ -81,6 +81,7 @@ using UnityEngine.UI;
 	public Text dialogText;
 	Vector2 defaultAimUIpos;
 	bool mouseOverTextChanged = false;
+	public GameEvent exitFocusModeEvent;
 	
 		private bool IsCurrentDeviceMouse
 		{
@@ -289,7 +290,8 @@ using UnityEngine.UI;
 		if (_input.jump)
 		{
 			_input.jump = false;
-			FindFirstObjectByType<GameManger>().ExitFocusVcam();
+			//FindFirstObjectByType<GameManger>().ExitFocusVcam();
+			exitFocusModeEvent.Raise();
 			aimUI.rectTransform.position = defaultAimUIpos;
 			Cursor.lockState = CursorLockMode.Locked;
 			pstate = playerInputState.Walking;

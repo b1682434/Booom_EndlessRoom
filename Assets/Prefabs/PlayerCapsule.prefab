@@ -592,6 +592,7 @@ MonoBehaviour:
   interactLength: 5
   aimUI: {fileID: 7021371220830676400}
   dialogText: {fileID: 487565478468067849}
+  exitFocusModeEvent: {fileID: 11400000, guid: 1aee59cc0d823e04d9a4bcc318ac8c99, type: 2}
 --- !u!114 &1978471637655604388
 MonoBehaviour:
   m_ObjectHideFlags: 0

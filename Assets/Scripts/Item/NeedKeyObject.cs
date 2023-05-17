@@ -1,40 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
+using UnityEngine.Events;
 
-public class SelectableObject : InteractableBase, IInteractRequest                               
+
+public class NeedKeyObject : InteractableBase, IInteractRequest                               
 {
-    public CinemachineVirtualCamera vCam;
-    public int focusPriority = 15;
-    public bool needKeyToOpen;
+    
     public int keyID;
-    public bool focusObj;
     bool opened;
-    GameManger gm;
-    bool canInteract;
- 
- private void Start()
-    {
-        gm = FindObjectOfType<GameManger>();
-    }
-   
+    public UnityEvent itemOpen;
+    
     
     public void InteractRequest(int ItemID)
     {
-        if (focusObj)
+        
+        if (opened)
         {
-            gm.EnterFocusMode(vCam);
+            showWord = openWord;
         }
-        if (needKeyToOpen)
+        else
         {
-            
             if (ItemID == keyID)//打开
             {
                 opened = true;
-               // showWord = openWord;
+                showWord = openWord;
+                itemOpen.Invoke();
             }
-            else if(ItemID == 0)//空手
+            else if (ItemID == 0)//空手
             {
                 showWord = emptyHandWord; //应该可以继续优化。 需要钥匙的一个类，多种钥匙多种方法的一个子类，pickup一个
             }
@@ -42,11 +35,9 @@ public class SelectableObject : InteractableBase, IInteractRequest
             {
                 showWord = cannotOpenWord;
             }
+
         }
-        if (opened)
-        {
-            showWord = openWord;
-        }
+        
     }
 
     

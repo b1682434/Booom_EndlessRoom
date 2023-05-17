@@ -44,6 +44,7 @@ public class GameManger : MonoBehaviour
             currentVitrualCam.Priority = 0;
         }      
         cmBrain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
+       
     }
   public  void GoThroughDoor( Vector3 postion )
     {

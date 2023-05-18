@@ -74,6 +74,7 @@ public class InventoryItem : SelectableObject
         
         if (_inventory is not null)
         {
+            // 背包已经存在该物体，只增加数量
             _stack++;
         }
         else
@@ -87,7 +88,8 @@ public class InventoryItem : SelectableObject
             {
                 collider.enabled = false;
             }
-            // Note: 不销毁是为了检视物品的时候不用重新生成
+            
+            gameObject.layer = LayerMask.NameToLayer("Inventory");
         }
     }
 
@@ -129,9 +131,11 @@ public class InventoryItem : SelectableObject
     /// 玩家与场景中的背包物品交互（通常是拾取）。
     /// </summary>
     /// <param name="ItemID">手持物品的ItemID，此处用不到</param>
-    public void InteractRequest(int ItemID)
+    public override void InteractRequestImpl(int ItemID)
     {
-        base.InteractRequest(ItemID);
+        opened = true;
+        
+        base.InteractRequestImpl(ItemID);
     }
 
     public override void MouseOver()

@@ -23,6 +23,8 @@ public class Inventory : MonoBehaviour
 {
     [Header("背包属性")] [Tooltip("背包格子数")] public int capacity = 4;
 
+    [Header("功能组件")] [Tooltip("检视相机，需要能渲染Inventory层")] public Camera inspectionCamera;
+
     /****** 背包状态 ******/
 
     /// <summary>
@@ -51,7 +53,6 @@ public class Inventory : MonoBehaviour
 
         return index < _inventoryItems.Count ? _inventoryItems[index] : null;
     }
-
     
     private int _selectedItemIndex = 0;
 
@@ -73,22 +74,38 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public InventoryItem SelectedItem => _inventoryItems[_selectedItemIndex];
+
     /// <summary>
-    /// 当前选中物品的id（将来服务于IInteractRequest）
+    /// 当前选中物品的id（将来服务于IInteractRequest接口）
     /// </summary>
     public int SelectedItemId
     {
         get
         {
-            if (_inventoryItems[SelectedItemIndex] is null)
+            if (SelectedItem is null)
             {
                 // TODO: 暂时用0作为空位id
                 return 0;
             }
 
-            return _inventoryItems[SelectedItemIndex].itemData.itemId;
+            return SelectedItem.itemData.itemId;
         }
     }
+
+    private bool _inspectionMode;
+
+    /// <summary>
+    /// 是否处于检视模式
+    /// </summary>
+    public bool InspectionMode
+    {
+        get => _inspectionMode;
+        protected set => _inspectionMode = value;
+    }
+    
+    private readonly Vector3 _inventoryPos = Vector3.back;
+    private readonly Vector3 _inspectionPos = Vector3.forward * 0.5f;
 
     /****** 可用的物品操作 ******/
 
@@ -112,7 +129,7 @@ public class Inventory : MonoBehaviour
             _inventoryItems[index] = ownedItem;
             itemObtained = ownedItem;
 
-            ownedItem.transform.localPosition = Vector3.back * 1.0f;
+            ownedItem.transform.localPosition = _inventoryPos;
         }
 
         itemObtained.OnObtained(this);
@@ -122,24 +139,9 @@ public class Inventory : MonoBehaviour
 
         SelectedItemIndex = index;
         onItemInfoUpdate(index);
-        
-        // TODO: 进入检视界面
-        InspectItem(_inventoryItems[index]);
-    }
-
-    /// <summary>
-    /// 检视物品。
-    /// </summary>
-    /// <param name="ownedItem">持有的物品</param>
-    public void InspectItem([CanBeNull] InventoryItem ownedItem)
-    {
-        if (ownedItem is null)
-        {
-            // 场景1：检视空位。设想：检视失败提示音
-            return;
-        }
 
         // TODO: 进入检视界面
+        InspectItem(SelectedItem);
     }
 
     /// <summary>
@@ -147,7 +149,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void InspectSelectedItem()
     {
-        InspectItem(_inventoryItems[SelectedItemIndex]);
+        InspectItem(SelectedItem);
     }
 
     /// <summary>
@@ -183,6 +185,88 @@ public class Inventory : MonoBehaviour
     {
         SelectedItemIndex++;
     }
+    
+    /****** 检视模式 ******/
+    
+    /// <summary>
+    /// 检视中的物品
+    /// </summary>
+    private List<InventoryItem> _inspectionItems = new List<InventoryItem>();
+    
+    /// <summary>
+    /// 进入/退出检视模式
+    /// </summary>
+    /// <param name="itemToInspect">要检视的物品</param>
+    public void InspectItem([CanBeNull] InventoryItem itemToInspect)
+    {
+        if (InspectionMode)
+        {
+            // 退出检视模式
+            InspectionMode = false;
+            inspectionCamera.enabled = false;
+            // TODO: 恢复视角转动和移动输入
+            // TODO: 隐藏、锁定鼠标
+
+            while (_inspectionItems.Count > 0)
+            {
+                RemoveInspectionItem(_inspectionItems[0]);
+            }
+        }
+        else
+        {
+            // 进入检视模式
+            if (itemToInspect is null || !_inventoryItems.Contains(itemToInspect))
+            {
+                // 场景1：检视空位。设想：检视失败提示音
+                return;
+            }
+
+            if (inspectionCamera is null)
+            {
+                return;
+            }
+
+            AddInspectionItem(SelectedItem);
+
+            // TODO: 禁用视角转动和移动输入
+            // TODO: 显示、解锁鼠标
+            InspectionMode = true;
+            inspectionCamera.enabled = true;
+        }
+    }
+
+    /// <summary>
+    /// 添加检视物品
+    /// </summary>
+    public void AddInspectionItem(InventoryItem itemToAdd)
+    {
+        if (itemToAdd is null || _inspectionItems.Contains(itemToAdd))
+        {
+            return;
+        }
+
+        var itemTransform = itemToAdd.transform;
+        itemTransform.parent = inspectionCamera.transform;
+        itemTransform.localPosition = _inspectionPos;
+        _inspectionItems.Add(itemToAdd);
+    }
+
+    /// <summary>
+    /// 移除检视物品
+    /// </summary>
+    public void RemoveInspectionItem(InventoryItem itemToRemove)
+    {
+        if (itemToRemove is null || !_inspectionItems.Contains(itemToRemove))
+        {
+            return;
+        }
+
+        var itemTransform = itemToRemove.transform;
+        itemTransform.parent = transform;
+        itemTransform.localPosition = _inventoryPos;
+        _inspectionItems.Remove(itemToRemove);
+    }
+
 
     /****** 内部工具方法 ******/
 
@@ -276,14 +360,6 @@ public class Inventory : MonoBehaviour
         return nullIndex;
     }
 
-    /// <summary>
-    /// 当前选中的背包位置是否包含物品
-    /// </summary>
-    public bool IsSelectionBlank()
-    {
-        return _inventoryItems[SelectedItemIndex] is null;
-    }
-
     /****** MonoBehaviour ******/
 
     void Start()
@@ -293,7 +369,7 @@ public class Inventory : MonoBehaviour
         {
             _inventoryItems.Add(null);
         }
-        
+
         // 绑定玩家输入事件
         var input = GetComponent<StarterAssetsInputs>();
         if (input is not null)

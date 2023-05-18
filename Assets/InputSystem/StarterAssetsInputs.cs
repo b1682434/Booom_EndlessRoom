@@ -19,7 +19,6 @@ public class StarterAssetsInputs : MonoBehaviour
     public bool backPack;
     public float scroll;
     public bool confirm;
-    public bool inspectItem;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -32,13 +31,19 @@ public class StarterAssetsInputs : MonoBehaviour
     public ButtonStartDelegate OnScrollUpStart;
     public ButtonStartDelegate OnScrollDownStart;
     public ButtonStartDelegate OnInspectItemStart;
+    public ButtonStartDelegate OnEscStart;
 
 
 #if ENABLE_INPUT_SYSTEM
 
 	public void OnEsc(InputValue value)
     {
+        var oldEsc = esc;
         esc = value.isPressed;
+        if (!oldEsc && esc)
+        {
+            OnEscStart.Invoke();
+        }
     }
 
 	public void OnConfirm(InputValue value)
@@ -96,13 +101,13 @@ public class StarterAssetsInputs : MonoBehaviour
 
     public void OnInspectItem(InputValue value)
     {
-        // 只有按下时会触发一次
-        if (inspectItem == false && value.isPressed)
-        {
-            OnInspectItemStart();
-        }
+        // 由于在InputAction的设置，只有按下时会触发一次
+        OnInspectItemStart();
+    }
 
-        inspectItem = value.isPressed;
+    public void OnMoveInspectionItem(InputValue value)
+    {
+        Debug.Log("OnMoveInspectionItem");
     }
 #endif
 

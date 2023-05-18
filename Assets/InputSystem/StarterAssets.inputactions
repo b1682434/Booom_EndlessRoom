@@ -85,6 +85,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MoveInspectionItem",
+                    "type": "Value",
+                    "id": "48709c13-573f-47eb-a69d-4f3fbd1fa28b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "RotateInspectionItem",
+                    "type": "Button",
+                    "id": "56654a01-a698-4418-b619-777a3a23a443",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -400,10 +418,32 @@
                     "name": "",
                     "id": "4c9eaf84-dfe7-496b-ac11-61379d7430da",
                     "path": "<Keyboard>/f",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
                     "action": "InspectItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4e1661a7-502b-48f3-98ae-253729bf1f79",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveInspectionItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c4943353-2bfc-4140-a7a0-7457040dafc0",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateInspectionItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

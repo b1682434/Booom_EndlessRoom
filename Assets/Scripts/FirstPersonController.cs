@@ -256,28 +256,27 @@ public delegate void OnInteraction(IInteractRequest IInter);
 			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
             if (IInter != null)
             {
-				if(IInter.ObjectType == 1)//如果是门
+	            if(IInter.ObjectType == 1)//如果是门
                 {
 					if (pstate != playerInputState.Interacting)//防止专注模式点到门，有奇奇怪怪bug
 					{
 						StartCoroutine(PassingDoor(hit.transform.GetComponent<BasicPortal>().DoorWayPoints(transform.position), hit.normal));
 						pstate = playerInputState.Donothing;
 						IInter.InteractRequest(0);
-						
-						// 告知其他组件
-						onInteraction(IInter);
 					}
 				}
                 else
                 {
 					IInter.InteractRequest(0);
-					onInteraction(IInter);
 				}
+	            
                 if (IInter.returnWord != null)
                 {
 					dialogText.text = IInter.returnWord;
                 }
                 
+                // 告知其他组件
+                onInteraction(IInter);
             }
 
 		}

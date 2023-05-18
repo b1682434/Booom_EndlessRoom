@@ -10,7 +10,7 @@ public class SelectableObject : InteractableBase, IInteractRequest
     public bool needKeyToOpen;
     public int keyID;
     public bool focusObj;
-    bool opened;
+    protected bool opened;
     GameManger gm;
  
     protected void Start()
@@ -23,9 +23,13 @@ public class SelectableObject : InteractableBase, IInteractRequest
         Camera.main.transform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
         vCam.Priority = focusPriority;
     }
-    
 
     public void InteractRequest(int ItemID)
+    {
+        InteractRequestImpl(ItemID);
+    }
+    
+    public virtual void InteractRequestImpl(int ItemID)
     {
         if (focusObj)
         {

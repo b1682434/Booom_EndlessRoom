@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,7 +22,8 @@ public class Inventory : MonoBehaviour
 {
     [Header("背包属性")] [Tooltip("背包格子数")] public int capacity = 4;
 
-    [Header("功能组件")] [Tooltip("检视相机，需要能渲染Inventory层")] public Camera inspectionCamera;
+    [Header("功能组件")] [Tooltip("检视相机，需要能渲染Inventory层")] [CanBeNull]
+    public Camera inspectionCamera;
 
     /****** 背包状态 ******/
 
@@ -53,7 +53,7 @@ public class Inventory : MonoBehaviour
 
         return index < _inventoryItems.Count ? _inventoryItems[index] : null;
     }
-    
+
     private int _selectedItemIndex = 0;
 
     /// <summary>
@@ -69,7 +69,7 @@ public class Inventory : MonoBehaviour
             _selectedItemIndex = Math.Clamp(value, 0, _inventoryItems.Count - 1);
             if (oldValue != _selectedItemIndex)
             {
-                onSelectionChanged(_selectedItemIndex);
+                onSelectionChanged?.Invoke(_selectedItemIndex);
             }
         }
     }
@@ -83,7 +83,7 @@ public class Inventory : MonoBehaviour
     {
         get
         {
-            if (SelectedItem is null)
+            if (SelectedItem == null)
             {
                 // TODO: 暂时用0作为空位id
                 return 0;
@@ -103,9 +103,19 @@ public class Inventory : MonoBehaviour
         get => _inspectionMode;
         protected set => _inspectionMode = value;
     }
-    
-    private readonly Vector3 _inventoryPos = Vector3.back;
-    private readonly Vector3 _inspectionPos = Vector3.forward * 0.5f;
+
+    private readonly Vector3 INVENTORY_POS = Vector3.back;
+    private readonly Vector3 INSPECTION_POS = new Vector3(0.0f, -0.15f, 1.0f);
+
+    /// <summary>
+    /// PlayerInput，用来切换操作映射
+    /// </summary>
+    private PlayerInput _playerInput;
+
+    private StarterAssetsInputs _input;
+
+    private readonly string INSPECTION_MODE_ACTION_MAP = "InspectionMode";
+    private readonly string PLAYER_ACTION_MAP = "Player";
 
     /****** 可用的物品操作 ******/
 
@@ -120,16 +130,22 @@ public class Inventory : MonoBehaviour
             return;
         }
 
+        // 背包有同类物品时不进入检视模式
+        var enterInspectionMode = !_inventoryItems.Exists((item) =>
+        {
+            return item != null && item.itemData == sceneItem.itemData;
+        });
+
         // 放入背包物品列表
         var index = FindSuitableGridForNewItem(sceneItem);
         var itemObtained = _inventoryItems[index];
-        if (itemObtained is null)
+        if (itemObtained == null)
         {
             var ownedItem = Instantiate(sceneItem, transform);
             _inventoryItems[index] = ownedItem;
             itemObtained = ownedItem;
 
-            ownedItem.transform.localPosition = _inventoryPos;
+            ownedItem.transform.localPosition = INVENTORY_POS;
         }
 
         itemObtained.OnObtained(this);
@@ -138,10 +154,13 @@ public class Inventory : MonoBehaviour
         sceneItem.gameObject.SetActive(false);
 
         SelectedItemIndex = index;
-        onItemInfoUpdate(index);
+        onItemInfoUpdate?.Invoke(index);
 
-        // TODO: 进入检视界面
-        InspectItem(SelectedItem);
+        // 进入检视界面
+        if (enterInspectionMode)
+        {
+            InspectItem(SelectedItem);
+        }
     }
 
     /// <summary>
@@ -163,10 +182,10 @@ public class Inventory : MonoBehaviour
 
         // TODO: 使用逻辑
 
-        onItemInfoUpdate(SelectedItemIndex);
+        onItemInfoUpdate?.Invoke(SelectedItemIndex);
         if (indexToUse != SelectedItemIndex)
         {
-            onItemInfoUpdate(indexToUse);
+            onItemInfoUpdate?.Invoke(indexToUse);
         }
     }
 
@@ -185,14 +204,19 @@ public class Inventory : MonoBehaviour
     {
         SelectedItemIndex++;
     }
-    
+
     /****** 检视模式 ******/
-    
+
     /// <summary>
-    /// 检视中的物品
+    /// 检视模式中的物品
     /// </summary>
     private List<InventoryItem> _inspectionItems = new List<InventoryItem>();
-    
+
+    /// <summary>
+    /// 检视模式中正在操作的对象
+    /// </summary>
+    [CanBeNull] private InventoryItem _operationTarget;
+
     /// <summary>
     /// 进入/退出检视模式
     /// </summary>
@@ -204,8 +228,11 @@ public class Inventory : MonoBehaviour
             // 退出检视模式
             InspectionMode = false;
             inspectionCamera.enabled = false;
-            // TODO: 恢复视角转动和移动输入
-            // TODO: 隐藏、锁定鼠标
+            inspectionCamera.gameObject.SetActive(false);
+
+            // 切换Player输入
+            _playerInput.SwitchCurrentActionMap(PLAYER_ACTION_MAP);
+            _input.SetCursorState(true);
 
             while (_inspectionItems.Count > 0)
             {
@@ -215,23 +242,26 @@ public class Inventory : MonoBehaviour
         else
         {
             // 进入检视模式
-            if (itemToInspect is null || !_inventoryItems.Contains(itemToInspect))
+            if (itemToInspect == null || !_inventoryItems.Contains(itemToInspect))
             {
                 // 场景1：检视空位。设想：检视失败提示音
                 return;
             }
 
-            if (inspectionCamera is null)
+            if (inspectionCamera == null)
             {
                 return;
             }
 
             AddInspectionItem(SelectedItem);
 
-            // TODO: 禁用视角转动和移动输入
-            // TODO: 显示、解锁鼠标
+            // 切换检视模式输入
+            _playerInput.SwitchCurrentActionMap(INSPECTION_MODE_ACTION_MAP);
+            _input.SetCursorState(false);
+
             InspectionMode = true;
             inspectionCamera.enabled = true;
+            inspectionCamera.gameObject.SetActive(true);
         }
     }
 
@@ -240,14 +270,22 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void AddInspectionItem(InventoryItem itemToAdd)
     {
-        if (itemToAdd is null || _inspectionItems.Contains(itemToAdd))
+        if (itemToAdd == null || _inspectionItems.Contains(itemToAdd))
         {
             return;
         }
 
+        // 启用item的碰撞，使其可以被射线检测
+        var colliders = itemToAdd.GetComponents<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = true;
+        }
+
+        // 放到inspectionCamera面前
         var itemTransform = itemToAdd.transform;
         itemTransform.parent = inspectionCamera.transform;
-        itemTransform.localPosition = _inspectionPos;
+        itemTransform.localPosition = INSPECTION_POS;
         _inspectionItems.Add(itemToAdd);
     }
 
@@ -256,17 +294,76 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void RemoveInspectionItem(InventoryItem itemToRemove)
     {
-        if (itemToRemove is null || !_inspectionItems.Contains(itemToRemove))
+        if (itemToRemove == null || !_inspectionItems.Contains(itemToRemove))
         {
             return;
         }
 
+        // 关闭item的碰撞
+        var colliders = itemToRemove.GetComponents<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
+        }
+
+        // 放回原位
         var itemTransform = itemToRemove.transform;
         itemTransform.parent = transform;
-        itemTransform.localPosition = _inventoryPos;
+        itemTransform.localPosition = INVENTORY_POS;
         _inspectionItems.Remove(itemToRemove);
     }
 
+    /// <summary>
+    /// 检测操作对象，鼠标按下时点击的物体为操作物体
+    /// </summary>
+    private void DetectOperationTargat()
+    {
+        if (_operationTarget != null || inspectionCamera == null)
+        {
+            return;
+        }
+
+        // Debug.Log($"DetectOperationTargat: {LayerMask.NameToLayer("Inventory")}");
+        // 射线检测操作对象
+        RaycastHit hit;
+        // Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Ray ray = inspectionCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(ray, out hit, 10.0f))
+        {
+            Debug.Log($"DetectOperationTargat:Raycast {hit.transform.gameObject}");
+            _operationTarget = hit.transform.GetComponent<InventoryItem>();
+            Debug.Log($"DetectOperationTargat:Raycast {_operationTarget}");
+        }
+    }
+
+    /// <summary>
+    /// 清空操作对象
+    /// </summary>
+    private void ResetOperationTarget()
+    {
+        Debug.Log("ResetOperationTarget");
+
+        if (_operationTarget != null)
+        {
+            CheckComposite(_operationTarget);
+        }
+
+        _operationTarget = null;
+    }
+
+    /// <summary>
+    /// 检测检视模式中的物体是否满足合成条件
+    /// </summary>
+    private void CheckComposite(InventoryItem itemToCheck)
+    {
+        if (itemToCheck == null)
+        {
+            return;
+        }
+        
+        // TODO: 检查合成表
+        Debug.Log("检查合成表");
+    }
 
     /****** 内部工具方法 ******/
 
@@ -274,7 +371,7 @@ public class Inventory : MonoBehaviour
     /// 有东西被交互时就看看是不是背包物品，是的话就捡起来
     /// - 绑定在FirstPersonController的onInteraction上
     /// </summary>
-    /// <param name="inter">交互物</param>
+    /// <param name="inter">被交互物</param>
     private void OnInteraction(IInteractRequest inter)
     {
         if (inter is InventoryItem item)
@@ -288,7 +385,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     private bool CanPickUpItem(InventoryItem item)
     {
-        if (item is null)
+        if (item == null)
         {
             return false;
         }
@@ -322,7 +419,7 @@ public class Inventory : MonoBehaviour
 
             return itemInList.Stack < itemInList.itemData.maxStack;
         });
-        if (stackItem is null)
+        if (stackItem == null)
         {
             return false;
         }
@@ -341,7 +438,7 @@ public class Inventory : MonoBehaviour
         // 找到第一个可以堆叠的物品索引
         var stackIndex = _inventoryItems.FindIndex((itemInList) =>
         {
-            if (itemInList is null || itemInList.itemData != newItem.itemData)
+            if (itemInList == null || itemInList.itemData != newItem.itemData)
             {
                 return false;
             }
@@ -355,7 +452,7 @@ public class Inventory : MonoBehaviour
         }
 
         // 找到第一个空位索引
-        var nullIndex = _inventoryItems.FindIndex((itemInList) => itemInList is null);
+        var nullIndex = _inventoryItems.FindIndex((itemInList) => itemInList == null);
 
         return nullIndex;
     }
@@ -371,17 +468,46 @@ public class Inventory : MonoBehaviour
         }
 
         // 绑定玩家输入事件
-        var input = GetComponent<StarterAssetsInputs>();
-        if (input is not null)
+        _input = GetComponent<StarterAssetsInputs>();
+        if (_input != null)
         {
-            input.OnScrollUpStart += SelectPrevItem;
-            input.OnScrollDownStart += SelectNextItem;
-            input.OnInspectItemStart += InspectSelectedItem;
+            _input.OnScrollUpStart += SelectPrevItem;
+            _input.OnScrollDownStart += SelectNextItem;
         }
 
-        // 绑定交互事件
+        _playerInput = GetComponent<PlayerInput>();
+
+        // 检视模式相关变量获取
+        if (inspectionCamera == null)
+        {
+            // 根据名称自动设置inspectionCamera
+            var cameras = gameObject.GetComponentsInChildren<Camera>(true);
+
+            const string defaultInspectionCameraName = "InspectionCamera";
+            foreach (var cameraComponent in cameras)
+            {
+                if (cameraComponent.gameObject.name == defaultInspectionCameraName)
+                {
+                    inspectionCamera = cameraComponent;
+                    break;
+                }
+            }
+        }
+
+        // 检视模式相关输入事件绑定
+        if (_input != null)
+        {
+            _input.OnEnterInspectionModeStart += InspectSelectedItem;
+            _input.OnExitInspectionModeStart += InspectSelectedItem;
+            _input.OnMoveInspectionItemStart += DetectOperationTargat;
+            _input.OnRotateInspectionItemStart += DetectOperationTargat;
+            _input.OnMoveInspectionItemEnd += ResetOperationTarget;
+            _input.OnRotateInspectionItemEnd += ResetOperationTarget;
+        }
+
+        // 交互
         var fpc = GetComponent<FirstPersonController>();
-        if (fpc is not null)
+        if (fpc != null)
         {
             fpc.onInteraction += OnInteraction;
         }
@@ -389,5 +515,30 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
+        // Debug.Log(Mouse.current.position.ReadValue());
+
+        // 检视模式下的输入处理
+        if (InspectionMode)
+        {
+            // 移动和旋转操作目标
+            if (_operationTarget != null)
+            {
+                Debug.Log(_operationTarget);
+                
+                var moveDelta = _input.moveDeltaInInspectionMode;
+                if (moveDelta != Vector2.zero)
+                {
+                    // TODO: 不懂直接这样行不行
+                    _operationTarget.transform.Translate(moveDelta * 0.002f);
+                }
+
+                var rotateDelta = _input.rotateDeltaInInspectionMode;
+                if (rotateDelta != Vector2.zero)
+                {
+                    // TODO: 不懂直接这样行不行
+                    _operationTarget.transform.Rotate(rotateDelta * 0.5f);
+                }
+            }
+        }
     }
 }

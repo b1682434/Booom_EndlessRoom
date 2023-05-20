@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine;using UnityEngine.InputSystem;
 
 /// <summary>
 /// 背包物体组件。
@@ -9,6 +9,7 @@ using UnityEngine;
 /// - 放入背包内的物品不会因为重置而消失
 /// </summary>
 [RequireComponent(typeof(Outline))]
+[RequireComponent(typeof(Collider))]
 public class InventoryItem : SelectableObject
 {
     [Header("Inventory")]
@@ -38,7 +39,7 @@ public class InventoryItem : SelectableObject
 
     public bool IsInInventory
     {
-        get => _inventory is not null;
+        get => _inventory != null;
     }
 
     /// <summary>
@@ -72,7 +73,7 @@ public class InventoryItem : SelectableObject
     {
         _revertBase.SetRecoveryEnabled(false);
         
-        if (_inventory is not null)
+        if (_inventory != null)
         {
             // 背包已经存在该物体，只增加数量
             _stack++;
@@ -99,7 +100,7 @@ public class InventoryItem : SelectableObject
     /// <param name="forceDestroy">强制销毁</param>
     public void OnConsumed(bool forceDestroy = false)
     {
-        if (_inventory is null)
+        if (_inventory == null)
         {
             return;
         }
@@ -158,7 +159,7 @@ public class InventoryItem : SelectableObject
     protected void Awake()
     {
         _revertBase = GetComponent<RevertBase>();
-        if (_revertBase is not null)
+        if (_revertBase != null)
         {
             if (itemData.recoverable)
             {
@@ -171,7 +172,7 @@ public class InventoryItem : SelectableObject
         }
         
         outline = GetComponent<Outline>();
-        if (outline is not null)
+        if (outline != null)
         {
             outline.enabled = false;
         }

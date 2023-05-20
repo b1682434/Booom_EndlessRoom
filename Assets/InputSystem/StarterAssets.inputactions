@@ -78,27 +78,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "InspectItem",
+                    "name": "EnterInspectionMode",
                     "type": "Button",
                     "id": "44c0f43b-690b-4546-baa6-5d4ac7cd91ad",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MoveInspectionItem",
-                    "type": "Value",
-                    "id": "48709c13-573f-47eb-a69d-4f3fbd1fa28b",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "RotateInspectionItem",
-                    "type": "Button",
-                    "id": "56654a01-a698-4418-b619-777a3a23a443",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -421,13 +403,110 @@
                     "interactions": "Press",
                     "processors": "",
                     "groups": "",
-                    "action": "InspectItem",
+                    "action": "EnterInspectionMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "InspectionMode",
+            "id": "aa9947dc-e580-4e72-adb2-a0eaa2929d12",
+            "actions": [
+                {
+                    "name": "ToggleMove",
+                    "type": "Button",
+                    "id": "bbcef99a-55e7-42bb-9a74-3a2519e0eb73",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MoveInspectionItem",
+                    "type": "Value",
+                    "id": "282f646a-c3c6-4df3-ac32-e4988c59716a",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ToggleRotate",
+                    "type": "Button",
+                    "id": "61ea3167-fee7-47fa-b43f-3581d6977164",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RotateInspectionItem",
+                    "type": "Value",
+                    "id": "56821662-b39d-40f2-9273-dd8ce29b98ba",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ExitInspectionMode",
+                    "type": "Button",
+                    "id": "91a25a40-c868-4ccd-93fc-d39f32ca88a8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7e4fffbf-9656-4099-b9ed-ffb67c49e235",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateInspectionItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "4e1661a7-502b-48f3-98ae-253729bf1f79",
+                    "id": "001f0367-a998-47c9-b54d-cfb057d7cd35",
+                    "path": "<Keyboard>/f",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitInspectionMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "63a2eaf0-cd03-47f3-9ca1-ac5d71c7c17d",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitInspectionMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ff03cb62-9bb7-4f0b-acc1-8d11e83e1d86",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "078c9ee8-5e18-4091-8159-416be2b218bf",
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
@@ -438,12 +517,12 @@
                 },
                 {
                     "name": "",
-                    "id": "c4943353-2bfc-4140-a7a0-7457040dafc0",
-                    "path": "",
-                    "interactions": "",
+                    "id": "b207828b-002e-4f7d-a93a-3b34915f9f71",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
-                    "action": "RotateInspectionItem",
+                    "action": "ToggleRotate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -631,10 +631,13 @@ MonoBehaviour:
   backPack: 0
   scroll: 0
   confirm: 0
-  inspectItem: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
+  moveInspectionItem: 0
+  rotateInspectionItem: 0
+  moveDeltaInInspectionMode: {x: 0, y: 0}
+  rotateDeltaInInspectionMode: {x: 0, y: 0}
 --- !u!114 &8616685848737228376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -758,7 +761,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1116885754137639005}
   - component: {fileID: 2471871709810682425}
-  - component: {fileID: 5285060159843206352}
   - component: {fileID: 636857455958551290}
   m_Layer: 0
   m_Name: InspectionCamera
@@ -825,14 +827,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &5285060159843206352
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9055395781960134705}
-  m_Enabled: 1
 --- !u!114 &636857455958551290
 MonoBehaviour:
   m_ObjectHideFlags: 0

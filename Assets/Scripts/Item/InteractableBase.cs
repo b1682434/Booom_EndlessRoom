@@ -32,7 +32,12 @@ public class InteractableBase : MonoBehaviour, IMouseOver
     bool corrotineAlreadyRunning = false;
     [HideInInspector] public bool overByMouse;
 
-    public virtual void MouseOver()
+    public void MouseOver()
+    {
+        MouseOverImpl();
+    }
+
+    public virtual void MouseOverImpl()
     {
         overByMouse = true;
         // showWord = mouseOVerWord;
@@ -42,12 +47,18 @@ public class InteractableBase : MonoBehaviour, IMouseOver
             showWord = mouseOVerWord;
             corrotineAlreadyRunning = true;
             outline.enabled = true;
+            Debug.Log("outline.enabled = true;");
             showWord = mouseOVerWord; //感觉有点不行。 被打开的话应该是会变化的。好像没必要放这儿？门可以另起
             // outline.OutlineMode = Outline.Mode.OutlineVisible;
         }
     }
 
-    public virtual void MouseExit()
+    public void MouseExit()
+    {
+        MouseExitImpl();
+    }
+
+    public virtual void MouseExitImpl()
     {
         outline.enabled = false;
         corrotineAlreadyRunning = false;

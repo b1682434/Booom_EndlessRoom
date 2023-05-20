@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;using UnityEngine.InputSystem;
 
 /// <summary>
@@ -15,6 +16,11 @@ public class InventoryItem : SelectableObject
     [Header("Inventory")]
     [Tooltip("物品数据配置")]
     public InventoryItemData itemData;
+
+    [Header("Inspection Mode")]
+    [Tooltip("物体中心点，用作检视模式的初始位置、旋转基准点")]
+    [CanBeNull]
+    public Transform pivotTransform;
 
     /****** 物品状态数据 ******/
     /// <summary>
@@ -88,6 +94,7 @@ public class InventoryItem : SelectableObject
             foreach (var collider in colliders)
             {
                 collider.enabled = false;
+                collider.isTrigger = true;
             }
             
             gameObject.layer = LayerMask.NameToLayer("Inventory");
@@ -139,21 +146,26 @@ public class InventoryItem : SelectableObject
         base.InteractRequestImpl(ItemID);
     }
 
-    public override void MouseOver()
+    public override void MouseOverImpl()
     {
-        if (!IsInteractionTarget && !IsInteractionTarget)
+        if (IsInInventory)
+        {
+            return;
+        }
+
+        if (!IsInteractionTarget)
         {
             IsInteractionTarget = true;
         }
         
-        base.MouseOver();
+        base.MouseOverImpl();
     }
 
-    public override void MouseExit()
+    public override void MouseExitImpl()
     {
         IsInteractionTarget = false;
         
-        base.MouseExit();
+        base.MouseExitImpl();
     }
     
     protected void Awake()
@@ -172,9 +184,10 @@ public class InventoryItem : SelectableObject
         }
         
         outline = GetComponent<Outline>();
-        if (outline != null)
+        
+        if (pivotTransform == null)
         {
-            outline.enabled = false;
+            pivotTransform = transform;
         }
 
         _durability = itemData.durability;

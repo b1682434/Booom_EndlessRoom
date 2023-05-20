@@ -251,7 +251,6 @@ public delegate void OnInteraction(IInteractRequest IInter);
     {
 		RaycastHit hit;
 		Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
-	    Debug.Log(aimUI.transform.position);
 		if (Physics.Raycast(ray, out hit, interactLength))
         {
 			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
@@ -277,7 +276,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
                 }
                 
                 // 告知其他组件
-                onInteraction.Invoke(IInter);
+                onInteraction?.Invoke(IInter);
             }
 
 		}

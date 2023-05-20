@@ -205,6 +205,7 @@ public class Inventory : MonoBehaviour
         SelectedItemIndex++;
     }
 
+
     /****** 检视模式 ******/
 
     /// <summary>
@@ -216,6 +217,16 @@ public class Inventory : MonoBehaviour
     /// 检视模式中正在操作的对象
     /// </summary>
     [CanBeNull] private InventoryItem _operationTarget;
+
+    /// <summary>
+    /// 检视模式下物品所在的平面、上方向、右方向
+    /// </summary>
+    private Plane _inspectionPlane;
+
+    private Vector3 _inspectionRotationUpAxis;
+    private Vector3 _inspectionRotationRightAxis;
+
+    private Vector3 _tempRelativePos;
 
     /// <summary>
     /// 进入/退出检视模式
@@ -253,6 +264,14 @@ public class Inventory : MonoBehaviour
                 return;
             }
 
+            // 计算放置检视物品的平面、上方向、右方向
+            // Note: 检视平面的位置是固定了，但可以在代码调整，以达到比较好的效果
+            var inspectionCameraTransform = inspectionCamera.transform;
+            _inspectionPlane = new Plane(-inspectionCameraTransform.forward,
+                inspectionCameraTransform.position + inspectionCameraTransform.forward * 1.0f);
+            _inspectionRotationUpAxis = inspectionCameraTransform.up;
+            _inspectionRotationRightAxis = inspectionCameraTransform.right;
+
             AddInspectionItem(SelectedItem);
 
             // 切换检视模式输入
@@ -285,7 +304,9 @@ public class Inventory : MonoBehaviour
         // 放到inspectionCamera面前
         var itemTransform = itemToAdd.transform;
         itemTransform.parent = inspectionCamera.transform;
-        itemTransform.localPosition = INSPECTION_POS;
+        var pivotPos = GetPosFromInspectionPlane(new Vector2(Screen.width / 2 , Screen.height / 2));
+        itemTransform.position = pivotPos + itemTransform.position - itemToAdd.pivotTransform.position;
+        itemTransform.rotation = Quaternion.identity;
         _inspectionItems.Add(itemToAdd);
     }
 
@@ -323,16 +344,20 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        // Debug.Log($"DetectOperationTargat: {LayerMask.NameToLayer("Inventory")}");
         // 射线检测操作对象
         RaycastHit hit;
-        // Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         Ray ray = inspectionCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(ray, out hit, 10.0f))
+        if (Physics.Raycast(ray, out hit, 10.0f, 1 << LayerMask.NameToLayer("Inventory"),
+                QueryTriggerInteraction.Collide))
         {
-            Debug.Log($"DetectOperationTargat:Raycast {hit.transform.gameObject}");
             _operationTarget = hit.transform.GetComponent<InventoryItem>();
-            Debug.Log($"DetectOperationTargat:Raycast {_operationTarget}");
+        }
+
+        if (_operationTarget != null)
+        {
+            float distance;
+            _inspectionPlane.Raycast(ray, out distance);
+            _tempRelativePos = _operationTarget.transform.position - ray.GetPoint(distance);
         }
     }
 
@@ -341,8 +366,6 @@ public class Inventory : MonoBehaviour
     /// </summary>
     private void ResetOperationTarget()
     {
-        Debug.Log("ResetOperationTarget");
-
         if (_operationTarget != null)
         {
             CheckComposite(_operationTarget);
@@ -360,7 +383,7 @@ public class Inventory : MonoBehaviour
         {
             return;
         }
-        
+
         // TODO: 检查合成表
         Debug.Log("检查合成表");
     }
@@ -457,6 +480,17 @@ public class Inventory : MonoBehaviour
         return nullIndex;
     }
 
+    /// <summary>
+    /// 找出屏幕坐标投影到检视平面上的点的世界坐标
+    /// </summary>
+    private Vector3 GetPosFromInspectionPlane(Vector2 screenPos)
+    {
+        Ray ray = inspectionCamera.ScreenPointToRay(screenPos);
+        float distance;
+        _inspectionPlane.Raycast(ray, out distance);
+        return ray.GetPoint(distance);
+    }
+
     /****** MonoBehaviour ******/
 
     void Start()
@@ -523,20 +557,20 @@ public class Inventory : MonoBehaviour
             // 移动和旋转操作目标
             if (_operationTarget != null)
             {
-                Debug.Log(_operationTarget);
-                
-                var moveDelta = _input.moveDeltaInInspectionMode;
-                if (moveDelta != Vector2.zero)
+                var moveItem = _input.moveInspectionItem;
+                if (moveItem)
                 {
-                    // TODO: 不懂直接这样行不行
-                    _operationTarget.transform.Translate(moveDelta * 0.002f);
+                    var mousePos = GetPosFromInspectionPlane(Mouse.current.position.ReadValue());
+                    _operationTarget.transform.position = mousePos + _tempRelativePos;
                 }
 
                 var rotateDelta = _input.rotateDeltaInInspectionMode;
                 if (rotateDelta != Vector2.zero)
                 {
-                    // TODO: 不懂直接这样行不行
-                    _operationTarget.transform.Rotate(rotateDelta * 0.5f);
+                    var trans = _operationTarget.transform;
+                    var pivotTrans = _operationTarget.pivotTransform;
+                    trans.RotateAround(pivotTrans.position, _inspectionRotationUpAxis, rotateDelta.x * -0.2f);
+                    trans.RotateAround(pivotTrans.position, _inspectionRotationRightAxis, rotateDelta.y * 0.2f);
                 }
             }
         }

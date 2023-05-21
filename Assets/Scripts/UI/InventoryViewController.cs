@@ -32,16 +32,16 @@ public class InventoryViewController
             var newGrid = gridTemplate.Instantiate();
             var newGridLogic = new InventoryGridController();
             newGridLogic.InitializeGridController(newGrid);
-            newGridLogic.SetGridData(inventory.GetInventoryItem(i));
+            newGridLogic.SetGridData(inventory, i);
             newGrid.userData = newGridLogic;
             _gridScrollView.Add(newGrid);
         }
 
         // 绑定更新
         _inventory.onItemInfoUpdate += RefreshGrid;
-        _inventory.onSelectionChanged += FocusGrid;
+        _inventory.onSelectionChanged += SelectGrid;
 
-        FocusGrid(0);
+        SelectGrid(0);
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public class InventoryViewController
     {
         if (_gridScrollView.ElementAt(gridIndex).userData is InventoryGridController gridController)
         {
-            gridController.SetGridData(_inventory.GetInventoryItem(gridIndex));
+            gridController.SetGridData(_inventory, gridIndex);
         }
     }
 
@@ -71,9 +71,9 @@ public class InventoryViewController
     }
 
     /// <summary>
-    /// 聚焦到某个格子
+    /// 选择某个格子
     /// </summary>
-    public void FocusGrid(int gridIndex)
+    public void SelectGrid(int gridIndex)
     {
         for (int i = 0; i < _gridScrollView.childCount; ++i)
         {

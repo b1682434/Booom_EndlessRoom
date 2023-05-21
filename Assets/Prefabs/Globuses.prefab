@@ -116,6 +116,8 @@ MonoBehaviour:
   focusObj: 0
   itemData: {fileID: 11400000, guid: deb211298afe5cd4f921fe3351b75c3b, type: 2}
   pivotTransform: {fileID: 1721350793449198043}
+  test:
+  - {fileID: 0}
 --- !u!135 &8439788673098691135
 SphereCollider:
   m_ObjectHideFlags: 0

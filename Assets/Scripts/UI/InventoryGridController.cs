@@ -8,10 +8,24 @@ using UnityEngine.UIElements;
 public class InventoryGridController
 {
     /****** 物品 ******/
+
+    /// <summary>
+    /// 背包
+    /// </summary>
+    private Inventory _inventory;
+    
+    /// <summary>
+    /// 背包物品的位置
+    /// </summary>
+    private int _itemIndex;
+
     /// <summary>
     /// 格子中存放的物品
     /// </summary>
-    private InventoryItem _item;
+    private InventoryItem Item
+    {
+        get => _inventory.GetInventoryItem(_itemIndex);
+    }
 
     /****** UI状态 ******/
     private bool _selected = false;
@@ -26,6 +40,8 @@ public class InventoryGridController
     }
 
     /****** UI元素 ******/
+    private VisualElement _gridRoot;
+    
     /// <summary>
     /// 物品数量标签
     /// </summary>
@@ -45,20 +61,32 @@ public class InventoryGridController
 
     public void InitializeGridController(VisualElement gridRoot)
     {
+        _gridRoot = gridRoot;
         _stackNumberRootElement = gridRoot.Q<VisualElement>("StackNumberRoot");
         _stackNumberLabel = gridRoot.Q<Label>("StackNumber");
         _itemIconElement = gridRoot.Q<VisualElement>("ItemIcon");
         _selectionFrameElement = gridRoot.Q<VisualElement>("SelectionFrame");
+        
+        gridRoot.RegisterCallback<MouseDownEvent>(MouseDownCallback);
+    }
 
-        // _stackLabel.Bind();
+    private void MouseDownCallback(MouseDownEvent evt)
+    {
+        if (Selected)
+        {
+            return;
+        }
+
+        _inventory.AddInspectionItemToSparePos(Item);
     }
 
     /// <summary>
     /// 设置绑定的物品
     /// </summary>
-    public void SetGridData([CanBeNull] InventoryItem item)
+    public void SetGridData(Inventory inventory, int itemIndex)
     {
-        _item = item;
+        _inventory = inventory;
+        _itemIndex = itemIndex;
         Refresh();
     }
 
@@ -67,16 +95,16 @@ public class InventoryGridController
     /// </summary>
     public void Refresh()
     {
-        if (_item is null)
+        if (Item == null)
         {
             _itemIconElement.style.backgroundImage = new StyleBackground(StyleKeyword.None);
             _stackNumberRootElement.style.display = DisplayStyle.None;
         }
         else
         {
-            _itemIconElement.style.backgroundImage = new StyleBackground(_item.itemData.itemIcon);
-            _stackNumberRootElement.style.display = _item.Stack > 1 ? DisplayStyle.Flex : DisplayStyle.None;
-            _stackNumberLabel.text = _item.Stack.ToString();
+            _itemIconElement.style.backgroundImage = new StyleBackground(Item.itemData.itemIcon);
+            _stackNumberRootElement.style.display = Item.Stack > 1 ? DisplayStyle.Flex : DisplayStyle.None;
+            _stackNumberLabel.text = Item.Stack.ToString();
         }
     }
 

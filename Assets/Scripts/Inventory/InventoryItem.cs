@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 /// - 放入背包内的物品不会因为重置而消失
 /// </summary>
 [RequireComponent(typeof(Collider))]
-public class InventoryItem : SelectableObject, IEquatable<InventoryItem>
+public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<InventoryItem>
 {
     [Header("Inventory")] [Tooltip("物品数据配置")]
     public InventoryItemData itemData;
@@ -94,7 +94,9 @@ public class InventoryItem : SelectableObject, IEquatable<InventoryItem>
     /// </summary>
     public void ObtainedBy(Inventory inventory)
     {
-        _revertBase.SetRecoveryEnabled(false);
+        if (_revertBase != null) {
+            _revertBase.SetRecoveryEnabled(false);
+        }
 
         if (_inventory != null)
         {
@@ -232,12 +234,9 @@ public class InventoryItem : SelectableObject, IEquatable<InventoryItem>
     /// <summary>
     /// 玩家与场景中的背包物品交互（通常是拾取）。
     /// </summary>
-    /// <param name="ItemID">手持物品的ItemID，此处用不到</param>
-    public override void InteractRequestImpl(int ItemID)
+    /// <param name="ItemID">手持物品的ItemID</param>
+    public void InteractRequest(int ItemID)
     {
-        opened = true;
-
-        base.InteractRequestImpl(ItemID);
     }
 
     public override void MouseOverImpl()
@@ -291,8 +290,6 @@ public class InventoryItem : SelectableObject, IEquatable<InventoryItem>
 
     protected void Start()
     {
-        base.Start();
-
         objName = itemData.itemName;
         ObjType = itemData.itemId;
         mouseOVerWord = cannotOpenWord = emptyHandWord = itemData.itemName;

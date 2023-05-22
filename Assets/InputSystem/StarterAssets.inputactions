@@ -495,6 +495,17 @@
                 },
                 {
                     "name": "",
+                    "id": "739dace8-7c3a-48a5-9954-7c2ef6b5757a",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitInspectionMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ff03cb62-9bb7-4f0b-acc1-8d11e83e1d86",
                     "path": "<Mouse>/leftButton",
                     "interactions": "Press(behavior=2)",

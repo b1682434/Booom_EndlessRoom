@@ -251,19 +251,21 @@ public class Inventory : MonoBehaviour
     private List<InventoryItem> _inspectionItems = new List<InventoryItem>();
 
     /// <summary>
-    /// 检视模式中正在操作的对象
+    /// 检视模式中正在操作的对象、操作对象相对位置、旋转操作方向。每次点击物品更新。
     /// </summary>
     [CanBeNull] private InventoryItem _operationTarget;
+    
+    private Vector3 _tempRelativePos;
+    private bool _rotatePitch = false;
+    private bool _rotateYaw = false;
 
     /// <summary>
-    /// 检视模式下物品所在的平面、上方向、右方向
+    /// 检视模式下物品所在的平面、上方向、右方向，每次进入检视模式时更新
     /// </summary>
     private Plane _inspectionPlane;
 
     private Vector3 _inspectionRotationUpAxis;
     private Vector3 _inspectionRotationRightAxis;
-
-    private Vector3 _tempRelativePos;
 
     /// <summary>
     /// 进入/退出检视模式
@@ -273,6 +275,11 @@ public class Inventory : MonoBehaviour
     {
         if (InspectionMode)
         {
+            while (_inspectionItems.Count > 0)
+            {
+                RemoveInspectionItem(_inspectionItems[0]);
+            }
+            
             // 退出检视模式
             InspectionMode = false;
             inspectionCamera.enabled = false;
@@ -281,15 +288,9 @@ public class Inventory : MonoBehaviour
             // 切换Player输入
             _playerInput.SwitchCurrentActionMap(PLAYER_ACTION_MAP);
             _input.SetCursorState(true);
-
-            while (_inspectionItems.Count > 0)
-            {
-                RemoveInspectionItem(_inspectionItems[0]);
-            }
         }
         else
         {
-            // 进入检视模式
             if (itemToInspect == null || !_inventoryItems.Contains(itemToInspect))
             {
                 // 场景1：检视空位。设想：检视失败提示音
@@ -311,14 +312,14 @@ public class Inventory : MonoBehaviour
 
             Debug.Log("AddInspectionItem");
             
-            // 切换检视模式输入
-            _playerInput.SwitchCurrentActionMap(INSPECTION_MODE_ACTION_MAP);
-            _input.SetCursorState(false);
-
-            // 检视模式Setup
+            // 进入检视模式
             inspectionCamera.enabled = true;
             inspectionCamera.gameObject.SetActive(true);
             InspectionMode = true;
+            
+            // 切换检视模式输入
+            _playerInput.SwitchCurrentActionMap(INSPECTION_MODE_ACTION_MAP);
+            _input.SetCursorState(false);
             
             AddInspectionItem(SelectedItem);
         }
@@ -441,6 +442,8 @@ public class Inventory : MonoBehaviour
         }
 
         _operationTarget = null;
+        _rotateYaw = false;
+        _rotatePitch = false;
     }
 
     /// <summary>
@@ -693,6 +696,7 @@ public class Inventory : MonoBehaviour
             // 移动和旋转操作目标
             if (_operationTarget != null)
             {
+                // 移动
                 var moveItem = _input.moveInspectionItem;
                 if (moveItem)
                 {
@@ -700,12 +704,37 @@ public class Inventory : MonoBehaviour
                     _operationTarget.transform.position = mousePos + _tempRelativePos;
                 }
 
+                // 旋转
                 var rotateDelta = _input.rotateDeltaInInspectionMode;
-                if (rotateDelta != Vector2.zero)
+                if (!_rotatePitch && !_rotateYaw)
+                {
+                    // 点击到物体上后，第一次发生鼠标挪动时得到旋转方向
+                    var deltaX = Mathf.Abs(rotateDelta.x);
+                    var deltaY = Mathf.Abs(rotateDelta.y);
+                    if (deltaX != 0.0f && deltaY != 0.0f)
+                    {
+                        if (deltaX >= deltaY)
+                        {
+                            _rotateYaw = true;
+                        }
+                        else
+                        {
+                            _rotatePitch = true;
+                        }
+                    }
+                }
+
+                if (_rotateYaw)
                 {
                     var trans = _operationTarget.transform;
                     var pivotTrans = _operationTarget.pivotTransform;
                     trans.RotateAround(pivotTrans.position, _inspectionRotationUpAxis, rotateDelta.x * -0.2f);
+                }
+
+                if (_rotatePitch)
+                {
+                    var trans = _operationTarget.transform;
+                    var pivotTrans = _operationTarget.pivotTransform;
                     trans.RotateAround(pivotTrans.position, _inspectionRotationRightAxis, rotateDelta.y * 0.2f);
                 }
             }

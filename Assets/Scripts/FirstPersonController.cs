@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 
+public delegate void OnInteraction(IInteractRequest IInter);
+
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
@@ -51,7 +53,10 @@ using UnityEngine.UI;
 		public float TopClamp = 90.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
-
+		
+		// interaction
+		public OnInteraction onInteraction;
+		
 		// cinemachine
 		private float _cinemachineTargetPitch;
 
@@ -254,7 +259,7 @@ using UnityEngine.UI;
 			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
             if (IInter != null)
             {
-				if(IInter.ObjectType == 1)//如果是门
+	            if(IInter.ObjectType == 1)//如果是门
                 {
 					if (pstate != playerInputState.Interacting)//防止专注模式点到门，有奇奇怪怪bug
 					{
@@ -267,11 +272,14 @@ using UnityEngine.UI;
                 {
 					IInter.InteractRequest(0);
 				}
+	            
                 if (IInter.returnWord != null)
                 {
 					dialogText.text = IInter.returnWord;
                 }
                 
+                // 告知其他组件
+                onInteraction?.Invoke(IInter);
             }
 
 		}

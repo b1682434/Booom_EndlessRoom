@@ -10,7 +10,8 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
     public int keyID;
     bool opened;
     public UnityEvent itemOpen;
-    
+    public AudioClip cannnotOpenSouond, openSound;
+    public AudioSource au;
     
     public void InteractRequest(int ItemID)
     {
@@ -26,13 +27,16 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
                 opened = true;
                 showWord = openWord;
                 itemOpen.Invoke();
+                PlaySound(openSound);
             }
             else if (ItemID == 0)//空手
             {
+                PlaySound(cannnotOpenSouond);
                 showWord = emptyHandWord; //应该可以继续优化。 需要钥匙的一个类，多种钥匙多种方法的一个子类，pickup一个
             }
             else // 拿了错的东西开门
             {
+                PlaySound(cannnotOpenSouond);
                 showWord = cannotOpenWord;
             }
 
@@ -40,5 +44,14 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
         
     }
 
+    public void PlaySound(AudioClip clip)
+    {
+
+        if (clip != null && au != null)
+        {
+            au.clip = clip;
+            au.Play();
+        }
+    }
     
 }

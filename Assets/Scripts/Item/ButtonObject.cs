@@ -6,7 +6,7 @@ public class ButtonObject : InteractableBase, IInteractRequest
 {
     public bool canBeInteracted = true;
     public UnityEvent ItemOpen;
-
+    public AudioSource au;
 
     public void InteractRequest(int ItemID)
     {
@@ -14,6 +14,11 @@ public class ButtonObject : InteractableBase, IInteractRequest
         {
             ItemOpen.Invoke();
             print("ButtonPressed");
+            if (au != null)
+            {
+                au.Play();
+            }
+          
         }
     }
     

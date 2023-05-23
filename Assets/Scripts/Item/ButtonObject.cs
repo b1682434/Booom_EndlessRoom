@@ -13,6 +13,7 @@ public class ButtonObject : InteractableBase, IInteractRequest
         if (canBeInteracted)
         {
             ItemOpen.Invoke();
+            print("ButtonPressed");
         }
     }
     

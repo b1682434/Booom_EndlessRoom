@@ -84,7 +84,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
 	public float interactLength;
 	public Image aimUI;
 	public Text dialogText;
-	Vector2 defaultAimUIpos;
+	//Vector2 defaultAimUIpos;
 	bool mouseOverTextChanged = false;
 	public GameEvent exitFocusModeEvent;
 	
@@ -123,12 +123,12 @@ public delegate void OnInteraction(IInteractRequest IInter);
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
 
-		defaultAimUIpos = aimUI.rectTransform.position;//aimui的默认位置
+		//defaultAimUIpos = aimUI.rectTransform.position;//aimui的默认位置
 		}
 
 		private void Update()
 		{
-
+		aimUI.rectTransform.position = Mouse.current.position.ReadValue();
 		switch (pstate)
         {
 			case playerInputState.Walking:
@@ -294,13 +294,14 @@ public delegate void OnInteraction(IInteractRequest IInter);
     }
 	void FocusMode()
     {
+		Cursor.lockState = CursorLockMode.Confined;
 		aimUI.rectTransform.position = Mouse.current.position.ReadValue();
 		if (_input.jump)
 		{
 			_input.jump = false;
 			//FindFirstObjectByType<GameManger>().ExitFocusVcam();
 			exitFocusModeEvent.Raise();
-			aimUI.rectTransform.position = defaultAimUIpos;
+			//aimUI.rectTransform.position = defaultAimUIpos;
 			Cursor.lockState = CursorLockMode.Locked;
 			pstate = playerInputState.Walking;
 		}//离开专注模式

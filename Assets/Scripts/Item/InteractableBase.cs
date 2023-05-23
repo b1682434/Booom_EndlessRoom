@@ -63,7 +63,10 @@ public class InteractableBase : MonoBehaviour, IMouseOver
 
     public virtual void MouseExitImpl()
     {
-        outline.enabled = false;
+        if (outline != null)
+            {
+                outline.enabled = false;
+            }
         corrotineAlreadyRunning = false;
     }
 
@@ -75,13 +78,14 @@ public class InteractableBase : MonoBehaviour, IMouseOver
             yield return new WaitForSeconds(0.02f); //等一会，如果值不跟新，说明不再被看着了,那就关闭轮廓线并结束此协程
             if (!overByMouse)
             {
-                if (outline != null)
+                MouseExit();
+                /*if (outline != null)
                 {
                     outline.enabled = false;
                 }
                 MouseExit();
                 
-                corrotineAlreadyRunning = false;
+                corrotineAlreadyRunning = false;*/
                 StopAllCoroutines();
             }
             

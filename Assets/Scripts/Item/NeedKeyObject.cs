@@ -14,7 +14,7 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
     
     public void InteractRequest(int ItemID)
     {
-        
+        print(ItemID);
         if (opened)
         {
             showWord = openWord;

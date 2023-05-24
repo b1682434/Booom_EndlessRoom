@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254ef5278551b7c458e78ffe684355ff, type: 3}
   m_Name: Eye
   m_EditorClassIdentifier: 
-  itemId: 2
-  itemName: "\u773C\u7403"
+  itemId: 102
+  itemName: "\u773C\u7403\u8001\u9F20"
   itemIcon: {fileID: 21300000, guid: fba62ba3a0f3abb4cbe434d834bc3162, type: 3}
   maxStack: 1
   canBePickUp: 1

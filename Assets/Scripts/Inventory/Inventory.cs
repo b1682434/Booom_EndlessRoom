@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -35,6 +36,8 @@ public class Inventory : MonoBehaviour
     public OnInventoryItemUpdate onInspectItemFailed;
 
     public OnInventoryItemUpdate onSelectionChanged;
+
+    public OnInventoryItemUpdate onCraftingSucceeded;
 
     /// <summary>
     /// 背包物品，列表长度由capacity确定。
@@ -93,22 +96,11 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private bool _inspectionMode;
-
-    /// <summary>
-    /// 是否处于检视模式
-    /// </summary>
-    public bool InspectionMode
-    {
-        get => _inspectionMode;
-        protected set => _inspectionMode = value;
-    }
-
     // 处于背包中的物体的存放位置
     private readonly Vector3 INVENTORY_POS = Vector3.back;
 
     /****** 输入相关 ******/
-    
+
     /// <summary>
     /// PlayerInput，用来切换操作映射
     /// </summary>
@@ -133,11 +125,8 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        // 背包有同类物品时不进入检视模式
-        var enterInspectionMode = !_inventoryItems.Exists((item) =>
-        {
-            return item != null && item.itemData == sceneItem.itemData;
-        });
+        // 不是第一次捡到的物品不进入检视模式
+        var enterInspectionMode = !_knownItemIds.Contains(sceneItem.itemData.itemId);
 
         // 放入背包物品列表
         var index = FindSuitableGridForNewItem(sceneItem);
@@ -165,7 +154,7 @@ public class Inventory : MonoBehaviour
             InspectItem(SelectedItem);
         }
     }
-    
+
     /// <summary>
     /// 将物品放入背包（适用于合成产物的获取）
     /// </summary>
@@ -210,7 +199,7 @@ public class Inventory : MonoBehaviour
 
         // TODO: 物品使用效果逻辑
         //
-        
+
         itemToUse.Consumed();
 
         onItemInfoUpdate?.Invoke(SelectedItemIndex);
@@ -219,7 +208,7 @@ public class Inventory : MonoBehaviour
             onItemInfoUpdate?.Invoke(itemToUseIndex);
         }
     }
-    
+
     public void UseItem(InventoryItem ownedItem)
     {
         int indexToUse = _inventoryItems.IndexOf(ownedItem);
@@ -249,12 +238,34 @@ public class Inventory : MonoBehaviour
     /// 检视模式中的物品
     /// </summary>
     private List<InventoryItem> _inspectionItems = new List<InventoryItem>();
+    
+    private bool _inspectionMode;
+
+    /// <summary>
+    /// 是否处于检视模式
+    /// </summary>
+    public bool InspectionMode
+    {
+        get => _inspectionMode;
+        protected set
+        {
+            _inspectionMode = value;
+            inspectionCamera.enabled = value;
+            inspectionCamera.gameObject.SetActive(value);
+        }
+    }
+
+    /// <summary>
+    /// 见过的item
+    /// - 仅第一次拾取到的item会自动进入检视模式。
+    /// </summary>
+    private HashSet<int> _knownItemIds = new HashSet<int>();
 
     /// <summary>
     /// 检视模式中正在操作的对象、操作对象相对位置、旋转操作方向。每次点击物品更新。
     /// </summary>
     [CanBeNull] private InventoryItem _operationTarget;
-    
+
     private Vector3 _tempRelativePos;
     private bool _rotatePitch = false;
     private bool _rotateYaw = false;
@@ -279,11 +290,9 @@ public class Inventory : MonoBehaviour
             {
                 RemoveInspectionItem(_inspectionItems[0]);
             }
-            
+
             // 退出检视模式
             InspectionMode = false;
-            inspectionCamera.enabled = false;
-            inspectionCamera.gameObject.SetActive(false);
 
             // 切换Player输入
             _playerInput.SwitchCurrentActionMap(PLAYER_ACTION_MAP);
@@ -293,7 +302,7 @@ public class Inventory : MonoBehaviour
         {
             if (itemToInspect == null || !_inventoryItems.Contains(itemToInspect))
             {
-                // 场景1：检视空位。设想：检视失败提示音
+                // Note：检视空位。设想：检视失败提示音
                 return;
             }
 
@@ -310,21 +319,18 @@ public class Inventory : MonoBehaviour
             _inspectionRotationUpAxis = inspectionCameraTransform.up;
             _inspectionRotationRightAxis = inspectionCameraTransform.right;
 
-            Debug.Log("AddInspectionItem");
-            
             // 进入检视模式
-            inspectionCamera.enabled = true;
-            inspectionCamera.gameObject.SetActive(true);
             InspectionMode = true;
-            
+
             // 切换检视模式输入
             _playerInput.SwitchCurrentActionMap(INSPECTION_MODE_ACTION_MAP);
             _input.SetCursorState(false);
-            
+
+            // 将选中的物品添加到检视模式
             AddInspectionItem(SelectedItem);
         }
     }
-    
+
     /// <summary>
     /// 检视当前选中物品。
     /// </summary>
@@ -357,8 +363,10 @@ public class Inventory : MonoBehaviour
         itemTransform.position = pivotPos + itemTransform.position - itemToAdd.pivotTransform.position;
         itemTransform.rotation = Quaternion.identity;
         _inspectionItems.Add(itemToAdd);
+        
+        _knownItemIds.Add(itemToAdd.itemData.itemId);
     }
-    
+
     /// <summary>
     /// 添加检视物品到屏幕中心
     /// </summary>
@@ -400,7 +408,7 @@ public class Inventory : MonoBehaviour
         var itemTransform = itemToRemove.transform;
         itemTransform.parent = transform;
         itemTransform.localPosition = INVENTORY_POS;
-        
+
         _inspectionItems.Remove(itemToRemove);
     }
 
@@ -462,12 +470,13 @@ public class Inventory : MonoBehaviour
         int ingredientIndex = -1;
         for (int i = 0; i < _inspectionItems.Count; ++i)
         {
-            if (i == SelectedItemIndex)
+            // Note: 暂不允许使用两个相同的物品作为材料合成
+            var inspectionItem = _inspectionItems[i];
+            if (itemToCheck == inspectionItem)
             {
                 continue;
             }
-            
-            var inspectionItem = _inspectionItems[i];
+
             canCraft = InventoryItem.CheckCrafting(itemToCheck, inspectionItem, out recipe);
             if (canCraft)
             {
@@ -480,21 +489,77 @@ public class Inventory : MonoBehaviour
         if (canCraft)
         {
             // TODO: 执行合成操作，播动画、音效啥的
-            Debug.Log("能合成");
             // 消耗选中的物品和另一个物品，同时也要从检视模式移除出去
-            RemoveInspectionItem(SelectedItem);
-            ConsumeItem(SelectedItemIndex);
-            RemoveInspectionItem(_inspectionItems[ingredientIndex]);
-            ConsumeItem(ingredientIndex);
-            
-            // 生成产物
-            var productItem = InventoryItem.MakeProduct(recipe.product);
-            ObtainItem(productItem);
-            AddInspectionItem(SelectedItem);
+            PlayCraftingAnimation(itemToCheck, _inspectionItems[ingredientIndex], recipe);
+        }
+    }
+
+    /// <summary>
+    /// 播放合成动画。
+    /// - 实现的有点怪先将就一下
+    /// </summary>
+    private void PlayCraftingAnimation(InventoryItem itemA, InventoryItem itemB, InventoryCraftingRecipe recipe)
+    {
+        if (_input != null)
+        {
+            _input.enabled = false;
+        }
+
+        var targetPos = recipe.transform.position;
+        var targetRot = recipe.transform.rotation;
+
+        InventoryItem mainItem;
+        InventoryItem ingredientItem;
+        if (itemA.itemData == recipe.ingredient)
+        {
+            ingredientItem = itemA;
+            mainItem = itemB;
         }
         else
         {
-            Debug.Log("不能合成");
+            ingredientItem = itemB;
+            mainItem = itemA;
+        }
+
+        StartCoroutine(UpdateCraftingAnimation(2.0f));
+
+        // 更新动画
+        IEnumerator UpdateCraftingAnimation(float duration = 1.0f, float delta = 0.02f)
+        {
+            float t = 0.0f;
+            var trans = ingredientItem.transform;
+            
+            // 位移动画
+            while (t < duration)
+            {
+                trans.position = Vector3.Lerp(trans.position, targetPos, t / duration);
+                trans.rotation = Quaternion.Lerp(trans.rotation, targetRot, t / duration);
+
+                t += delta;
+                yield return new WaitForSeconds(delta);
+            }
+            
+            StopAllCoroutines();
+
+            // 动画结束后的逻辑
+            if (_input != null)
+            {
+                _input.enabled = true;
+            }
+
+            RemoveInspectionItem(itemA);
+            ConsumeItem(itemA);
+            RemoveInspectionItem(itemB);
+            ConsumeItem(itemB);
+
+            // 生成产物
+            var productItem = InventoryItem.MakeProduct(recipe);
+            ObtainItem(productItem);
+            AddInspectionItem(SelectedItem);
+
+            onCraftingSucceeded?.Invoke(SelectedItemIndex);
+
+            yield return new WaitForSeconds(delta);
         }
     }
 
@@ -625,9 +690,23 @@ public class Inventory : MonoBehaviour
     private void ConsumeItem(int itemIndex, bool forceDestroy = false)
     {
         var item = GetInventoryItem(itemIndex);
+
         if (item != null)
         {
             item.Consumed(forceDestroy);
+
+            onItemInfoUpdate?.Invoke(itemIndex);
+        }
+    }
+
+    private void ConsumeItem(InventoryItem item, bool forceDestroy = false)
+    {
+        var itemIndex = _inventoryItems.IndexOf(item);
+
+        if (itemIndex >= 0)
+        {
+            item.Consumed(forceDestroy);
+
             onItemInfoUpdate?.Invoke(itemIndex);
         }
     }

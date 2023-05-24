@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public class ButtonObject : InteractableBase, IInteractRequest
 {
     public bool canBeInteracted = true;
+    public bool canOnlyInteractOnce = false;
     public UnityEvent ItemOpen;
     public AudioSource au;
 
@@ -18,7 +19,10 @@ public class ButtonObject : InteractableBase, IInteractRequest
             {
                 au.Play();
             }
-          
+            if (canOnlyInteractOnce)
+            {
+                canBeInteracted = false;
+            }
         }
     }
     

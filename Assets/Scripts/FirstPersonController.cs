@@ -300,17 +300,20 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		if (_input.jump)
 		{
 			_input.jump = false;
-			//FindFirstObjectByType<GameManger>().ExitFocusVcam();
-			exitFocusModeEvent.Raise();
-			//aimUI.rectTransform.position = defaultAimUIpos;
-			Cursor.lockState = CursorLockMode.Locked;
-			pstate = playerInputState.Walking;
+			ExitFocusMode();
 		}//离开专注模式
         if (_input.confirm)
         {
 			_input.confirm = false;
 			Interaction();
         }
+	}
+	public void ExitFocusMode()
+    {
+		exitFocusModeEvent.Raise();
+		//aimUI.rectTransform.position = defaultAimUIpos;
+		Cursor.lockState = CursorLockMode.Locked;
+		pstate = playerInputState.Walking;
 	}
 	IEnumerator PassingDoor(Vector3[] wayPoints, Vector3 doorFacingVec)
     {

@@ -20,17 +20,21 @@ public class FocusObj : InteractableBase,IInteractRequest
     // Update is called once per frame
    public void InteractRequest(int ItemID)
     {
-        foreach(Collider coll in childCollider)
-        {
-            coll.enabled = true;
-        }
+        
         selfColl.enabled = false;
         gm.EnterFocusMode(vcam);
         if (outline != null)
         {
             outline.enabled = false;
         }
-
+        Invoke("EnableChildColl",1.5f);
+    }
+    void EnableChildColl()
+    {
+        foreach (Collider coll in childCollider)
+        {
+            coll.enabled = true;
+        }
     }
 
     public void DeFocus()//使用event激活。 很乱，但先这样吧

@@ -205,5 +205,8 @@ public class StarterAssetsInputs : MonoBehaviour
     public void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.Confined;
+        
+        // Note: 切换到检视模式后会自动显示鼠标，所以先在这里手动设置隐藏。推测是切换actionmap的原因。
+        Cursor.visible = false;
     }
 }

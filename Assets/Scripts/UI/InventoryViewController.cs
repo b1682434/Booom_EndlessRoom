@@ -40,6 +40,9 @@ public class InventoryViewController
         // 绑定更新
         _inventory.onItemInfoUpdate += RefreshGrid;
         _inventory.onSelectionChanged += SelectGrid;
+        
+        // TODO: 合成成功可以适当加点提示
+        // _inventory.onCraftingSucceeded += (productIndex) => RefreshAllGrids();
 
         SelectGrid(0);
     }

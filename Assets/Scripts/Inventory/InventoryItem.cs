@@ -19,9 +19,7 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
 
     [Header("Inspection Mode")] [Tooltip("物体中心点，用作检视模式的初始位置、旋转基准点")] [CanBeNull]
     public Transform pivotTransform;
-
-    public List<Transform> test;
-
+    
     /// <summary>
     /// 物体合成表，目前仅支持1+1的合成。
     /// - 需要在物品的Prefab添加子GameObject，然后给子GameObject添加InventoryCraftingRecipe组件，并在组件中配置合成表参数。
@@ -153,8 +151,8 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
         }
 
         if (_stack <= 0)
-        {
-            Destroy(gameObject);
+        { 
+            DestroyImmediate(gameObject);
             return true;
         }
 
@@ -200,9 +198,9 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
                     }
 
                     // 检查旋转是否在合成旋转附近
-                    // 此处的 recipe1.tolerance * 200.0f 是一个大概的容忍范围，系数可以调整
+                    // 此处的 recipe1.tolerance * 300.0f 是一个大概的容忍范围，系数可以调整
                     if (Mathf.Abs(Quaternion.Angle(recipe1.transform.rotation, item2.transform.rotation)) <
-                        recipe1.tolerance * 200.0f)
+                        recipe1.tolerance * 300.0f)
                     {
                         outRecipe = recipe1;
                         return true;
@@ -223,11 +221,17 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
         var productItem = Instantiate(prefabTemplate).GetComponent<InventoryItem>();
         if (productItem != null)
         {
+            // 这个标志位暂时还没用到
             productItem.IsProduct = true;
         }
 
         return productItem;
     }
+    
+    public static InventoryItem MakeProduct(InventoryCraftingRecipe recipe)
+    {
+        return MakeProduct(recipe.product);
+    } 
 
     /****** SelectableObject ******/
 

@@ -10,7 +10,7 @@ using UnityEngine;
 public class InventoryItemData : ScriptableObject, IEquatable<InventoryItemData>
 {
     [Header("物品信息")]
-    [Tooltip("物品id")] public int itemId;
+    [Tooltip("物品id，0为无效物品")] public int itemId;
     [Tooltip("物品名称")] public string itemName;
     [Tooltip("物品2D图片，用于在背包栏中展示")] public Sprite itemIcon;
     
@@ -22,6 +22,6 @@ public class InventoryItemData : ScriptableObject, IEquatable<InventoryItemData>
 
     public virtual bool Equals(InventoryItemData other)
     {
-        return other is not null && itemId == other.itemId;
+        return other != null && itemId == other.itemId;
     }
 }

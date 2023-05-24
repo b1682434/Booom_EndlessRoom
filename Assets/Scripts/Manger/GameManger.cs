@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cinemachine;
+using UnityEngine.Rendering;
 public class GameManger : MonoBehaviour
 {
     
@@ -67,7 +68,30 @@ public class GameManger : MonoBehaviour
         revertObjs[1].SetActive(false);*/
     }
 
+    public void ChangeEnvironmentLighting(Color lightColor,float time)
+    {
+        // RenderSettings.ambientLight = lightColor;
+        StopAllCoroutines();
+        StartCoroutine(ChangeLight(lightColor,time));
+    }
+    IEnumerator ChangeLight(Color lightColor, float time)
+    {
+        float i = 0;
+       
 
+        for(; ; )
+        { i++;
+            float lerp = i / 50 / time;
+            RenderSettings.ambientLight= Color.Lerp(RenderSettings.ambientLight, lightColor, lerp);
+
+                if (lerp >= 1)
+            {
+                StopAllCoroutines();
+            }
+            yield return new WaitForSeconds(0.02f);
+        }
+        
+    }
     public void ReturnToMainu()
     {
         SceneManager.LoadScene(0);

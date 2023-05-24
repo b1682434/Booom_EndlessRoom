@@ -11,7 +11,8 @@ public class ItemMoveandRot : MonoBehaviour
     public bool rot;
     public float speed = 2f;
     bool coroutineStarted = false;
-
+    public AudioSource au;
+    public AudioClip clip;
     private void Start()
     {
         targetPos = targetTrans.position;
@@ -23,6 +24,11 @@ public class ItemMoveandRot : MonoBehaviour
         {
             coroutineStarted = true;
             StartCoroutine("TransTransforms");
+            if (au != null)
+            {
+                au.clip = clip;
+                au.Play();
+            }
         }
     }
     IEnumerator TransTransforms()

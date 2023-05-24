@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 8757700939561375028}
   - component: {fileID: 3559938279262258687}
   - component: {fileID: 6365292272060313875}
-  - component: {fileID: 3842758593192935996}
   - component: {fileID: 4619200563841706569}
   - component: {fileID: 7392003509668203339}
+  - component: {fileID: 5685035674422894047}
   m_Layer: 0
   m_Name: ButtonTemplate
   m_TagString: Untagged
@@ -332,20 +332,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 329776778547346507}
   m_Mesh: {fileID: 0}
---- !u!64 &3842758593192935996
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 329776778547346507}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &4619200563841706569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,3 +374,16 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!65 &5685035674422894047
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329776778547346507}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.11845493, y: 0.029931508, z: 0.07299423}
+  m_Center: {x: -0.059227467, y: 0.014965758, z: 0.036497116}

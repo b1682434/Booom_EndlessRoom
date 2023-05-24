@@ -296,6 +296,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
     {
 		Cursor.lockState = CursorLockMode.Confined;
 		aimUI.rectTransform.position = Mouse.current.position.ReadValue();
+
 		if (_input.jump)
 		{
 			_input.jump = false;

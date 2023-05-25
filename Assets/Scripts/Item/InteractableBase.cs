@@ -28,6 +28,7 @@ public class InteractableBase : MonoBehaviour, IMouseOver
         get { return ObjType; }
     }
 
+  
     public Outline outline;
     bool corrotineAlreadyRunning =false;
     bool overByMouse;

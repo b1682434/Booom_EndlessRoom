@@ -7,18 +7,23 @@ using UnityEngine.Events;
 public class NeedKeyObject : InteractableBase, IInteractRequest                               
 {
     
+
+    public bool consumeItems = true;
     public int keyID;
     bool opened;
     public UnityEvent itemOpen;
     public AudioClip cannnotOpenSouond, openSound;
     public AudioSource au;
     
+    
+   
     public void InteractRequest(int ItemID)
     {
         print(ItemID);
         if (opened)
         {
             showWord = openWord;
+            
         }
         else
         {
@@ -28,6 +33,10 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
                 showWord = openWord;
                 itemOpen.Invoke();
                 PlaySound(openSound);
+                if (consumeItems)
+                {
+                    FindFirstObjectByType<FirstPersonController>().ConsumeObj();
+                }
             }
             else if (ItemID == 0)//空手
             {

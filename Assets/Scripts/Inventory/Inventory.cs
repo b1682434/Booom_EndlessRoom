@@ -25,6 +25,7 @@ public class Inventory : MonoBehaviour
 
     [Header("功能组件")] [Tooltip("检视相机，需要能渲染Inventory层")] [CanBeNull]
     public Camera inspectionCamera;
+    public Collider inspectColl;//在检视模式时开启，防止鼠标和场景物体互动.放在maincamera下面的
 
     /****** 背包状态 ******/
 
@@ -252,6 +253,7 @@ public class Inventory : MonoBehaviour
             _inspectionMode = value;
             inspectionCamera.enabled = value;
             inspectionCamera.gameObject.SetActive(value);
+            inspectColl.enabled = value;
         }
     }
 
@@ -362,6 +364,11 @@ public class Inventory : MonoBehaviour
         var pivotPos = GetPosFromInspectionPlane(screenPos);
         itemTransform.position = pivotPos + itemTransform.position - itemToAdd.pivotTransform.position;
         itemTransform.rotation = Quaternion.identity;
+        
+        // Note: 这里pivot的localScale更像是一个固定的数据，但是保存在Transform中
+        // 设置scale是为了在检视模式中检视小体积物体，改善体验
+        // TODO: 再次放置到场景中时需要设置会原来的scale
+        itemTransform.localScale = itemToAdd.pivotTransform.localScale;
         _inspectionItems.Add(itemToAdd);
         
         _knownItemIds.Add(itemToAdd.itemData.itemId);

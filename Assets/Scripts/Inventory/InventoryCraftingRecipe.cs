@@ -15,6 +15,9 @@ public class InventoryCraftingRecipe : MonoBehaviour
     [Tooltip("产物，通常是Prefab")]
     public GameObject product;
 
-    [Tooltip("合成位置容忍度。5.0f表示在合成位置5m内都可以合成成功。通常可取0.16")]
-    public float tolerance = 5.0f;
+    [Tooltip("合成位置容忍度。0.16f表示在合成位置0.16m内都可以合成成功。若不限制位置则设个大值，比如10")]
+    public float tolerance = 0.16f;
+
+    
+    public bool craftingStatus = false;
 }

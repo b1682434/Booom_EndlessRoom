@@ -13,6 +13,7 @@ public class InventoryItemData : ScriptableObject, IEquatable<InventoryItemData>
     [Tooltip("物品id，0为无效物品")] public int itemId;
     [Tooltip("物品名称")] public string itemName;
     [Tooltip("物品2D图片，用于在背包栏中展示")] public Sprite itemIcon;
+    [Tooltip("物品描述")] public string itemDescription;
     
     [Header("物品属性")]
     [Tooltip("最大堆叠数量")] public int maxStack = 1;

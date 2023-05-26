@@ -122,6 +122,11 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
             // }
 
             gameObject.layer = LayerMask.NameToLayer("Inventory");
+            var children = gameObject.GetComponentsInChildren<Transform>();
+            foreach (var child in children)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("Inventory");
+            }
         }
     }
 

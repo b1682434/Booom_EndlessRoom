@@ -21,8 +21,9 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
     public Transform pivotTransform;
     
     /// <summary>
-    /// 物体合成表，目前仅支持1+1的合成。
+    /// 物体合成表，目前仅支持一个物品仅有一种配方的合成。
     /// - 需要在物品的Prefab添加子GameObject，然后给子GameObject添加InventoryCraftingRecipe组件，并在组件中配置合成表参数。
+    /// - 需要所有Recipe都满足条件才可成功合成。
     /// </summary>
     private List<InventoryCraftingRecipe> _craftingRecipes = new List<InventoryCraftingRecipe>();
 
@@ -186,6 +187,8 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
             // 检查item2是否在item1的合成表中
             foreach (var recipe1 in item1._craftingRecipes)
             {
+                
+                
                 if (recipe1.ingredient == item2.itemData)
                 {
                     // 检查位置是否在合成位置附近
@@ -210,6 +213,14 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
 
             outRecipe = null;
             return false;
+        }
+    }
+
+    public void ResetRecipeStatus()
+    {
+        foreach (var recipe in _craftingRecipes)
+        {
+            recipe.craftingStatus = false;
         }
     }
 

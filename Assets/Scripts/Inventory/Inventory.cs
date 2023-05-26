@@ -362,6 +362,11 @@ public class Inventory : MonoBehaviour
         var pivotPos = GetPosFromInspectionPlane(screenPos);
         itemTransform.position = pivotPos + itemTransform.position - itemToAdd.pivotTransform.position;
         itemTransform.rotation = Quaternion.identity;
+        
+        // Note: 这里pivot的localScale更像是一个固定的数据，但是保存在Transform中
+        // 设置scale是为了在检视模式中检视小体积物体，改善体验
+        // TODO: 再次放置到场景中时需要设置会原来的scale
+        itemTransform.localScale = itemToAdd.pivotTransform.localScale;
         _inspectionItems.Add(itemToAdd);
         
         _knownItemIds.Add(itemToAdd.itemData.itemId);

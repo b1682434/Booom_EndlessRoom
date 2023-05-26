@@ -7,7 +7,7 @@ public class InteractableBase : MonoBehaviour, IMouseOver
 {
     [Tooltip("物品名称")] public string objName;
     [Tooltip("物品id")] public int ObjType;
-    [Tooltip("被准星怼着时候该说啥")] public string mouseOVerWord;
+    [Tooltip("被准星怼着时候默认该说啥")] public string mouseOVerWord;
     [Tooltip("拿了错误东西开门该说啥")] public string cannotOpenWord;
     [Tooltip("空手调查时候该说啥")] public string emptyHandWord;
     [Tooltip("打开了该说啥")] public string openWord;
@@ -41,9 +41,10 @@ public class InteractableBase : MonoBehaviour, IMouseOver
     public virtual void MouseOverImpl()
     {
         overByMouse = true;
-        // showWord = mouseOVerWord;
+         
         if (!corrotineAlreadyRunning)
         {
+            showWord = mouseOVerWord;
             StartCoroutine("CheckWhetherStillOverByTheMouse");
             
             corrotineAlreadyRunning = true;

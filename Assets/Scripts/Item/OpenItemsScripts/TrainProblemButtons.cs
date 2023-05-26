@@ -47,12 +47,12 @@ public class TrainProblemButtons : MonoBehaviour
         for(; ; )
         {
             i += 1;
-            lerp = Mathf.Lerp(0, 1, i / 50f);
+            lerp = Mathf.Lerp(0, 1, i / 100f);
             trainModelTrans.position = pcreators[currentSplineNumber].path.GetPointAtDistance(length-lerp * length);
            // trainModelTrans.rotation = AdjustRot( pcreators[currentSplineNumber].path.GetRotationAtDistance(length - lerp * length));
             trainModelTrans.rotation = AdjustRot(pcreators[currentSplineNumber].path.GetDirectionAtDistance(length - lerp * length));
             //trainModelTrans.rotation = pcreators[currentSplineNumber].path.GetRotationAtDistance(length - lerp * length);
-            if (i >= 49)
+            if (i >= 90)
             {
                 StopAllCoroutines();
                 choiceEvents[currentSplineNumber].Invoke();

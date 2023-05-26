@@ -9,7 +9,7 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
     
 
     public bool consumeItems = true;
-    public int keyID;
+    public int[] keyIDs;
     bool opened;
     public UnityEvent itemOpen;
     public AudioClip cannnotOpenSouond, openSound;
@@ -27,26 +27,36 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
         }
         else
         {
-            if (ItemID == keyID)//打开
-            {
-                opened = true;
-                showWord = openWord;
-                itemOpen.Invoke();
-                PlaySound(openSound);
-                if (consumeItems)
-                {
-                    FindFirstObjectByType<FirstPersonController>().ConsumeObj();
-                }
-            }
-            else if (ItemID == 0)//空手
+           
+             if (ItemID == 0)//空手
             {
                 PlaySound(cannnotOpenSouond);
                 showWord = emptyHandWord; //应该可以继续优化。 需要钥匙的一个类，多种钥匙多种方法的一个子类，pickup一个
             }
-            else // 拿了错的东西开门
+            else // 遍历keyid，有了就开，没有就显示打不开
             {
-                PlaySound(cannnotOpenSouond);
-                showWord = cannotOpenWord;
+                
+                foreach(int i in keyIDs)
+                {
+                    if(ItemID == i)
+                    {
+                        opened = true;
+                        showWord = openWord;
+                        itemOpen.Invoke();
+                        PlaySound(openSound);
+                        if (consumeItems)
+                        {
+                            FindFirstObjectByType<FirstPersonController>().ConsumeObj();
+                        }
+                        break;
+                    }
+                }
+                if (!opened)
+                {
+                    PlaySound(cannnotOpenSouond);
+                    showWord = cannotOpenWord;
+                }
+             
             }
 
         }

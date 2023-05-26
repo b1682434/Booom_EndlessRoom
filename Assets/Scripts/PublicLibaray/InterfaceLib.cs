@@ -13,6 +13,7 @@ public interface IInteractRequest  //点击
 
     public string returnWord { get; }//点了之后说啥
     //public string objectName { get;}//感觉接口好像要名字没用
+    
 }
 
 public interface IMouseOver

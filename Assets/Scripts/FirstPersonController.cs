@@ -87,6 +87,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
 	//Vector2 defaultAimUIpos;
 	bool mouseOverTextChanged = false;
 	public GameEvent exitFocusModeEvent;
+	Inventory _inventory;
 	
 		private bool IsCurrentDeviceMouse
 		{
@@ -113,6 +114,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
+		_inventory = GetComponent<Inventory>();
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 			_playerInput = GetComponent<PlayerInput>();
 #else
@@ -270,13 +272,10 @@ public delegate void OnInteraction(IInteractRequest IInter);
 				}
                 else
                 {
-					IInter.InteractRequest(0);
+					IInter.InteractRequest(_inventory.SelectedItemId);
 				}
-	            
-                if (IInter.returnWord != null)
-                {
-					dialogText.text = IInter.returnWord;
-                }
+                
+                
                 
                 // 告知其他组件
                 onInteraction?.Invoke(IInter);
@@ -285,7 +284,10 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		}
 
 	}
-
+	public void ConsumeObj()
+    {
+		_inventory.UseItem(_inventory.SelectedItemIndex);
+	}
 	public void EnterFocusMode()
     {
 		pstate = playerInputState.Interacting;
@@ -342,6 +344,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
 			yield return new WaitForSeconds(0.02f);
         }
     }
+	
 	
 	void MouseOverInteractable()
     {

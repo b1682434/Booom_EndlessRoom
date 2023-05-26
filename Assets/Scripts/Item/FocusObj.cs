@@ -9,6 +9,7 @@ public class FocusObj : InteractableBase,IInteractRequest
    public Collider selfColl;
     public CinemachineVirtualCamera vcam;
     GameManger gm;
+
     // Start is called before the first frame update
     void Start()
     {

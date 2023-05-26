@@ -11,7 +11,6 @@ public class DifferentKeyObj : InteractableBase, IInteractRequest
     public UnityEvent itemOpenV1;
     public UnityEvent itemOpenV2;
 
-
     public void InteractRequest(int ItemID)
     {
 

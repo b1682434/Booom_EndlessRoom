@@ -25,6 +25,7 @@ public class Inventory : MonoBehaviour
 
     [Header("功能组件")] [Tooltip("检视相机，需要能渲染Inventory层")] [CanBeNull]
     public Camera inspectionCamera;
+    public Collider inspectColl;//在检视模式时开启，防止鼠标和场景物体互动.放在maincamera下面的
 
     /****** 背包状态 ******/
 
@@ -252,6 +253,7 @@ public class Inventory : MonoBehaviour
             _inspectionMode = value;
             inspectionCamera.enabled = value;
             inspectionCamera.gameObject.SetActive(value);
+            inspectColl.enabled = value;
         }
     }
 

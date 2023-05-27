@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254ef5278551b7c458e78ffe684355ff, type: 3}
+  m_Name: LV2_Eyeball
+  m_EditorClassIdentifier: 
+  itemId: 207
+  itemName: "\u773C\u7403"
+  itemIcon: {fileID: 0}
+  itemDescription: "\u4ECE\u8001\u9F20\u8EAB\u4E0A\u53D6\u4E0B\u7684\u773C\u7403"
+  maxStack: 1
+  canBePickUp: 1
+  durability: 1
+  recoverable: 1

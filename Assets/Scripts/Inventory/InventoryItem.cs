@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -80,6 +79,8 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
     /// </summary>
     private RevertBase _revertBase;
 
+
+    /****** 物品操作方法 ******/
     /// <summary>
     /// 重置物品
     /// </summary>
@@ -166,7 +167,66 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
     }
 
     /// <summary>
-    /// 检查两个物品能否被合成
+    /// 物品进入检视模式
+    /// </summary>
+    public void EnterInspectionMode() {
+        if (IsInInspectionMode) {
+            return;
+        }
+
+        // 启用item的碰撞，使其可以被射线检测
+        var colliders = GetComponents<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = true;
+        }
+
+        transform.localScale = inspectionScale;
+    }
+
+    /// <summary>
+    /// 物品退出检视模式
+    /// </summary>
+    public void ExitInspectionMode() {
+        if (!IsInInspectionMode) {
+            return;
+        }
+
+        // 启用item的碰撞，使其可以被射线检测
+        var colliders = GetComponents<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
+        }
+
+        transform.localScale = sceneScale;
+    }
+
+    /****** 检视模式相关 ******/
+
+    /// <summary>
+    /// 是否处于检视模式中
+    /// </summary>
+    private bool _isInInspectionMode = false;
+    public bool IsInInspectionMode {
+        get => _isInInspectionMode;
+        protected set => _isInInspectionMode = value;
+    }
+
+    /// <summary>
+    /// 在场景中的缩放
+    /// </summary>
+    [HideInInspector]
+    public Vector3 sceneScale;
+
+    /// <summary>
+    /// 在检视模式中的缩放
+    /// </summary>
+    [HideInInspector]
+    public Vector3 inspectionScale;
+
+    /// <summary>
+    /// 静态工具方法：检查两个物品能否被合成
     /// </summary>
     /// <returns>是否可以合成、合成位置</returns>
     public static bool CheckCrafting(InventoryItem itemA, InventoryItem itemB,
@@ -221,16 +281,8 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
         }
     }
 
-    public void ResetRecipeStatus()
-    {
-        foreach (var recipe in _craftingRecipes)
-        {
-            recipe.craftingStatus = false;
-        }
-    }
-
     /// <summary>
-    /// 生成合成产物
+    /// 静态工具方法：生成合成产物
     /// </summary>
     public static InventoryItem MakeProduct(GameObject prefabTemplate)
     {
@@ -308,15 +360,30 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
         _durability = itemData.durability;
     }
 
+
     protected void Start()
     {
+        inspectionScale = pivotTransform.localScale;
+        if (sceneScale == Vector3.zero)
+        {
+            sceneScale = transform.localScale;
+        }
+
+        Debug.Log($"{gameObject} : sceneScale {sceneScale}");
+
         objName = itemData.itemName;
         ObjType = itemData.itemId;
-        mouseOVerWord = cannotOpenWord = emptyHandWord = itemData.itemName;
+        // TODO: 可能需要自定义这些台词
+        // mouseOVerWord = cannotOpenWord = emptyHandWord = itemData.itemName;
         openWord = "拿走了";
 
         Restart();
     }
+
+    // private void Update()
+    // {
+    //     Debug.Log($"{gameObject} : inspectionScale {inspectionScale}, sceneScale {sceneScale}");
+    // }
 
     // public void OnMouseOver()
     // {

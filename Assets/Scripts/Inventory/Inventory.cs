@@ -134,10 +134,14 @@ public class Inventory : MonoBehaviour
         var itemObtained = _inventoryItems[index];
         if (itemObtained == null)
         {
-            var ownedItem = Instantiate(sceneItem, transform);
+            var ownedItem = Instantiate(sceneItem, sceneItem.transform);
             _inventoryItems[index] = ownedItem;
             itemObtained = ownedItem;
 
+            // Note: 这里即使直接设置ownedItem.transform.localScale，在Start()中获取到的localScale还是0
+            // 所以直接设置这个变量了
+            ownedItem.sceneScale = sceneItem.transform.localScale;
+            ownedItem.transform.parent = transform;
             ownedItem.transform.localPosition = INVENTORY_POS;
         }
 
@@ -157,7 +161,7 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// 将物品放入背包（适用于合成产物的获取）
+    /// 直接将物品加入背包（适用于获取合成产物、通过交互获得道具）
     /// </summary>
     public void ObtainItem(InventoryItem itemToObtain)
     {
@@ -201,13 +205,7 @@ public class Inventory : MonoBehaviour
         // TODO: 物品使用效果逻辑
         //
 
-        itemToUse.Consumed();
-
-        onItemInfoUpdate?.Invoke(SelectedItemIndex);
-        if (itemToUseIndex != SelectedItemIndex)
-        {
-            onItemInfoUpdate?.Invoke(itemToUseIndex);
-        }
+        ConsumeItem(itemToUse);
     }
 
     public void UseItem(InventoryItem ownedItem)
@@ -351,13 +349,6 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        // 启用item的碰撞，使其可以被射线检测
-        var colliders = itemToAdd.GetComponents<Collider>();
-        foreach (var collider in colliders)
-        {
-            collider.enabled = true;
-        }
-
         // 放到inspectionCamera面前
         var itemTransform = itemToAdd.transform;
         itemTransform.parent = inspectionCamera.transform;
@@ -368,7 +359,8 @@ public class Inventory : MonoBehaviour
         // Note: 这里pivot的localScale更像是一个固定的数据，但是保存在Transform中
         // 设置scale是为了在检视模式中检视小体积物体，改善体验
         // TODO: 再次放置到场景中时需要设置会原来的scale
-        itemTransform.localScale = itemToAdd.pivotTransform.localScale;
+        itemToAdd.EnterInspectionMode();
+        // itemTransform.localScale = itemToAdd.pivotTransform.localScale;
         _inspectionItems.Add(itemToAdd);
         
         _knownItemIds.Add(itemToAdd.itemData.itemId);
@@ -415,6 +407,7 @@ public class Inventory : MonoBehaviour
         var itemTransform = itemToRemove.transform;
         itemTransform.parent = transform;
         itemTransform.localPosition = INVENTORY_POS;
+        itemToRemove.ExitInspectionMode();
 
         _inspectionItems.Remove(itemToRemove);
     }

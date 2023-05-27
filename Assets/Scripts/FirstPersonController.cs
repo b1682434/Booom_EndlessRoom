@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public delegate void OnInteraction(IInteractRequest IInter);
 
 	[RequireComponent(typeof(CharacterController))]
+	[RequireComponent(typeof(AudioSource))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
@@ -54,6 +55,12 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
 		
+		[Header("Action Feedback")]
+		[Tooltip("点击音效")]
+		public List<AudioClip> clickSoundEffects;
+		[Tooltip("切换物品音效")]
+		public AudioClip inventoryItemChangedSoundEffect;
+
 		// interaction
 		public OnInteraction onInteraction;
 		
@@ -87,7 +94,10 @@ public delegate void OnInteraction(IInteractRequest IInter);
 	//Vector2 defaultAimUIpos;
 	bool mouseOverTextChanged = false;
 	public GameEvent exitFocusModeEvent;
-	Inventory _inventory;
+
+	/****** 组件 ******/
+	private Inventory _inventory;
+	private AudioSource _audioSource;
 	
 		private bool IsCurrentDeviceMouse
 		{
@@ -112,9 +122,13 @@ public delegate void OnInteraction(IInteractRequest IInter);
 
 		private void Start()
 		{
+			// 获取组件
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
-		_inventory = GetComponent<Inventory>();
+
+			_inventory = GetComponent<Inventory>();
+			_audioSource = GetComponent<AudioSource>();
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 			_playerInput = GetComponent<PlayerInput>();
 #else
@@ -125,7 +139,11 @@ public delegate void OnInteraction(IInteractRequest IInter);
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
 
-		//defaultAimUIpos = aimUI.rectTransform.position;//aimui的默认位置
+			//defaultAimUIpos = aimUI.rectTransform.position;//aimui的默认位置
+
+			// 设置组件
+			_inventory.onSelectionChanged += PlayInventorySelectionChangeSoundEffect;
+
 		}
 
 		private void Update()
@@ -249,6 +267,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		if (_input.confirm)
 		{
 			_input.confirm = false;
+			PlayClickSoundEffect();
 			Interaction();
 		}
 	}
@@ -307,6 +326,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
         if (_input.confirm)
         {
 			_input.confirm = false;
+			PlayClickSoundEffect();
 			Interaction();
         }
 	}
@@ -470,5 +490,22 @@ public delegate void OnInteraction(IInteractRequest IInter);
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 
 			
+		}
+
+		/****** Effects ******/
+		// 播放鼠标点击音效
+		private void PlayClickSoundEffect() {
+			if (_audioSource != null && clickSoundEffects.Count > 0) {
+				_audioSource.clip = clickSoundEffects[Random.Range(0, clickSoundEffects.Count)];
+				_audioSource.Play();
+			}
+		}
+
+		// 播放切换物品音效
+		private void PlayInventorySelectionChangeSoundEffect(int itemIndex) {
+			if (_audioSource != null && inventoryItemChangedSoundEffect != null) {
+				_audioSource.clip = inventoryItemChangedSoundEffect;
+				_audioSource.Play();
+			}
 		}
 	}

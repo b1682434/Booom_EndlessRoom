@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cinemachine;
-using UnityEngine.Rendering;
+using UnityEngine.InputSystem;
 public class GameManger : MonoBehaviour
 {
     
@@ -13,12 +13,14 @@ public class GameManger : MonoBehaviour
     FirstPersonController fpsCtrl;
     CinemachineBrain cmBrain;
     CinemachineVirtualCamera currentVitrualCam;
-   
-  
+    private PlayerInput _playerInput;
+
+
     GameObject[] revertObjs = new GameObject[2];
     private void Start()
     {
         fpsCtrl = FindFirstObjectByType<FirstPersonController>();
+        _playerInput = FindFirstObjectByType<PlayerInput>();
         revertObjs[1] = currentRevertObj;
         /*revertObjs[1] = Instantiate(revertObjs[0], revertObjs[0].transform);
         revertObjs[1].transform.parent = null;
@@ -47,7 +49,7 @@ public class GameManger : MonoBehaviour
         cmBrain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
        
     }
-  public  void GoThroughDoor( Vector3 postion )
+    public  void GoThroughDoor( Vector3 postion )
     {
         //GameObject newObj = Instantiate(nextRevertObj, postion, nextRevertObj.transform.rotation);
         GameObject newObj = Instantiate(roomPrefab, postion, revertObjs[1].transform.rotation);

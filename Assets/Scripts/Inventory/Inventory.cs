@@ -561,6 +561,7 @@ public class Inventory : MonoBehaviour
                 _input.enabled = true;
             }
 
+            // 消耗原料
             RemoveInspectionItem(itemA);
             ConsumeItem(itemA);
             RemoveInspectionItem(itemB);
@@ -568,6 +569,7 @@ public class Inventory : MonoBehaviour
 
             // 生成产物
             var productItem = InventoryItem.MakeProduct(recipe);
+            Debug.Log($"{productItem.gameObject} product");
             ObtainItem(productItem);
             AddInspectionItem(SelectedItem);
             _uiAudioSource.PlayOneShot(craftingSucceedSoundEffect);
@@ -622,14 +624,25 @@ public class Inventory : MonoBehaviour
     {
         if (item == null)
         {
+            Debug.Log("IsInventoryAvailable item == null");
             return false;
         }
 
-        // 背包是否还有空位
-        if (_inventoryItems.Contains(null))
+        // 背包是否还有空位（手动比较）
+        foreach (var inventoryItem in _inventoryItems)
         {
-            return true;
+            if (inventoryItem == null)
+            {
+                return true;
+            }
         }
+
+        // Note: 下面注释的写法不能检测出已经被销毁组件为null
+        // // 背包是否还有空位
+        // if (_inventoryItems.Contains(null))
+        // {
+        //     return true;
+        // }
 
         // 判断物品本身是否可堆叠
         if (item.itemData.maxStack <= 1)

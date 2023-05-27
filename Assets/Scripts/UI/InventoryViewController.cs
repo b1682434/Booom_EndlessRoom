@@ -86,4 +86,12 @@ public class InventoryViewController
             }
         }
     }
+
+    /// <summary>
+    /// 设置隐藏和显示
+    /// </summary>
+    public void SetEnable(bool newEnable)
+    {
+        _gridScrollView.SetEnabled(newEnable);
+    }
 }

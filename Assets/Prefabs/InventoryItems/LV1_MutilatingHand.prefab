@@ -119,8 +119,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0012253418, y: 0.00087187754, z: 0.0021164238}
-  m_Center: {x: 0.0000111286645, y: 0.000058736216, z: -0.00005372068}
+  m_Size: {x: 0.0011402752, y: 0.00064030837, z: 0.0021641026}
+  m_Center: {x: -0.000031404496, y: -0.000057048423, z: -0.00002988238}
 --- !u!114 &8671592907618841813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,6 +143,8 @@ MonoBehaviour:
   outline: {fileID: 0}
   itemData: {fileID: 11400000, guid: 6c2359664a5e90044bbb88503b4d24d5, type: 2}
   pivotTransform: {fileID: 7096301911612304051}
+  sceneScale: {x: 0, y: 0, z: 0}
+  inspectionScale: {x: 0, y: 0, z: 0}
 --- !u!1 &3209180143424065538
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredient: {fileID: 11400000, guid: 17a779e56f3e6cd49b8bc10678d32afd, type: 2}
   product: {fileID: 1826258694373614052, guid: b63a9744f2e19b544a31458d795a245c, type: 3}
-  tolerance: 0.16
+  tolerance: 1
   craftingStatus: 0
 --- !u!1 &6680224453567265817
 GameObject:
@@ -268,7 +270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredient: {fileID: 11400000, guid: 0e16990a75893cc4893f361313ccbf81, type: 2}
   product: {fileID: 2926186133621353156, guid: 5a32bb6312103ef4189334de2ba8c758, type: 3}
-  tolerance: 0.16
+  tolerance: 1
   craftingStatus: 0
 --- !u!1001 &7888997251416267342
 PrefabInstance:

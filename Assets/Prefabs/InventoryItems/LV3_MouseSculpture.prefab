@@ -82,7 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: 
+  mouseOVerWord: "\u7389\u77F3\u8001\u9F20"
   cannotOpenWord: 
   emptyHandWord: 
   openWord: 
@@ -90,6 +90,8 @@ MonoBehaviour:
   outline: {fileID: 0}
   itemData: {fileID: 11400000, guid: 457d516066925ae45987b42b77ef4886, type: 2}
   pivotTransform: {fileID: 4449610861206140506}
+  sceneScale: {x: 0, y: 0, z: 0}
+  inspectionScale: {x: 0, y: 0, z: 0}
 --- !u!1 &3836412186273717067
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,7 +247,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8387924124698411189, guid: a65d7996899011142800177ccebaf215, type: 3}
+  - {fileID: 2100000, guid: 7fad49d3ada338c4387f3feba426bfd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

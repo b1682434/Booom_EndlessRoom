@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254ef5278551b7c458e78ffe684355ff, type: 3}
   m_Name: TriangleKey
   m_EditorClassIdentifier: 
-  itemId: 0
+  itemId: 121
   itemName: "\u4E09\u89D2\u94A5\u5319"
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  itemDescription: 
   maxStack: 2
   canBePickUp: 1
   durability: 1

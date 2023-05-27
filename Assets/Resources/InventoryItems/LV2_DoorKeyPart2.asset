@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 205
   itemName: "\u623F\u95E8\u94A5\u5319\u7684\u4E00\u90E8\u5206"
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   itemDescription: "\u623F\u95E8\u94A5\u5319\u7684\u4E00\u90E8\u5206"
   maxStack: 1
   canBePickUp: 1

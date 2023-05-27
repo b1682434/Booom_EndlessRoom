@@ -182,14 +182,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: 
+  mouseOVerWord: "\u94A5\u5319\u5934"
   cannotOpenWord: 
   emptyHandWord: 
   openWord: 
   showWord: 
-  outline: {fileID: 0}
+  outline: {fileID: 4138936673984637986}
   itemData: {fileID: 11400000, guid: 7f4314a3b1bddd242869ec5ff648f930, type: 2}
   pivotTransform: {fileID: 3380234907652475015}
+  sceneScale: {x: 0, y: 0, z: 0}
+  inspectionScale: {x: 0, y: 0, z: 0}
 --- !u!1 &6491610255361498504
 GameObject:
   m_ObjectHideFlags: 0

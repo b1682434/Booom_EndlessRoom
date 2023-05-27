@@ -9,7 +9,10 @@ public class GameManger : MonoBehaviour
     
     public GameObject currentRevertObj;
 
-    public GameObject roomPrefab;
+    public GameObject[] roomPrefab;
+    public int darkRoomNumber;
+    int currentRoomNumber;
+
     FirstPersonController fpsCtrl;
     CinemachineBrain cmBrain;
     CinemachineVirtualCamera currentVitrualCam;
@@ -47,10 +50,19 @@ public class GameManger : MonoBehaviour
         cmBrain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
        
     }
+
+    public void ChangeRoomPrefab()
+    {
+        currentRoomNumber = Mathf.Clamp(currentRoomNumber + 1, 0, roomPrefab.Length);
+    }
   public  void GoThroughDoor( Vector3 postion )
     {
+        if (currentRoomNumber == darkRoomNumber)
+        {
+            ChangeEnvironmentLighting(Color.black, 2f);
+        }
         //GameObject newObj = Instantiate(nextRevertObj, postion, nextRevertObj.transform.rotation);
-        GameObject newObj = Instantiate(roomPrefab, postion, revertObjs[1].transform.rotation);
+        GameObject newObj = Instantiate(roomPrefab[currentRoomNumber], postion, revertObjs[1].transform.rotation);
         newObj.transform.parent = null; 
         revertObjs[0] = revertObjs[1];
         revertObjs[1] = newObj;

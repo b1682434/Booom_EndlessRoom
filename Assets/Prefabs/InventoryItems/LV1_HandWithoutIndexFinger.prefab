@@ -143,6 +143,8 @@ MonoBehaviour:
   outline: {fileID: 0}
   itemData: {fileID: 11400000, guid: 71cd1a30ec11d254c8f3947920565383, type: 2}
   pivotTransform: {fileID: 8600287413354630859}
+  sceneScale: {x: 0, y: 0, z: 0}
+  inspectionScale: {x: 0, y: 0, z: 0}
 --- !u!1 &2548564476175343824
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredient: {fileID: 11400000, guid: 0e16990a75893cc4893f361313ccbf81, type: 2}
   product: {fileID: 2582795253766438478, guid: 6a617d5eb26b49f4eabd1aa5ec7cdaac, type: 3}
-  tolerance: 0.16
+  tolerance: 1
   craftingStatus: 0
 --- !u!1001 &8010860221604599591
 PrefabInstance:

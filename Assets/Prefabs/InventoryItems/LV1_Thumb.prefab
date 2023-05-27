@@ -164,11 +164,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: 
+  mouseOVerWord: "\u62C7\u6307"
   cannotOpenWord: 
   emptyHandWord: 
   openWord: 
   showWord: 
-  outline: {fileID: 0}
+  outline: {fileID: 4765623226091066974}
   itemData: {fileID: 11400000, guid: 17a779e56f3e6cd49b8bc10678d32afd, type: 2}
   pivotTransform: {fileID: 1014745105049876334}
+  sceneScale: {x: 0, y: 0, z: 0}
+  inspectionScale: {x: 0, y: 0, z: 0}

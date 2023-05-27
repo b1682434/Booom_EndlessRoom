@@ -12470,7 +12470,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: b8b45d1df1e29094ab9242e255fd835d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12525,13 +12525,13 @@ MonoBehaviour:
   objName: 
   ObjType: 2
   mouseOVerWord: "\u4E00\u5177\u51B0\u51B7\u7684\u4F4E\u591A\u8FB9\u5F62\u6A21\u578B"
-  cannotOpenWord: 
+  cannotOpenWord: "\u7528\u4E0D\u4E86"
   emptyHandWord: 
   openWord: "\u653E\u5165\u4E86\u624B\u638C"
   showWord: 
   outline: {fileID: 1623289210213339125}
-  consumeItems: 0
-  keyIDs: ca000000
+  consumeItems: 1
+  keyIDs: 6a000000
   itemOpen:
     m_PersistentCalls:
       m_Calls:

@@ -6,9 +6,14 @@ public class ChangeEnvironmetLighting : MonoBehaviour
 {
     GameManger gm;
     public Color lightColor;
+    public bool callAtStart = false;
     private void Start()
     {
         gm = FindFirstObjectByType<GameManger>();
+        if (callAtStart)
+        {
+            BackToNormalColor();
+        }
     }
     // Start is called before the first frame update
     public void ChangeToBlack()

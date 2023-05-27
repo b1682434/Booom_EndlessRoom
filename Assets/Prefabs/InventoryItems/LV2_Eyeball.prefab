@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4303335501403488536, guid: e0b30372be7d44d4cb2e321b8fa6beeb, type: 3}
+  - {fileID: 2100000, guid: c82f1ee0ea808ac44af0ac12f47d946f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,6 +140,8 @@ MonoBehaviour:
   outline: {fileID: 0}
   itemData: {fileID: 11400000, guid: e207dd5e53fe29047bcf41cdaa1cea80, type: 2}
   pivotTransform: {fileID: 2837780384873428719}
+  sceneScale: {x: 0, y: 0, z: 0}
+  inspectionScale: {x: 0, y: 0, z: 0}
 --- !u!1 &3897205454626140178
 GameObject:
   m_ObjectHideFlags: 0

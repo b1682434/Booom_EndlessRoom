@@ -96,8 +96,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.07557917, y: 0.5886944, z: 0.57922554}
-  m_Center: {x: -0.0006892681, y: -0.17661986, z: 0.041713715}
+  m_Size: {x: 0.07557917, y: 1.409577, z: 1.0960705}
+  m_Center: {x: -0.00068927405, y: -0.37632796, z: -0.018351462}
 --- !u!114 &7390984067987508529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,17 +152,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: fb3087d7ee3dfdc4ebb474b8140062b9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0027272701
+      value: -0.003
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fb3087d7ee3dfdc4ebb474b8140062b9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.10285726
+      value: -0.286
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fb3087d7ee3dfdc4ebb474b8140062b9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.080350876
+      value: 0.061
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fb3087d7ee3dfdc4ebb474b8140062b9,
         type: 3}
@@ -204,6 +204,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SharpPieces
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fb3087d7ee3dfdc4ebb474b8140062b9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb3087d7ee3dfdc4ebb474b8140062b9, type: 3}
 --- !u!1 &1662234782436253324 stripped
@@ -226,7 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 4
+  outlineWidth: 8
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []

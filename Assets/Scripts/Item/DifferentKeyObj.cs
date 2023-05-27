@@ -10,7 +10,8 @@ public class DifferentKeyObj : InteractableBase, IInteractRequest
     bool opened;
     public UnityEvent itemOpenV1;
     public UnityEvent itemOpenV2;
-
+    public AudioSource au;
+    public AudioClip openv1sound, openV2sound, failSound;
     public void InteractRequest(int ItemID)
     {
 
@@ -25,11 +26,15 @@ public class DifferentKeyObj : InteractableBase, IInteractRequest
                 opened = true;
                 showWord = openWord;
                 itemOpenV1.Invoke();
+                au.clip = openv1sound;
+                au.Play();
             }else if (ItemID == KeyIDV2)
             {
                 opened = true;
                 showWord = openWord;
                 itemOpenV2.Invoke();
+                au.clip = openV2sound;
+                au.Play();
             }
             else if (ItemID == 0)//空手
             {
@@ -38,6 +43,9 @@ public class DifferentKeyObj : InteractableBase, IInteractRequest
             else // 拿了错的东西开门
             {
                 showWord = cannotOpenWord;
+                au.clip = failSound;
+                au.Play();
+
             }
 
         }

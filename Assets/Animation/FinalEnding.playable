@@ -98,6 +98,22 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
+--- !u!114 &-5842347093663532935
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
+  m_Name: CinemachineShot
+  m_EditorClassIdentifier: 
+  DisplayName: 
+  VirtualCamera:
+    exposedName: e08253d4473dd7f4c986205181326711
+    defaultValue: {fileID: 0}
 --- !u!114 &-349377498174381041
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -137,22 +153,6 @@ MonoBehaviour:
     m_ScenePreview: 1
   m_DurationMode: 0
   m_MarkerTrack: {fileID: 0}
---- !u!114 &2704247819468941060
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
-  m_Name: CinemachineShot
-  m_EditorClassIdentifier: 
-  DisplayName: 
-  VirtualCamera:
-    exposedName: 89452bf1b304a844ca6bc35fd254b062
-    defaultValue: {fileID: 0}
 --- !u!74 &7146018861966301745
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -378,16 +378,16 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 0
+    m_Start: 6.666666666666667
     m_ClipIn: 0
-    m_Asset: {fileID: 2704247819468941060}
-    m_Duration: 5
+    m_Asset: {fileID: -349377498174381041}
+    m_Duration: 6.25
     m_TimeScale: 1
     m_ParentTrack: {fileID: 7965333827612152548}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: 4.583333333333333
+    m_BlendInDuration: 4.6499999999999995
+    m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -414,25 +414,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -445,9 +427,9 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: PlayerFollowCamera
+    m_DisplayName: CM vcam6
   - m_Version: 1
-    m_Start: 0.4166666666666667
+    m_Start: 1.4166666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -7663017291497670537}
     m_Duration: 9.9
@@ -455,8 +437,8 @@ MonoBehaviour:
     m_ParentTrack: {fileID: 7965333827612152548}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 4.583333333333333
-    m_BlendOutDuration: 3.6499999999999995
+    m_BlendInDuration: 3.583333333333333
+    m_BlendOutDuration: 4.6499999999999995
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -516,16 +498,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CM vcam5
   - m_Version: 1
-    m_Start: 6.666666666666667
+    m_Start: 0
     m_ClipIn: 0
-    m_Asset: {fileID: -349377498174381041}
-    m_Duration: 6.25
+    m_Asset: {fileID: -5842347093663532935}
+    m_Duration: 5
     m_TimeScale: 1
     m_ParentTrack: {fileID: 7965333827612152548}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 3.6499999999999995
-    m_BlendOutDuration: -1
+    m_BlendInDuration: -1
+    m_BlendOutDuration: 3.583333333333333
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -583,7 +565,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: CM vcam6
+    m_DisplayName: PlayerFollowCamera
   m_Markers:
     m_Objects: []
 --- !u!74 &8680316938184546284

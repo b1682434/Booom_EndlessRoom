@@ -9693,6 +9693,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LV1_Hand
       objectReference: {fileID: 0}
+    - target: {fileID: 2582795253766438478, guid: 6a617d5eb26b49f4eabd1aa5ec7cdaac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2926282258574763252, guid: 6a617d5eb26b49f4eabd1aa5ec7cdaac,
         type: 3}
       propertyPath: m_RootOrder
@@ -18106,9 +18111,9 @@ MonoBehaviour:
   currentRevertObj: {fileID: 12026327767596901}
   roomPrefab:
   - {fileID: 1634152517262693619, guid: c81c3ae0743fd4c4c9b1ee0ed1654f84, type: 3}
-  - {fileID: 1485550372}
+  - {fileID: 3642198979222700741, guid: 496acfd07339a1045b354701ed3975d5, type: 3}
   - {fileID: 4850633048709018784, guid: 987ec330e746118499b088c2499a6625, type: 3}
-  - {fileID: 6534169761235834141, guid: b07a024f6179ac249963166affc17d96, type: 3}
+  - {fileID: 3738110878101288927}
   darkRoomNumber: 2
 --- !u!114 &1088478748
 MonoBehaviour:
@@ -21588,12 +21593,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1485550372 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3642198979222700741, guid: 496acfd07339a1045b354701ed3975d5,
-    type: 3}
-  m_PrefabInstance: {fileID: 6416940106909348336}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1495543071
 Mesh:
   m_ObjectHideFlags: 0
@@ -28670,17 +28669,17 @@ PrefabInstance:
     - target: {fileID: 9005220659476430818, guid: 2d3a85ecde41a8246a79669975912b74,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.76
+      value: -1.39
       objectReference: {fileID: 0}
     - target: {fileID: 9005220659476430818, guid: 2d3a85ecde41a8246a79669975912b74,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.757
+      value: 1.947
       objectReference: {fileID: 0}
     - target: {fileID: 9005220659476430818, guid: 2d3a85ecde41a8246a79669975912b74,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.79
+      value: 12.22
       objectReference: {fileID: 0}
     - target: {fileID: 9005220659476430818, guid: 2d3a85ecde41a8246a79669975912b74,
         type: 3}
@@ -30355,6 +30354,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &3738110878101288927 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6534169761235834141, guid: b07a024f6179ac249963166affc17d96,
+    type: 3}
+  m_PrefabInstance: {fileID: 7588135250686878402}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4438256020367047115
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31135,17 +31140,17 @@ PrefabInstance:
     - target: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.76
+      value: -1.39
       objectReference: {fileID: 0}
     - target: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.19
       objectReference: {fileID: 0}
     - target: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.79
+      value: 12.22
       objectReference: {fileID: 0}
     - target: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
         type: 3}
@@ -32455,17 +32460,17 @@ PrefabInstance:
     - target: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.76
+      value: -1.39
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.757
+      value: 1.947
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.79
+      value: 12.22
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81,
         type: 3}

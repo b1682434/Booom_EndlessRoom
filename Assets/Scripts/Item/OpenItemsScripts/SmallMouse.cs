@@ -39,11 +39,11 @@ public class SmallMouse : MonoBehaviour
         for (; ; )
         {
             i += 1;
-            lerp = Mathf.Lerp(0, 1, i / 50f);
+            lerp = Mathf.Lerp(0, 1, i / 100f);
             mouseModelTrans.position = pcreate.path.GetPointAtDistance(lerp * length);       
             mouseModelTrans.rotation = AdjustRot(pcreate.path.GetDirectionAtDistance(lerp * length));
            
-            if (i >= 49)
+            if (i >= 99)
             {
                 StopAllCoroutines();
                 if (getCaught)

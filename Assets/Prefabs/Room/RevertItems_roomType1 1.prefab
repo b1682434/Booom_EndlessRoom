@@ -12419,6 +12419,7 @@ GameObject:
   - component: {fileID: 1623289210213339125}
   - component: {fileID: 1623289210213339124}
   - component: {fileID: 1623289210213339127}
+  - component: {fileID: 2694358703711706497}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -12546,6 +12547,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 2694358703711706497}
+        m_TargetAssemblyTypeName: NextRoom, Assembly-CSharp
+        m_MethodName: NextTimeSpawnNextRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   cannnotOpenSouond: {fileID: 8300000, guid: a36c14bdcc6cf6341a0e1a5ff4fb7297, type: 3}
   openSound: {fileID: 8300000, guid: a36c14bdcc6cf6341a0e1a5ff4fb7297, type: 3}
   au: {fileID: 1623289209799073367}
@@ -12563,6 +12576,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8980115498675584859, guid: cb2d767eea133914aa3106ce6b42afc0, type: 3}
+--- !u!114 &2694358703711706497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623289210213339081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 907f2abe19fe38c489bc409ee66902cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1623289210255283130
 GameObject:
   m_ObjectHideFlags: 0

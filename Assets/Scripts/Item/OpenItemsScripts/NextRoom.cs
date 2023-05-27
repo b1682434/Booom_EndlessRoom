@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class NextRoom : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+  public void NextTimeSpawnNextRoom()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        FindFirstObjectByType<GameManger>().ChangeRoomPrefab();
     }
 }

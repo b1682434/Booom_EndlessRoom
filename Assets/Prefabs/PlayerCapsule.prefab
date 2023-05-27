@@ -746,8 +746,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f2b5a516bada56c4f85028ced0c07cf7, type: 3}
   - {fileID: 8300000, guid: 2e8ce5a46b70426469d4759b2a399585, type: 3}
   - {fileID: 8300000, guid: 7ce09e53a35f2ae46a135f6487399574, type: 3}
-  inventoryItemChangedSoundEffect: {fileID: 8300000, guid: 08d2de525e8a55c42a7c99b22ce2c4e2,
-    type: 3}
   pstate: 1
   interactLength: 3
   aimUI: {fileID: 7021371220830676400}
@@ -911,6 +909,10 @@ MonoBehaviour:
   capacity: 4
   inspectionCamera: {fileID: 0}
   inspectColl: {fileID: 0}
+  selectionChangedSoundEffect: {fileID: 8300000, guid: 08d2de525e8a55c42a7c99b22ce2c4e2,
+    type: 3}
+  craftingSucceedSoundEffect: {fileID: 8300000, guid: 3bd8e1aab7a85954bbfa6b27223b421a,
+    type: 3}
 --- !u!82 &1403021437578524908
 AudioSource:
   m_ObjectHideFlags: 0

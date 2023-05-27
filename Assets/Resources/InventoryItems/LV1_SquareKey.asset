@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LV1_SquareKey
   m_EditorClassIdentifier: 
   itemId: 110
-  itemName: "\u65B9\u5F62"
+  itemName: "\u65B9\u5F62\uFF08\u5F03\u7528\uFF09"
   itemIcon: {fileID: 0}
   itemDescription: "\u65B9\u5F62\u94A5\u5319"
   maxStack: 1

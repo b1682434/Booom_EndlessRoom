@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 /// - 放入背包内的物品不会因为重置而消失
 /// </summary>
 [RequireComponent(typeof(Collider))]
-public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<InventoryItem>
+public class InventoryItem : InteractableBase, IInteractRequest
 {
     [Header("Inventory")] [Tooltip("物品数据配置")]
     public InventoryItemData itemData;
@@ -110,10 +110,10 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
             // Note: 将此gameobject放到一个玩家看不到的位置，并且禁用碰撞
             // 移动位置的逻辑在Inventory中
             var colliders = GetComponents<Collider>();
-            foreach (var collider in colliders)
+            foreach (var col in colliders)
             {
-                collider.enabled = false;
-                collider.isTrigger = true;
+                col.enabled = false;
+                col.isTrigger = true;
             }
 
             // TODO: 不知道为什么进入检视模式的物体总有白边
@@ -176,9 +176,9 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
 
         // 启用item的碰撞，使其可以被射线检测
         var colliders = GetComponents<Collider>();
-        foreach (var collider in colliders)
+        foreach (var col in colliders)
         {
-            collider.enabled = true;
+            col.enabled = true;
         }
 
         transform.localScale = inspectionScale;
@@ -194,9 +194,9 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
 
         // 启用item的碰撞，使其可以被射线检测
         var colliders = GetComponents<Collider>();
-        foreach (var collider in colliders)
+        foreach (var col in colliders)
         {
-            collider.enabled = false;
+            col.enabled = false;
         }
 
         transform.localScale = sceneScale;
@@ -358,19 +358,14 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
         }
 
         _durability = itemData.durability;
+        
+        inspectionScale = pivotTransform.localScale;
+        sceneScale = transform.localScale;
     }
 
 
     protected void Start()
     {
-        inspectionScale = pivotTransform.localScale;
-        if (sceneScale == Vector3.zero)
-        {
-            sceneScale = transform.localScale;
-        }
-
-        Debug.Log($"{gameObject} : sceneScale {sceneScale}");
-
         objName = itemData.itemName;
         ObjType = itemData.itemId;
         // TODO: 可能需要自定义这些台词
@@ -382,16 +377,10 @@ public class InventoryItem : InteractableBase, IInteractRequest, IEquatable<Inve
 
     // private void Update()
     // {
-    //     Debug.Log($"{gameObject} : inspectionScale {inspectionScale}, sceneScale {sceneScale}");
     // }
 
     // public void OnMouseOver()
     // {
     //     throw new NotImplementedException();
     // }
-
-    public bool Equals(InventoryItem other)
-    {
-        return other != null && itemData == other.itemData;
-    }
 }

@@ -19,6 +19,7 @@ public delegate void OnInventoryItemUpdate(int index);
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(StarterAssetsInputs))]
 [RequireComponent(typeof(FirstPersonController))] // 需要它的交互功能
+[RequireComponent(typeof(AudioSource))]
 public class Inventory : MonoBehaviour
 {
     [Header("背包属性")] [Tooltip("背包格子数")] public int capacity = 4;
@@ -26,6 +27,14 @@ public class Inventory : MonoBehaviour
     [Header("功能组件")] [Tooltip("检视相机，需要能渲染Inventory层")] [CanBeNull]
     public Camera inspectionCamera;
     public Collider inspectColl;//在检视模式时开启，防止鼠标和场景物体互动.放在maincamera下面的
+
+    [Header("音效")] 
+    [Tooltip("切换选择物品音效")]
+    public AudioClip selectionChangedSoundEffect;
+    [Tooltip("合成成功音效")]
+    public AudioClip craftingSucceedSoundEffect;
+
+    private AudioSource _uiAudioSource;
 
     /****** 背包状态 ******/
 
@@ -203,14 +212,13 @@ public class Inventory : MonoBehaviour
         }
 
         // TODO: 物品使用效果逻辑
-        //
 
         ConsumeItem(itemToUse);
     }
 
-    public void UseItem(InventoryItem ownedItem)
+    public void UseItem(InventoryItem itemToUse)
     {
-        int indexToUse = _inventoryItems.IndexOf(ownedItem);
+        int indexToUse = _inventoryItems.IndexOf(itemToUse);
         UseItem(indexToUse);
     }
 
@@ -219,7 +227,12 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void SelectPrevItem()
     {
+        var oldIndex = SelectedItemIndex;
         SelectedItemIndex--;
+        if (oldIndex != SelectedItemIndex)
+        {
+            _uiAudioSource.PlayOneShot(selectionChangedSoundEffect);
+        }
     }
 
     /// <summary>
@@ -227,7 +240,12 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void SelectNextItem()
     {
+        var oldIndex = SelectedItemIndex;
         SelectedItemIndex++;
+        if (oldIndex != SelectedItemIndex)
+        {
+            _uiAudioSource.PlayOneShot(selectionChangedSoundEffect);
+        }
     }
 
 
@@ -356,11 +374,7 @@ public class Inventory : MonoBehaviour
         itemTransform.position = pivotPos + itemTransform.position - itemToAdd.pivotTransform.position;
         itemTransform.rotation = Quaternion.identity;
         
-        // Note: 这里pivot的localScale更像是一个固定的数据，但是保存在Transform中
-        // 设置scale是为了在检视模式中检视小体积物体，改善体验
-        // TODO: 再次放置到场景中时需要设置会原来的scale
         itemToAdd.EnterInspectionMode();
-        // itemTransform.localScale = itemToAdd.pivotTransform.localScale;
         _inspectionItems.Add(itemToAdd);
         
         _knownItemIds.Add(itemToAdd.itemData.itemId);
@@ -521,19 +535,19 @@ public class Inventory : MonoBehaviour
             mainItem = itemA;
         }
 
-        StartCoroutine(UpdateCraftingAnimation(2.0f));
+        StartCoroutine(UpdateCraftingAnimation(1.2f));
 
         // 更新动画
         IEnumerator UpdateCraftingAnimation(float duration = 1.0f, float delta = 0.02f)
         {
             float t = 0.0f;
-            var trans = ingredientItem.transform;
+            var ingredientTrans = ingredientItem.transform;
             
             // 位移动画
             while (t < duration)
             {
-                trans.position = Vector3.Lerp(trans.position, targetPos, t / duration);
-                trans.rotation = Quaternion.Lerp(trans.rotation, targetRot, t / duration);
+                ingredientTrans.position = Vector3.Lerp(ingredientTrans.position, targetPos, t / duration);
+                ingredientTrans.rotation = Quaternion.Lerp(ingredientTrans.rotation, targetRot, t / duration);
 
                 t += delta;
                 yield return new WaitForSeconds(delta);
@@ -556,6 +570,7 @@ public class Inventory : MonoBehaviour
             var productItem = InventoryItem.MakeProduct(recipe);
             ObtainItem(productItem);
             AddInspectionItem(SelectedItem);
+            _uiAudioSource.PlayOneShot(craftingSucceedSoundEffect);
 
             onCraftingSucceeded?.Invoke(SelectedItemIndex);
 
@@ -765,6 +780,9 @@ public class Inventory : MonoBehaviour
         {
             fpc.onInteraction += OnInteraction;
         }
+        
+        // 音效
+        _uiAudioSource = GetComponent<AudioSource>();
     }
 
     void Update()

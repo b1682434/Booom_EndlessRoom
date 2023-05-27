@@ -58,8 +58,6 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		[Header("Action Feedback")]
 		[Tooltip("点击音效")]
 		public List<AudioClip> clickSoundEffects;
-		[Tooltip("切换物品音效")]
-		public AudioClip inventoryItemChangedSoundEffect;
 
 		// interaction
 		public OnInteraction onInteraction;
@@ -140,10 +138,6 @@ public delegate void OnInteraction(IInteractRequest IInter);
 			_fallTimeoutDelta = FallTimeout;
 
 			//defaultAimUIpos = aimUI.rectTransform.position;//aimui的默认位置
-
-			// 设置组件
-			_inventory.onSelectionChanged += PlayInventorySelectionChangeSoundEffect;
-
 		}
 
 		private void Update()
@@ -497,14 +491,6 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		private void PlayClickSoundEffect() {
 			if (_audioSource != null && clickSoundEffects.Count > 0) {
 				_audioSource.clip = clickSoundEffects[Random.Range(0, clickSoundEffects.Count)];
-				_audioSource.Play();
-			}
-		}
-
-		// 播放切换物品音效
-		private void PlayInventorySelectionChangeSoundEffect(int itemIndex) {
-			if (_audioSource != null && inventoryItemChangedSoundEffect != null) {
-				_audioSource.clip = inventoryItemChangedSoundEffect;
 				_audioSource.Play();
 			}
 		}

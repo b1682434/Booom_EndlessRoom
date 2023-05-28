@@ -10625,6 +10625,7 @@ GameObject:
   - component: {fileID: 8099248032066189703}
   - component: {fileID: 4643943972661265112}
   - component: {fileID: 4688057025889969973}
+  - component: {fileID: 1848809761359142090}
   m_Layer: 0
   m_Name: Screen
   m_TagString: Untagged
@@ -10697,6 +10698,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1848809761359142090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2788781388475038909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efe995de57519a849ac7494a78b2193d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objName: 
+  ObjType: 0
+  mouseOVerWord: "\u7279\u5B9A\u65F6\u95F4\uFF0C\u7279\u5B9A\u9891\u9053\uFF0C\u7279\u5B9A\u5185\u5BB9\u3002\u4E5F\u8BB8\u8FD9\u5C31\u662F\u5FAA\u89C4\u8E48\u77E9\u7684\u4EE3\u8868\u5427"
+  cannotOpenWord: 
+  emptyHandWord: 
+  openWord: 
+  showWord: 
+  outline: {fileID: 0}
 --- !u!1 &2818837147165423801
 GameObject:
   m_ObjectHideFlags: 0
@@ -16016,7 +16037,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6320673399858182265}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.700179, y: 0.82363033, z: -0.4119997}
+  m_LocalPosition: {x: -4.285, y: 1.678, z: -0.4119997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16053,7 +16074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: 
+  mouseOVerWord: "\u4E00\u53F0\u7535\u89C6\u3002\u6216\u8BB8\u8FD8\u6709\u75281"
   cannotOpenWord: 
   emptyHandWord: 
   openWord: 
@@ -16775,8 +16796,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.057211, y: 1, z: 2.6135406}
-  m_Center: {x: 2.2240264, y: 0, z: -0.20632553}
+  m_Size: {x: 3.057211, y: 0.68034834, z: 2.6135406}
+  m_Center: {x: 2.2240264, y: -0.15982583, z: -0.20632553}
 --- !u!114 &6416940105424980362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21881,7 +21902,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 953501f9a0d073a4dad286ca665c2b44, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -31183,8 +31204,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.2630708, y: 1.538922, z: 2.1891317}
-  m_Center: {x: 0.6315353, y: -0.26946098, z: -0.0024666786}
+  m_Size: {x: 2.2630708, y: 1.068593, z: 2.1891317}
+  m_Center: {x: 0.6315353, y: -0.50462544, z: -0.0024666786}
 --- !u!114 &2885656460355283619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32083,7 +32104,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 7b6ee22a67ea44049946fd4f8404c878, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

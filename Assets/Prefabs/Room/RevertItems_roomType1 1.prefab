@@ -517,7 +517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: "\u4E00\u5177\u5C38\u4F53\u3002\u770B\u8D77\u6765\u633A\u60E8\u7684"
+  mouseOVerWord: "\u4E00\u5177\u5C38\u4F53"
   cannotOpenWord: 
   emptyHandWord: 
   openWord: Smelly...
@@ -942,7 +942,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: "\u4E00\u4E2A\u6307\u7EB9\u68C0\u6D4B\u5668"
+  mouseOVerWord: "\u4E00\u4E2A\u6307\u7EB9\u68C0\u6D4B\u5668\u3002\u201C\u8BF7\u9A8C\u8BC1\u62C7\u6307\u201D"
   cannotOpenWord: "\u9A8C\u8BC1\u5931\u8D25"
   emptyHandWord: "\u8BF7\u9A8C\u8BC1\u62C7\u6307"
   openWord: 
@@ -11457,7 +11457,7 @@ MonoBehaviour:
   mouseOVerWord: "\u6CA1\u6709\u773C\u775B\uFF0C\u6CA1\u6709\u624B\uFF0C\u6CA1\u6709\u5FC3\u810F\u3002\u3002\u3002\u771F\u591F\u60E8\u7684"
   cannotOpenWord: "\u7528\u4E0D\u4E86"
   emptyHandWord: "\u4E0D\u77E5\u9053\u8FD9\u5C38\u4F53\u6709\u4EC0\u4E48\u610F\u4E49"
-  openWord: "\u653E\u5165\u4E86\u624B\u638C"
+  openWord: "\u653E\u8FDB\u53BB\u4E86\u3002\u8FD9\u4E2A\u623F\u95F4\u6CA1\u5565\u5176\u5B83\u597D\u5E72\u7684\u4E8B\u60C5\u4E86"
   showWord: 
   outline: {fileID: 1623289210213339125}
   consumeItems: 1
@@ -13446,7 +13446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: "\u8BF7\u9A8C\u8BC1\u4E2D\u6307"
+  mouseOVerWord: "\u62C7\u6307\u9A8C\u8BC1\u6210\u529F\uFF0C\u63A5\u4E0B\u6765\u8BF7\u9A8C\u8BC1\u4E2D\u6307"
   cannotOpenWord: "\u9A8C\u8BC1\u5931\u8D25"
   emptyHandWord: "\u8BF7\u9A8C\u8BC1\u4E2D\u6307"
   openWord: 
@@ -15621,7 +15621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754897273205997598}
   m_LocalRotation: {x: -0.7071069, y: 0.00000016430471, z: -0.0000001643043, w: 0.7071067}
-  m_LocalPosition: {x: -0.648, y: -0.164, z: -0.101}
+  m_LocalPosition: {x: -0.648, y: -0.164, z: 0.097}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17151,8 +17151,8 @@ MonoBehaviour:
   objName: 
   ObjType: 0
   mouseOVerWord: "\u8FD8\u5DEE\u4E00\u4E2A"
-  cannotOpenWord: "\u6295\u4E0D\u4E0A"
-  emptyHandWord: "\u8FD8\u5DEE\u4E00\u4E2A"
+  cannotOpenWord: "\u6295\u4E0D\u4E0A\u3002\u6216\u8BB8\u6211\u8BE5\u5728\u5176\u5B83\u623F\u95F4\u627E\u627E\u6709\u6CA1\u6709\u591A\u4F59\u7684\u94A5\u5319"
+  emptyHandWord: "\u8FD8\u5DEE\u4E00\u4E2A.\u6216\u8BB8\u6211\u8BE5\u53BB\u5176\u5B83\u623F\u95F4\u627E\u627E\u6709\u6CA1\u6709\u591A\u4F59\u7684\u94A5\u5319"
   openWord: "\u6253\u5F00\u4E86"
   showWord: 
   outline: {fileID: 1623289209966538471}
@@ -18893,7 +18893,7 @@ PrefabInstance:
     - target: {fileID: 4619200563841706569, guid: ae24784dd0572ac4c84b1a55908be4ad,
         type: 3}
       propertyPath: mouseOVerWord
-      value: "\u727A\u7272\u4E00\u4EBA"
+      value: "\u53D8\u8F68\uFF0C\u8FD9\u6837\u53EF\u4EE5\u62EF\u6551\u66F4\u591A\u4EBA"
       objectReference: {fileID: 0}
     - target: {fileID: 4619200563841706569, guid: ae24784dd0572ac4c84b1a55908be4ad,
         type: 3}
@@ -20796,7 +20796,7 @@ PrefabInstance:
     - target: {fileID: 4619200563841706569, guid: ae24784dd0572ac4c84b1a55908be4ad,
         type: 3}
       propertyPath: mouseOVerWord
-      value: "\u727A\u7272\u4E8C\u4EBA"
+      value: "\u4E0D\u53D8\u8F68\uFF0C\u8FD9\u662F\u4ED6\u4EEC\u7684\u547D\u8FD0"
       objectReference: {fileID: 0}
     - target: {fileID: 4619200563841706569, guid: ae24784dd0572ac4c84b1a55908be4ad,
         type: 3}

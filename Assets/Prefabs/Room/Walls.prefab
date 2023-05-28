@@ -250,17 +250,9 @@ MonoBehaviour:
   m_Mesh: {fileID: 0}
   m_VersionIndex: 4093
   m_IsSelectable: 1
-  m_SelectedFaces: 01000000
-  m_SelectedEdges:
-  - a: 4
-    b: 5
-  - a: 6
-    b: 4
-  - a: 5
-    b: 7
-  - a: 7
-    b: 6
-  m_SelectedVertices: 04000000050000000600000007000000
+  m_SelectedFaces: 
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!114 &719055295568786982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4726,17 +4718,9 @@ MonoBehaviour:
   m_Mesh: {fileID: 0}
   m_VersionIndex: 4172
   m_IsSelectable: 1
-  m_SelectedFaces: 01000000
-  m_SelectedEdges:
-  - a: 4
-    b: 5
-  - a: 6
-    b: 4
-  - a: 5
-    b: 7
-  - a: 7
-    b: 6
-  m_SelectedVertices: 04000000050000000600000007000000
+  m_SelectedFaces: 
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!114 &4406083300009379393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4948,3 +4932,42 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2907612456645995369}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5268646543294922528 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2214623117487352759, guid: 50d605ffb65e153439f7187d6baa6aca,
+    type: 3}
+  m_PrefabInstance: {fileID: 2907612456645995369}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5950200642789954946
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5268646543294922528}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2653648, y: 0.17987068, z: 2.988672}
+  m_Center: {x: 9.142025e-12, y: 0.009814625, z: 1.494336}
+--- !u!114 &3247635131020504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5268646543294922528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efe995de57519a849ac7494a78b2193d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objName: 
+  ObjType: 0
+  mouseOVerWord: "\u63A8\u4E0D\u52A8"
+  cannotOpenWord: 
+  emptyHandWord: 
+  openWord: 
+  showWord: 
+  outline: {fileID: 0}

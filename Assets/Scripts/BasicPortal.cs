@@ -11,6 +11,7 @@ public class BasicPortal : InteractableBase,IInteractRequest
     public BasicPortal otherPortal;
     public Collider coll;
    public Animation anim;
+    public AudioSource au;
     
     GameManger gm;
     Vector3 revertObjoffset;//记录与轮回物品的相对位置。方便生成的时候能够让轮回物品精确的生成在同一相对位置
@@ -32,9 +33,13 @@ public class BasicPortal : InteractableBase,IInteractRequest
     
    public void InteractRequest(int ItemID)
     {
+        au.Play();
         if (!anim.Play())
         {
+          
             anim.Play();//在动画里记录碰撞体的开启关闭
+            
+            
         }
         
     }

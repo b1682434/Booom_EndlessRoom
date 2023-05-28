@@ -71,6 +71,7 @@ public class GameManger : MonoBehaviour
         /* revertObjs[1].transform.position = postion;
          revertObjs[1].SetActive(true);*/
          Invoke("DestroyOldRertOBJ", 2f);
+        
     }
     public void DestroyOldRertOBJ()
     {

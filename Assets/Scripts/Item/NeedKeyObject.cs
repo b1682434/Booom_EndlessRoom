@@ -30,7 +30,7 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
            
              if (ItemID == 0)//空手
             {
-                PlaySound(cannnotOpenSouond);
+                
                 showWord = emptyHandWord; //应该可以继续优化。 需要钥匙的一个类，多种钥匙多种方法的一个子类，pickup一个
             }
             else // 遍历keyid，有了就开，没有就显示打不开

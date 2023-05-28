@@ -132,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: 
+  mouseOVerWord: "\u773C\u7403"
   cannotOpenWord: 
   emptyHandWord: 
   openWord: 

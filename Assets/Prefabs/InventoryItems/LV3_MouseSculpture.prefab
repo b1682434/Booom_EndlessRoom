@@ -82,7 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: "\u7389\u77F3\u8001\u9F20"
+  mouseOVerWord: "\u7389\u505A\u7684\u8001\u9F20\u5934\u96D5\u3002\u6709\u7740\u4E94\u89D2\u578B\u7684\u5E95\u5EA7"
   cannotOpenWord: 
   emptyHandWord: 
   openWord: 

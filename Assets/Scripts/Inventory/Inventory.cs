@@ -147,11 +147,11 @@ public class Inventory : MonoBehaviour
             _inventoryItems[index] = ownedItem;
             itemObtained = ownedItem;
 
-            // Note: 这里即使直接设置ownedItem.transform.localScale，在Start()中获取到的localScale还是0
-            // 所以直接设置这个变量了
-            ownedItem.sceneScale = sceneItem.transform.localScale;
-            ownedItem.transform.parent = transform;
-            ownedItem.transform.localPosition = INVENTORY_POS;
+            // // Note: 这里即使直接设置ownedItem.transform.localScale，在Start()中获取到的localScale还是0
+            // // 所以直接设置这个变量了
+            // ownedItem.sceneScale = sceneItem.transform.localScale;
+            itemObtained.transform.parent = transform;
+            itemObtained.transform.localPosition = INVENTORY_POS;
         }
 
         itemObtained.ObtainedBy(this);
@@ -165,6 +165,7 @@ public class Inventory : MonoBehaviour
         // 进入检视界面
         if (enterInspectionMode)
         {
+            print("InspectItem");
             InspectItem(SelectedItem);
         }
     }

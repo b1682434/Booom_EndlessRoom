@@ -22,6 +22,7 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
         print(ItemID);
         if (opened)
         {
+
             showWord = openWord;
             
         }
@@ -42,6 +43,7 @@ public class NeedKeyObject : InteractableBase, IInteractRequest
                     {
                         opened = true;
                         showWord = openWord;
+                        mouseOVerWord = openWord;
                         itemOpen.Invoke();
                         PlaySound(openSound);
                         if (consumeItems)

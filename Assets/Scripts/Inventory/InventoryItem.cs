@@ -128,6 +128,7 @@ public class InventoryItem : InteractableBase, IInteractRequest
             {
                 child.gameObject.layer = LayerMask.NameToLayer("Inventory");
             }
+            transform.localScale = sceneScale;
         }
     }
 
@@ -182,6 +183,7 @@ public class InventoryItem : InteractableBase, IInteractRequest
         }
 
         transform.localScale = inspectionScale;
+        print($"EnterInspectionMode: {inspectionScale}");
     }
 
     /// <summary>

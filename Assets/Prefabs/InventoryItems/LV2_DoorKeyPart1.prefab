@@ -47,7 +47,6 @@ MonoBehaviour:
   ingredient: {fileID: 11400000, guid: c3247ef8b1dbe074b8de0bf1ffd11887, type: 2}
   product: {fileID: 2592175229380807143, guid: cbcaae59bf26f5b4bb598655f9c3344d, type: 3}
   tolerance: 0.1
-  craftingStatus: 0
 --- !u!1 &4146457953790103807
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,8 +165,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.028345797, y: 0.0016744656, z: 0.027170973}
-  m_Center: {x: -0.00000010011718, y: 0.0008372272, z: -0.016867112}
+  m_Size: {x: 0.042773735, y: 0.0052666124, z: 0.03926093}
+  m_Center: {x: 0.00095107965, y: 0.0008315211, z: -0.019418847}
 --- !u!114 &4074613304346259754
 MonoBehaviour:
   m_ObjectHideFlags: 0

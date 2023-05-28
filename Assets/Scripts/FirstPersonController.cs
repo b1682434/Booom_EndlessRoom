@@ -61,6 +61,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
 
 		// interaction
 		public OnInteraction onInteraction;
+		private int interactionLayerMask;
 		
 		// cinemachine
 		private float _cinemachineTargetPitch;
@@ -92,6 +93,8 @@ public delegate void OnInteraction(IInteractRequest IInter);
 	//Vector2 defaultAimUIpos;
 	bool mouseOverTextChanged = false;
 	public GameEvent exitFocusModeEvent;
+	[Tooltip("focusMode提示")]
+	public Text focusModeTips;
 
 	/****** 组件 ******/
 	private Inventory _inventory;
@@ -136,6 +139,8 @@ public delegate void OnInteraction(IInteractRequest IInter);
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+			
+			interactionLayerMask = ~LayerMask.GetMask("Character", "Ignore Raycast");
 
 			//defaultAimUIpos = aimUI.rectTransform.position;//aimui的默认位置
 		}
@@ -269,8 +274,8 @@ public delegate void OnInteraction(IInteractRequest IInter);
     {
 		RaycastHit hit;
 		Ray ray = Camera.main.ScreenPointToRay(aimUI.transform.position);
-		if (Physics.Raycast(ray, out hit, interactLength))
-        {
+		if (Physics.Raycast(ray, out hit, interactLength, interactionLayerMask))
+		{
 			IInteractRequest IInter = hit.transform.GetComponent<IInteractRequest>();
             if (IInter != null)
             {
@@ -287,9 +292,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
                 {
 					IInter.InteractRequest(_inventory.SelectedItemId);
 				}
-                
-                
-                
+	            
                 // 告知其他组件
                 onInteraction?.Invoke(IInter);
             }
@@ -306,6 +309,9 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		pstate = playerInputState.Interacting;
 		Cursor.lockState = CursorLockMode.Confined;
 		Cursor.visible = false;
+		
+		// 显示提示
+		focusModeTips.enabled = true;
     }
 	void FocusMode()
     {
@@ -330,6 +336,9 @@ public delegate void OnInteraction(IInteractRequest IInter);
 		//aimUI.rectTransform.position = defaultAimUIpos;
 		Cursor.lockState = CursorLockMode.Locked;
 		pstate = playerInputState.Walking;
+		
+		// 隐藏提示
+		focusModeTips.enabled = false;
 	}
 	IEnumerator PassingDoor(Vector3[] wayPoints, Vector3 doorFacingVec)
     {
@@ -394,7 +403,7 @@ public delegate void OnInteraction(IInteractRequest IInter);
 			}
 		}*/
 		IMouseOver Imouse;
-		   if (Physics.Raycast(ray, out hit, interactLength))
+		   if (Physics.Raycast(ray, out hit, interactLength, interactionLayerMask))
 		{ Imouse = hit.transform.GetComponent<IMouseOver>(); Debug.DrawLine(Camera.main.ScreenToWorldPoint(aimUI.transform.position), hit.point); }
         else
         {

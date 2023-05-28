@@ -17,7 +17,9 @@ public class GameManger : MonoBehaviour
     CinemachineBrain cmBrain;
     CinemachineVirtualCamera currentVitrualCam;
     private PlayerInput _playerInput;
+    public bool fuzhouShouldShow = true;
 
+   
 
     GameObject[] revertObjs = new GameObject[2];
     private void Start()

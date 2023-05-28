@@ -5,13 +5,15 @@ using UnityEngine;
 public class Clock : InteractableBase,IInteractRequest
 {
     public AudioSource au;
-    public float second = 0;
+    public float second = 50;
     public int eventStartTime;
 
     public bool canBeInteracted = true;
     bool soundPlayed;
     public string timeString;
-   public int minutes = 0;
+   public int minutes = 59;
+    public int time = 19;
+    
     void Update()
     {
         second += Time.deltaTime;
@@ -20,7 +22,12 @@ public class Clock : InteractableBase,IInteractRequest
             minutes += 1;
             second = 0;
         }
-        timeString = minutes.ToString("d2");
+        if (minutes > 60)
+        {
+            time += 1;
+            minutes = 0;
+        }
+        timeString = minutes.ToString("d2")+": "+ minutes.ToString("d2");
         if (!soundPlayed)
         {
             if (second > eventStartTime)

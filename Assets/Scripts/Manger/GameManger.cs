@@ -24,7 +24,7 @@ public class GameManger : MonoBehaviour
         Screen.SetResolution(1920, 1080, true);
         Screen.fullScreen = true;//强制设置分辨率
     }
-
+    
     GameObject[] revertObjs = new GameObject[2];
     private void Start()
     {

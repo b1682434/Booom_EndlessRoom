@@ -17,11 +17,19 @@ public class UIbasicVoid : MonoBehaviour
         SceneManager.LoadScene(levelIndex);
     }
 
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
     public void PlayGame()
     {
         SceneManager.LoadScene("smallEyePlayground");
     }
-
+    public void ReleaseCursor()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+    }
     public void Quit()
     {
 #if UNITY_EDITOR

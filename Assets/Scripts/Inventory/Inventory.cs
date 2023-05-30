@@ -143,7 +143,7 @@ public class Inventory : MonoBehaviour
         var itemObtained = _inventoryItems[index];
         if (itemObtained == null)
         {
-            var ownedItem = Instantiate(sceneItem, sceneItem.transform);
+            var ownedItem = Instantiate(sceneItem, sceneItem.transform);//应该是因为被复制的是一个实例，而unity有材质实例这种说法，所以直接把材质实例给复制过去了。因为过门后之前房间被destroy，材质实例一样被毁了，所以就材质丢失了
             _inventoryItems[index] = ownedItem;
             itemObtained = ownedItem;
 
@@ -158,6 +158,8 @@ public class Inventory : MonoBehaviour
 
         // TODO: sceneItem 变成可重置状态
         sceneItem.gameObject.SetActive(false);
+
+        sceneItem.gameObject.transform.parent = null;//只要原始物品不被destory,物品栏里的物品就不会丢材质。或许可以先把这个原始的作为一个变量引用，在这个背包物品被销毁时候一起销毁？。更高级的解决方案：https://answers.unity.com/questions/1107653/how-to-find-the-original-prefab-of-a-gameobject.html 但好像也没必要？
 
         SelectedItemIndex = index;
         onItemInfoUpdate?.Invoke(index);

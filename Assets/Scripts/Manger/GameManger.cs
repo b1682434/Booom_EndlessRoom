@@ -19,7 +19,11 @@ public class GameManger : MonoBehaviour
     private PlayerInput _playerInput;
     public bool fuzhouShouldShow = true;
 
-   
+    private void Awake()
+    {
+        Screen.SetResolution(1920, 1080, true);
+        Screen.fullScreen = true;//强制设置分辨率
+    }
 
     GameObject[] revertObjs = new GameObject[2];
     private void Start()
@@ -31,6 +35,7 @@ public class GameManger : MonoBehaviour
         revertObjs[1].transform.parent = null;
         revertObjs[1].SetActive(false);*/
         cmBrain = Camera.main.GetComponent<CinemachineBrain>();
+        Cursor.lockState = CursorLockMode.Confined;
         
     }
     
@@ -43,6 +48,7 @@ public class GameManger : MonoBehaviour
         currentVitrualCam = targetVcam;
         currentVitrualCam.Priority = 15;
         cmBrain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
+        cmBrain.m_DefaultBlend.m_Time = 2f;
         fpsCtrl.EnterFocusMode();
     }
     public void ExitFocusVcam()

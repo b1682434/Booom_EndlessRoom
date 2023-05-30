@@ -22,6 +22,8 @@ public class ButtonObject : InteractableBase, IInteractRequest
             if (canOnlyInteractOnce)
             {
                 canBeInteracted = false;
+                mouseOVerWord = openWord;
+                showWord = openWord;
             }
         }
     }

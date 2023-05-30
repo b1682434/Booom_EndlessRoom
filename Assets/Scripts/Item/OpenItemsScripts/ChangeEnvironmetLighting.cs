@@ -7,7 +7,7 @@ public class ChangeEnvironmetLighting : MonoBehaviour
 {
     GameManger gm;
     public Color lightColor;
-    Color normalColor;
+    
     public bool callAtStart = false;
     private void Start()
     {
@@ -21,7 +21,7 @@ public class ChangeEnvironmetLighting : MonoBehaviour
     // Start is called before the first frame update
     public void ChangeToBlack()
     {
-        gm.ChangeEnvironmentLighting(Color.black, 2f);
+        gm.ChangeEnvironmentLighting(Color.black*0.6f, 2f);
     }
     public void BackToNormalColor()
     {

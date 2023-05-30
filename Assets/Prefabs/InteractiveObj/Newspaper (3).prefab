@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 1481673283232474714}
   - component: {fileID: 1481673283232474709}
   - component: {fileID: 1481673283232474708}
-  - component: {fileID: 1481673283232474711}
+  - component: {fileID: 1749058706385819492}
+  - component: {fileID: 8739821524120024291}
   m_Layer: 0
   m_Name: Newspaper (3)
   m_TagString: Untagged
@@ -345,7 +346,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!114 &1481673283232474711
+--- !u!114 &1749058706385819492
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -354,14 +355,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 1481673283232474705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efe995de57519a849ac7494a78b2193d, type: 3}
+  m_Script: {fileID: 11500000, guid: fad58217f0823d54aa229c38e8d362bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objName: 
   ObjType: 0
-  mouseOVerWord: "E/\u9F20\u6807\u5DE6\u952E\uFF1A\u4E92\u52A8\u3002"
+  mouseOVerWord: "\u597D\u50CF\u5199\u7740\u4E9B\u4EC0\u4E48"
   cannotOpenWord: 
   emptyHandWord: 
   openWord: 
   showWord: 
-  outline: {fileID: 0}
+  outline: {fileID: 8739821524120024291}
+  canBeInteracted: 1
+  canOnlyInteractOnce: 1
+  ItemOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  au: {fileID: 0}
+--- !u!114 &8739821524120024291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481673283232474705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

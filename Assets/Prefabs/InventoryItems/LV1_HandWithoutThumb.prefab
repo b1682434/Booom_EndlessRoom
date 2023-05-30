@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 848510124191358370, guid: 9fc507ac2f8772c4baf47e4e6a021e93, type: 3}
+  - {fileID: 2100000, guid: 70f92df2d2aae3a49a88ac4f4b7d1486, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -192,7 +192,6 @@ MonoBehaviour:
   ingredient: {fileID: 11400000, guid: 17a779e56f3e6cd49b8bc10678d32afd, type: 2}
   product: {fileID: 2582795253766438478, guid: 6a617d5eb26b49f4eabd1aa5ec7cdaac, type: 3}
   tolerance: 1
-  craftingStatus: 0
 --- !u!1 &8449679403789557394
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +305,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9016d8287c0dec64784ecdaf665765d7,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70f92df2d2aae3a49a88ac4f4b7d1486, type: 2}
     - target: {fileID: 919132149155446097, guid: 9016d8287c0dec64784ecdaf665765d7,
         type: 3}
       propertyPath: m_Name
@@ -396,6 +400,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b6aae2edf972a8e40bdf1c08c093a207,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70f92df2d2aae3a49a88ac4f4b7d1486, type: 2}
     - target: {fileID: 919132149155446097, guid: b6aae2edf972a8e40bdf1c08c093a207,
         type: 3}
       propertyPath: m_Name

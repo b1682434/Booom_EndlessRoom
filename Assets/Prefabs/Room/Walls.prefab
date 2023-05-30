@@ -389,7 +389,6 @@ GameObject:
   - component: {fileID: 2907612456671918660}
   - component: {fileID: 2907612456671918661}
   - component: {fileID: 2907612456671918662}
-  - component: {fileID: 2907612456671918663}
   m_Layer: 0
   m_Name: FineGlass
   m_TagString: Untagged
@@ -706,24 +705,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2907612456671918681}
   m_Mesh: {fileID: 0}
---- !u!114 &2907612456671918663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2907612456671918681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 4
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &2907612456950796296
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,7 +719,6 @@ GameObject:
   - component: {fileID: 2907612456950796337}
   - component: {fileID: 2907612456950796338}
   - component: {fileID: 2907612456950796339}
-  - component: {fileID: 2907612456950796340}
   - component: {fileID: 2907612456950796342}
   m_Layer: 0
   m_Name: WindowModel
@@ -1373,24 +1353,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!114 &2907612456950796340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2907612456950796296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!82 &2907612456950796342
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1496,7 +1458,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2907612457454594693}
-  - component: {fileID: 2907612457454594691}
   - component: {fileID: 2907612457454594692}
   m_Layer: 0
   m_Name: GlassKeyObj
@@ -1521,70 +1482,6 @@ Transform:
   m_Father: {fileID: 2907612456950796343}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2907612457454594691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2907612457454594694}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417d9fcf442a65a43b78086225439e3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objName: 
-  ObjType: 0
-  mouseOVerWord: "\u73BB\u7483\u3002"
-  cannotOpenWord: 
-  emptyHandWord: 
-  openWord: 
-  showWord: 
-  outline: {fileID: 2907612456671918663}
-  consumeItems: 0
-  keyIDs: ca000000
-  itemOpen:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 2907612456671918681}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  cannnotOpenSouond: {fileID: 8300000, guid: a36c14bdcc6cf6341a0e1a5ff4fb7297, type: 3}
-  openSound: {fileID: 8300000, guid: a36c14bdcc6cf6341a0e1a5ff4fb7297, type: 3}
-  au: {fileID: 2907612456950796342}
 --- !u!65 &2907612457454594692
 BoxCollider:
   m_ObjectHideFlags: 0

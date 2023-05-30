@@ -47,7 +47,6 @@ MonoBehaviour:
   ingredient: {fileID: 11400000, guid: 2e1b233619cfb0c43806a3b2ddc40098, type: 2}
   product: {fileID: 5155039718988690038, guid: bf9f5e5b8c85f7b44aef54c1456c2f4e, type: 3}
   tolerance: 2
-  craftingStatus: 0
 --- !u!1 &383862004208023799
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +139,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: b1b622f2db9e5a942bd9e35f5e926392, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -223,7 +222,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: b1b622f2db9e5a942bd9e35f5e926392, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -292,7 +291,6 @@ MonoBehaviour:
   ingredient: {fileID: 11400000, guid: 17a779e56f3e6cd49b8bc10678d32afd, type: 2}
   product: {fileID: 5155039718988690038, guid: bf9f5e5b8c85f7b44aef54c1456c2f4e, type: 3}
   tolerance: 2
-  craftingStatus: 0
 --- !u!1 &3967856103235985210
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +434,6 @@ MonoBehaviour:
   ingredient: {fileID: 11400000, guid: 0e16990a75893cc4893f361313ccbf81, type: 2}
   product: {fileID: 5155039718988690038, guid: bf9f5e5b8c85f7b44aef54c1456c2f4e, type: 3}
   tolerance: 2
-  craftingStatus: 0
 --- !u!1 &7119758396512222852
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,7 +495,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 83bad072fcb576f4fa58f75b7011e944, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
